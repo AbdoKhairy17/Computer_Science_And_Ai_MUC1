@@ -18,7 +18,7 @@ from http.server import BaseHTTPRequestHandler
 # NEVER put the bot token directly in this file.
 
 TOKEN = "8995756244:AAGDtW8CoTuxxAK4b7Gw18x3NuORSJ2fYf0"
-WEB_APP_URL = "https://codeartifact-2-ten.vercel.app/"
+WEB_APP_URL = "https://codeartifact-1-neon-chi.vercel.app/api/webhook"
 
 
 # ============================================================
