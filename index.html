@@ -2,7 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0d1117">
     <title>كلية الحاسبات والذكاء الاصطناعي - جامعة مايو</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -14,20 +15,43 @@
             --text-secondary: #8b949e;
             --accent-glow: #58a6ff;
             --accent-purple: #bc8cff;
+
+            --font-stack: system-ui, -apple-system, 'Segoe UI',
+                          'Noto Sans Arabic', Tahoma, sans-serif;
+
+            /* المسافات الآمنة: تيليجرام في وضع ملء الشاشة + نتوء الشاشة */
+            --safe-top: max(env(safe-area-inset-top, 0px),
+                            var(--tg-content-safe-area-inset-top, 0px));
+            --safe-bottom: max(env(safe-area-inset-bottom, 0px),
+                               var(--tg-content-safe-area-inset-bottom, 0px));
+            --safe-left: env(safe-area-inset-left, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button, input, select, textarea {
+            font-family: inherit;
         }
 
         body {
+            font-family: var(--font-stack);
             background-color: var(--bg-color);
             color: var(--text-primary);
             min-height: 100vh;
-            padding: 16px;
+            min-height: 100dvh;
+            max-width: 640px;
+            margin: 0 auto;
+            padding:
+                calc(16px + var(--safe-top))
+                calc(16px + var(--safe-right))
+                calc(16px + var(--safe-bottom))
+                calc(16px + var(--safe-left));
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(88, 166, 255, 0.08) 0%, transparent 40%),
                 radial-gradient(circle at 90% 80%, rgba(188, 140, 255, 0.08) 0%, transparent 40%);
@@ -53,13 +77,13 @@
         }
 
         h1 {
-            font-size: 18px;
+            font-size: clamp(18px, 5vw, 22px);
             margin-bottom: 4px;
             color: var(--text-primary);
         }
 
         p.subtitle {
-            font-size: 12px;
+            font-size: clamp(12px, 3.2vw, 14px);
             color: var(--text-secondary);
         }
 
@@ -88,7 +112,20 @@
             margin-bottom: 20px;
         }
 
+        @media (min-width: 560px) {
+            .grid-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 14px;
+            }
+        }
+
         .card {
+            -webkit-user-select: none;
+            user-select: none;
+            min-height: 96px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 14px;
@@ -101,10 +138,18 @@
             overflow: hidden;
         }
 
-        .card:hover {
-            transform: translateY(-3px);
+        /* التحويم فقط على الأجهزة التي تدعمه فعلاً (منع الالتصاق باللمس) */
+        @media (hover: hover) {
+            .card:hover {
+                transform: translateY(-3px);
+                border-color: var(--accent-glow);
+                box-shadow: 0 8px 25px rgba(88, 166, 255, 0.2);
+            }
+        }
+
+        .card:active {
+            transform: scale(0.97);
             border-color: var(--accent-glow);
-            box-shadow: 0 8px 25px rgba(88, 166, 255, 0.2);
         }
 
         .card-icon {
@@ -113,17 +158,17 @@
         }
 
         .card h3 {
-            font-size: 13px;
+            font-size: clamp(13px, 3.4vw, 15px);
             margin-bottom: 4px;
         }
 
         .card p {
-            font-size: 10px;
+            font-size: clamp(10px, 2.8vw, 12px);
             color: var(--text-secondary);
         }
 
         .full-width {
-            grid-column: span 2;
+            grid-column: 1 / -1;
         }
 
         .modal {
@@ -137,8 +182,13 @@
             backdrop-filter: blur(8px);
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding:
+                calc(16px + var(--safe-top))
+                calc(16px + var(--safe-right))
+                calc(16px + var(--safe-bottom))
+                calc(16px + var(--safe-left));
             z-index: 1000;
+            overscroll-behavior: contain;
         }
 
         .modal-content {
@@ -151,17 +201,25 @@
             position: relative;
             box-shadow: 0 0 30px rgba(88, 166, 255, 0.3);
             max-height: 85vh;
+            max-height: 85dvh;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .close-btn {
             position: absolute;
-            top: 12px;
-            left: 12px;
+            top: 6px;
+            left: 6px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 18px;
+            font-size: 22px;
+            line-height: 1;
             cursor: pointer;
         }
 
@@ -185,12 +243,18 @@
 
         .form-group input, .form-group select {
             width: 100%;
-            padding: 9px;
+            padding: 11px;
             background: #0d1117;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             color: white;
-            font-size: 13px;
+            /* 16px إلزامي: أقل من ذلك يجعل iOS يكبّر الصفحة عند الكتابة */
+            font-size: 16px;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-glow);
         }
 
         .file-item {
@@ -202,6 +266,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .file-info {
+            min-width: 0;
+            flex: 1 1 60%;
         }
 
         .file-info h4 {
@@ -216,10 +287,11 @@
         }
 
         .btn-download {
+            flex-shrink: 0;
             background: #1f6feb;
             color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 9px 14px;
             border-radius: 6px;
             font-size: 11px;
             cursor: pointer;
@@ -228,7 +300,9 @@
 
         .btn-action {
             width: 100%;
-            padding: 11px;
+            min-height: 44px;
+            font-size: 15px;
+            padding: 12px;
             background: linear-gradient(135deg, #1f6feb, #8957e5);
             color: white;
             border: none;
@@ -247,6 +321,13 @@
             font-size: 13px;
             color: var(--accent-glow);
             display: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+                animation: none !important;
+            }
         }
 
         footer {
@@ -313,7 +394,7 @@
                     <h4>مقدمة في الذكاء الاصطناعي (AI)</h4>
                     <span>محاضرة 1 • PDF • 4.2 MB</span>
                 </div>
-                <a href="#" onclick="alert('جاري تحميل الملف...')" class="btn-download">تحميل</a>
+                <a href="#" onclick="notify('جاري تحميل الملف...'); return false;" class="btn-download">تحميل</a>
             </div>
 
             <div class="file-item">
@@ -321,7 +402,7 @@
                     <h4>هياكل البيانات وخوارزمياتها</h4>
                     <span>ملخص السكاشن • PDF • 2.8 MB</span>
                 </div>
-                <a href="#" onclick="alert('جاري تحميل الملف...')" class="btn-download">تحميل</a>
+                <a href="#" onclick="notify('جاري تحميل الملف...'); return false;" class="btn-download">تحميل</a>
             </div>
         </div>
     </div>
@@ -349,7 +430,7 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('scheduleModal')">&times;</button>
             <div class="modal-title">الجدول الدراسي اليومي</div>
-            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; text-align: right;">
+            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; text-align: start;">
                 • <b>الأحد:</b> شبكات حاسب متقدمة (09:00 ص)<br>
                 • <b>الإثنين:</b> تعلم الآلة Machine Learning (11:30 ص)<br>
                 • <b>الثلاثاء:</b> نظم ذكية AI Systems (10:00 ص)<br>
@@ -364,10 +445,10 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('aiLabModal')">&times;</button>
             <div class="modal-title">معمل الذكاء الاصطناعي</div>
-            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; text-align: right;">
+            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; text-align: start;">
                 تم تفعيل بيئة العمل السحابية لطلاب الحاسبات والذكاء الاصطناعي بجامعة مايو.
             </p>
-            <button class="btn-action" onclick="alert('تم تفعيل الاتصال بنجاح!')">بدء الجلسة</button>
+            <button class="btn-action" onclick="notify('تم تفعيل الاتصال بنجاح!')">بدء الجلسة</button>
         </div>
     </div>
 
@@ -379,7 +460,7 @@
             <p style="font-size: 12px; color: var(--text-secondary); text-align: center; margin-bottom: 15px;">
                 الانتقال للنظام الأكاديمي الرسمي للجامعة.
             </p>
-            <button class="btn-action" onclick="window.open('https://www.miu.edu.eg', '_blank')">زيارة الموقع الرسمي</button>
+            <button class="btn-action" onclick="openExternal('https://www.miu.edu.eg')">زيارة الموقع الرسمي</button>
         </div>
     </div>
 
@@ -389,11 +470,45 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-        
+
+        // إبلاغ تيليجرام أن الواجهة جاهزة قبل أي شيء آخر
+        tg.ready();
+
         // تفعيل وضع ملء الشاشة وتوسيع النافذة تلقائياً
         tg.expand();
         if (tg.requestFullscreen) {
             tg.requestFullscreen();
+        }
+
+        // مطابقة شريط تيليجرام العلوي لخلفية التطبيق
+        try {
+            tg.setHeaderColor('#0d1117');
+            tg.setBackgroundColor('#0d1117');
+        } catch (e) {
+            /* نسخ تيليجرام القديمة لا تدعم هذه الدوال */
+        }
+
+        // منع الإغلاق بالسحب لأسفل أثناء تصفح المحتوى
+        if (tg.disableVerticalSwipes) {
+            tg.disableVerticalSwipes();
+        }
+
+        // تنبيه داخل تيليجرام بدلاً من alert المتصفح (المحجوب أحياناً)
+        function notify(message) {
+            if (tg.showAlert) {
+                tg.showAlert(message);
+            } else {
+                alert(message);
+            }
+        }
+
+        // فتح الروابط الخارجية عبر تيليجرام لا عبر window.open
+        function openExternal(url) {
+            if (tg.openLink) {
+                tg.openLink(url);
+            } else {
+                window.open(url, '_blank', 'noopener');
+            }
         }
 
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -401,43 +516,97 @@
             document.getElementById('username').innerText = user.first_name || 'طالب الكلية';
         }
 
+        // النافذة المفتوحة حالياً (نافذة واحدة كحد أقصى)
+        let openModalId = null;
+
         function openModal(modalId) {
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('medium');
             }
+
             document.getElementById(modalId).style.display = 'flex';
+            openModalId = modalId;
+
+            // منع تمرير الصفحة خلف النافذة
+            document.body.style.overflow = 'hidden';
+
+            // زر الرجوع في تيليجرام يغلق النافذة
+            if (tg.BackButton) {
+                tg.BackButton.show();
+            }
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
+
+            if (openModalId === modalId) {
+                openModalId = null;
+                document.body.style.overflow = '';
+
+                if (tg.BackButton) {
+                    tg.BackButton.hide();
+                }
+            }
         }
+
+        if (tg.BackButton) {
+            tg.BackButton.onClick(function () {
+                if (openModalId) {
+                    closeModal(openModalId);
+                }
+            });
+        }
+
+        // زر Escape على تيليجرام ديسكتوب
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && openModalId) {
+                closeModal(openModalId);
+            }
+        });
+
+        // المواد المسجلة حتى الآن: { gpa, hours }
+        const courses = [];
 
         function calculateGPA() {
             const gpa = parseFloat(document.getElementById('gpaInput').value);
-            const hours = parseInt(document.getElementById('hoursInput').value);
+            const hours = parseInt(document.getElementById('hoursInput').value, 10);
             const resultBox = document.getElementById('gpaResult');
-            
+
+            resultBox.style.display = 'block';
+
             if (isNaN(gpa) || gpa < 0 || gpa > 4.0) {
-                resultBox.style.display = 'block';
                 resultBox.style.color = '#ff7b72';
-                resultBox.innerText = 'يرجى إدخال قيمة صحيحة بين 0 و 4.0';
+                resultBox.innerText = 'يرجى إدخال تقدير صحيح بين 0 و 4.0';
                 return;
             }
 
-            resultBox.style.display = 'block';
+            if (isNaN(hours) || hours <= 0 || hours > 12) {
+                resultBox.style.color = '#ff7b72';
+                resultBox.innerText = 'يرجى إدخال عدد ساعات صحيح بين 1 و 12';
+                return;
+            }
+
+            courses.push({ gpa: gpa, hours: hours });
+
+            const totalHours = courses.reduce((sum, c) => sum + c.hours, 0);
+            const totalPoints = courses.reduce((sum, c) => sum + (c.gpa * c.hours), 0);
+            const cumulative = totalPoints / totalHours;
+
             resultBox.style.color = 'var(--accent-glow)';
-            resultBox.innerText = `تم تسجيل المادة بنجاح (GPA: ${gpa}, الساعات: ${hours})`;
-            
+            resultBox.innerText =
+                `المعدل التراكمي: ${cumulative.toFixed(2)} — ` +
+                `${courses.length} مادة، ${totalHours} ساعة معتمدة`;
+
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.notificationOccurred('success');
             }
         }
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
+                closeModal(event.target.id);
             }
-        }
+        };
     </script>
 </body>
 </html>

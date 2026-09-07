@@ -1,3 +1,4 @@
+import hmac
 import json
 import os
 import urllib.parse
@@ -12,13 +13,16 @@ from http.server import BaseHTTPRequestHandler
 
 # Set these in Vercel Environment Variables.
 #
-# TELEGRAM_BOT_TOKEN = your NEW token from @BotFather
-# WEB_APP_URL = https://codeartifact-2-ten.vercel.app/
+# TELEGRAM_BOT_TOKEN     = your NEW token from @BotFather
+# WEB_APP_URL            = https://codeartifact-2-ten.vercel.app/
+# TELEGRAM_SECRET_TOKEN  = any random string you also pass to
+#                          setWebhook as ?secret_token=...
 #
 # NEVER put the bot token directly in this file.
 
-TOKEN = "8995756244:AAGDtW8CoTuxxAK4b7Gw18x3NuORSJ2fYf0"
-WEB_APP_URL = "https://codeartifact-2-ten.vercel.app/"
+TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+WEB_APP_URL = os.environ.get("WEB_APP_URL", "")
+SECRET_TOKEN = os.environ.get("TELEGRAM_SECRET_TOKEN", "")
 
 
 # ============================================================
@@ -33,6 +37,26 @@ class handler(BaseHTTPRequestHandler):
     # --------------------------------------------------------
 
     def do_POST(self):
+
+        # ----------------------------------------------------
+        # Reject anyone who is not Telegram
+        # ----------------------------------------------------
+
+        if not self.is_from_telegram():
+
+            print(
+                "Rejected request: bad or missing "
+                "X-Telegram-Bot-Api-Secret-Token header."
+            )
+
+            self.send_json_response(
+                403,
+                {
+                    "status": "forbidden"
+                }
+            )
+
+            return
 
         try:
             # Get request body size
@@ -51,94 +75,26 @@ class handler(BaseHTTPRequestHandler):
             print("Telegram update:")
             print(json.dumps(update, indent=2))
 
-            # ------------------------------------------------
-            # Handle normal Telegram messages
-            # ------------------------------------------------
-
-            if "message" in update:
-
-                message = update["message"]
-
-                chat = message.get("chat", {})
-                user = message.get("from", {})
-
-                chat_id = chat.get("id")
-
-                user_name = user.get(
-                    "first_name",
-                    "User"
-                )
-
-                text = message.get(
-                    "text",
-                    ""
-                )
-
-                print(
-                    f"Message from {user_name}: {text}"
-                )
-
-                # ------------------------------------------------
-                # /start
-                # ------------------------------------------------
-
-                if text.startswith("/start"):
-
-                    # Support:
-                    # /start
-                    # /start something
-                    parts = text.split(
-                        maxsplit=1
-                    )
-
-                    start_parameter = (
-                        parts[1]
-                        if len(parts) > 1
-                        else None
-                    )
-
-                    self.send_telegram_message(
-                        chat_id=chat_id,
-                        user_name=user_name,
-                        start_parameter=start_parameter
-                    )
-
-                # ------------------------------------------------
-                # /help
-                # ------------------------------------------------
-
-                elif text == "/help":
-
-                    self.send_text_message(
-                        chat_id,
-                        "Available commands:\n\n"
-                        "/start - Open the MIU Student Portal\n"
-                        "/help - Show this help message"
-                    )
-
-            # ------------------------------------------------
-            # Telegram expects HTTP 200
-            # ------------------------------------------------
-
-            self.send_json_response(
-                200,
-                {
-                    "status": "ok"
-                }
-            )
+            self.handle_update(update)
 
         except Exception as e:
 
+            # Always answer 200, otherwise Telegram retries
+            # this same update forever.
             print(
                 f"Webhook error: {e}"
             )
 
-            self.send_json_response(
-                500,
-                {
-                    "status": "error"
-                }
-            )
+        # ------------------------------------------------
+        # Telegram expects HTTP 200
+        # ------------------------------------------------
+
+        self.send_json_response(
+            200,
+            {
+                "status": "ok"
+            }
+        )
 
     # --------------------------------------------------------
     # GET
@@ -161,6 +117,107 @@ class handler(BaseHTTPRequestHandler):
         )
 
     # ========================================================
+    # VERIFY THE CALLER IS TELEGRAM
+    # ========================================================
+
+    def is_from_telegram(self):
+
+        if not SECRET_TOKEN:
+
+            # No secret configured: nothing to check against.
+            print(
+                "WARNING: TELEGRAM_SECRET_TOKEN is not set, "
+                "the webhook is publicly callable."
+            )
+
+            return True
+
+        received = self.headers.get(
+            "X-Telegram-Bot-Api-Secret-Token",
+            ""
+        )
+
+        return hmac.compare_digest(
+            received,
+            SECRET_TOKEN
+        )
+
+    # ========================================================
+    # ROUTE ONE UPDATE
+    # ========================================================
+
+    def handle_update(self, update):
+
+        # ------------------------------------------------
+        # Handle normal Telegram messages
+        # ------------------------------------------------
+
+        message = (
+            update.get("message")
+            or update.get("edited_message")
+        )
+
+        if not message:
+            return
+
+        chat = message.get("chat", {})
+        user = message.get("from", {})
+
+        chat_id = chat.get("id")
+
+        user_name = user.get(
+            "first_name",
+            "User"
+        )
+
+        text = message.get(
+            "text",
+            ""
+        )
+
+        print(
+            f"Message from {user_name}: {text}"
+        )
+
+        # ------------------------------------------------
+        # /start
+        # ------------------------------------------------
+
+        if text.startswith("/start"):
+
+            # Support:
+            # /start
+            # /start something
+            parts = text.split(
+                maxsplit=1
+            )
+
+            start_parameter = (
+                parts[1]
+                if len(parts) > 1
+                else None
+            )
+
+            self.send_telegram_message(
+                chat_id=chat_id,
+                user_name=user_name,
+                start_parameter=start_parameter
+            )
+
+        # ------------------------------------------------
+        # /help
+        # ------------------------------------------------
+
+        elif text == "/help":
+
+            self.send_text_message(
+                chat_id,
+                "Available commands:\n\n"
+                "/start - Open the MIU Student Portal\n"
+                "/help - Show this help message"
+            )
+
+    # ========================================================
     # SEND WELCOME MESSAGE
     # ========================================================
 
@@ -170,20 +227,6 @@ class handler(BaseHTTPRequestHandler):
         user_name,
         start_parameter=None
     ):
-
-        if not TOKEN:
-
-            print(
-                "ERROR: TELEGRAM_BOT_TOKEN "
-                "environment variable is missing."
-            )
-
-            return
-
-        api_url = (
-            "https://api.telegram.org/"
-            f"bot{TOKEN}/sendMessage"
-        )
 
         # Escape user-controlled text
         safe_name = escape(
@@ -197,23 +240,6 @@ class handler(BaseHTTPRequestHandler):
             "اضغط على الزر بالأسفل لفتح "
             "بوابة الطالب:"
         )
-
-        # ----------------------------------------------------
-        # Mini App button
-        # ----------------------------------------------------
-
-        reply_markup = {
-            "inline_keyboard": [
-                [
-                    {
-                        "text": "📱 فتح بوابة الطالب (Mini App)",
-                        "web_app": {
-                            "url": WEB_APP_URL
-                        }
-                    }
-                ]
-            ]
-        }
 
         # ----------------------------------------------------
         # Optional start parameter
@@ -234,11 +260,42 @@ class handler(BaseHTTPRequestHandler):
         payload = {
             "chat_id": chat_id,
             "text": welcome_text,
-            "parse_mode": "HTML",
-            "reply_markup": json.dumps(
+            "parse_mode": "HTML"
+        }
+
+        # ----------------------------------------------------
+        # Mini App button
+        #
+        # Telegram rejects a web_app button without a valid
+        # https URL, so only attach it when WEB_APP_URL is set.
+        # ----------------------------------------------------
+
+        if WEB_APP_URL:
+
+            reply_markup = {
+                "inline_keyboard": [
+                    [
+                        {
+                            "text": "📱 فتح بوابة الطالب (Mini App)",
+                            "web_app": {
+                                "url": WEB_APP_URL
+                            }
+                        }
+                    ]
+                ]
+            }
+
+            payload["reply_markup"] = json.dumps(
                 reply_markup
             )
-        }
+
+        else:
+
+            print(
+                "ERROR: WEB_APP_URL environment variable "
+                "is missing, sending message without the "
+                "Mini App button."
+            )
 
         self.call_telegram_api(
             "sendMessage",
@@ -254,15 +311,6 @@ class handler(BaseHTTPRequestHandler):
         chat_id,
         text
     ):
-
-        if not TOKEN:
-
-            print(
-                "ERROR: TELEGRAM_BOT_TOKEN "
-                "environment variable is missing."
-            )
-
-            return
 
         payload = {
             "chat_id": chat_id,
@@ -283,6 +331,15 @@ class handler(BaseHTTPRequestHandler):
         method,
         payload
     ):
+
+        if not TOKEN:
+
+            print(
+                "ERROR: TELEGRAM_BOT_TOKEN "
+                "environment variable is missing."
+            )
+
+            return None
 
         api_url = (
             "https://api.telegram.org/"
