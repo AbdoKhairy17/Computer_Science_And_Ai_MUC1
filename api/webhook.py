@@ -17,7 +17,7 @@ from http.server import BaseHTTPRequestHandler
 #
 # NEVER put the bot token directly in this file.
 
-TOKEN = os.environ.get(8995756244:AAGDtW8CoTuxxAK4b7Gw18x3NuORSJ2fYf0")
+TOKEN = os.environ.get("8995756244:AAGDtW8CoTuxxAK4b7Gw18x3NuORSJ2fYf0")
 WEB_APP_URL = os.environ.get(
     "WEB_APP_URL",
     "https://codeartifact-2-ten.vercel.app/"
