@@ -8,11 +8,21 @@ from html import escape
 from http.server import BaseHTTPRequestHandler
 
 
+
 # ============================================================
 # CONFIGURATION
 # ============================================================
 
 # One-click webhook registration.
+#
+# Set these in Vercel Environment Variables.
+#
+# TELEGRAM_BOT_TOKEN     = your NEW token from @BotFather
+# WEB_APP_URL            = https://codeartifact-2-ten.vercel.app/
+# TELEGRAM_SECRET_TOKEN  = any random string you also pass to
+#                          setWebhook as ?secret_token=...
+#
+# NEVER put the bot token directly in this file.
 #
 # Open in a browser:
 #   https://<your-app>.vercel.app/api/setup?key=<TELEGRAM_SECRET_TOKEN>
