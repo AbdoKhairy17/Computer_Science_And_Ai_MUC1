@@ -11,7 +11,8 @@ Bot: [@Computer_Science_And_Ai_MUC1bot](https://t.me/Computer_Science_And_Ai_MUC
 ```
 .
 ├── api/
-│   └── webhook.py   # Vercel Python serverless function → /api/webhook
+│   ├── webhook.py   # Vercel Python serverless function → /api/webhook
+│   └── setup.py     # one-click webhook registration → /api/setup
 ├── index.html       # the Mini App (served at /)
 └── README.md
 ```
@@ -47,26 +48,47 @@ them, or the function starts up with them empty.
 
 1. Push to the branch Vercel is connected to. It auto-detects `api/*.py` as a
    Python serverless function; no `vercel.json` is needed.
-2. Register the webhook **once**, using the same secret you put in the env vars:
+2. Register the webhook **once** by opening this in a browser:
 
-   ```bash
-   curl "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://<your-app>.vercel.app/api/webhook&secret_token=<SECRET>"
+   ```
+   https://<your-app>.vercel.app/api/setup?key=<TELEGRAM_SECRET_TOKEN>
    ```
 
-   Expect `{"ok":true,"result":true,"description":"Webhook was set"}`.
+Telegram does not know your server's address until you tell it. A bot receives
+messages either by long polling — a process running 24/7, which serverless
+cannot do — or by webhook, where Telegram POSTs to a URL you registered. That
+registration lives on Telegram's servers, not in your code, which is why
+deploying cannot do it for you.
 
-3. Verify:
+`/api/setup` does the registration from inside Vercel, so the bot token never
+leaves the server and never lands in your shell history. It reads the target URL
+from the incoming request, so it always points Telegram at the deployment you
+opened it on. It is gated by `TELEGRAM_SECRET_TOKEN` and refuses to run if that
+variable is unset.
 
-   ```bash
-   curl "https://api.telegram.org/bot<TOKEN>/getWebhookInfo"
-   ```
+| Query | Effect |
+| --- | --- |
+| `?key=<SECRET>` | register this deployment as the webhook |
+| `?key=<SECRET>&action=info` | show current status, change nothing |
+| `?key=<SECRET>&action=delete` | unregister the webhook |
 
-   `url` must not be empty, and `pending_update_count` should drain to `0`.
-   An empty `url` means Telegram has nowhere to deliver updates — the bot will
-   stay silent no matter what the code does.
+The page also warns when `WEB_APP_URL` does not match the deployment it is
+running on — the mistake that leaves `/start` working while the Mini App button
+opens a dead address.
 
-If `secret_token` and `TELEGRAM_SECRET_TOKEN` do not match exactly, every update
-is rejected with `403` and the bot goes quiet. That is the first thing to check.
+You only need this again if the domain changes or you revoke the token.
+
+### Doing it by hand instead
+
+```bash
+curl "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://<your-app>.vercel.app/api/webhook&secret_token=<SECRET>"
+curl "https://api.telegram.org/bot<TOKEN>/getWebhookInfo"
+```
+
+`url` must not be empty, and `pending_update_count` should drain to `0`. An
+empty `url` means Telegram has nowhere to deliver updates — the bot stays silent
+no matter what the code does. If `secret_token` and `TELEGRAM_SECRET_TOKEN` do
+not match exactly, every update is rejected with `403`.
 
 ## Health checks
 
@@ -75,6 +97,8 @@ is rejected with `403` and the bot goes quiet. That is the first thing to check.
 | `/` | `200` — the Mini App |
 | `/api/webhook` (GET) | `200 Telegram Bot Webhook is running successfully.` |
 | `/api/webhook` (POST, no secret) | `403` |
+| `/api/setup` (no key) | `403` |
+| `/api/setup?key=<SECRET>&action=info` | `200` — live webhook status |
 
 ## Bot commands
 
