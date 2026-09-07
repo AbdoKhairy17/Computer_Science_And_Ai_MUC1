@@ -3,30 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0d1117">
-    <title>كلية الحاسبات والذكاء الاصطناعي - جامعة مايو</title>
+    <meta name="theme-color" content="#08090F">
+    <title>كلية الحاسبات والذكاء الاصطناعي - MIU</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
     <style>
+        /* ==================================================
+           DESIGN TOKENS
+           ================================================== */
+
         :root {
-            --bg-color: #0d1117;
-            --card-bg: rgba(22, 27, 34, 0.85);
-            --border-color: rgba(88, 166, 255, 0.3);
-            --text-primary: #f0f6fc;
-            --text-secondary: #8b949e;
-            --accent-glow: #58a6ff;
-            --accent-purple: #bc8cff;
+            /* السطح والنص - الوضع الفاتح */
+            --bg:          #F6F7FB;
+            --surface:     #FFFFFF;
+            --surface-2:   #F1F3F9;
+            --surface-3:   #E8EBF3;
+            --border:      rgba(14, 16, 32, .09);
+            --border-soft: rgba(14, 16, 32, .06);
+            --text:        #0E1020;
+            --text-muted:  #5A6076;
+            --text-faint:  #8A90A6;
+            --shadow-sm:   0 1px 2px rgba(14,16,32,.06), 0 1px 3px rgba(14,16,32,.04);
+            --shadow-md:   0 4px 12px rgba(14,16,32,.07), 0 2px 4px rgba(14,16,32,.04);
+            --shadow-lg:   0 24px 48px -12px rgba(14,16,32,.18);
 
-            --font-stack: system-ui, -apple-system, 'Segoe UI',
-                          'Noto Sans Arabic', Tahoma, sans-serif;
+            /* الهوية اللونية */
+            --brand:       #6D4AFF;
+            --brand-soft:  rgba(109, 74, 255, .12);
+            --cyan:        #06B6D4;
+            --cyan-soft:   rgba(6, 182, 212, .12);
+            --amber:       #F59E0B;
+            --amber-soft:  rgba(245, 158, 11, .13);
+            --emerald:     #10B981;
+            --emerald-soft:rgba(16, 185, 129, .12);
+            --pink:        #EC4899;
+            --pink-soft:   rgba(236, 72, 153, .12);
+            --danger:      #EF4444;
 
-            /* المسافات الآمنة: تيليجرام في وضع ملء الشاشة + نتوء الشاشة */
-            --safe-top: max(env(safe-area-inset-top, 0px),
-                            var(--tg-content-safe-area-inset-top, 0px));
+            --gradient:    linear-gradient(135deg, #6D4AFF 0%, #9333EA 45%, #06B6D4 100%);
+
+            /* المقاسات */
+            --r-sm: 10px;
+            --r-md: 16px;
+            --r-lg: 22px;
+            --r-xl: 28px;
+            --ease: cubic-bezier(.32, .72, 0, 1);
+
+            --font: 'IBM Plex Sans Arabic', system-ui, -apple-system,
+                    'Segoe UI', 'Noto Sans Arabic', Tahoma, sans-serif;
+
+            /* المسافات الآمنة: ملء الشاشة في تيليجرام + نتوء الجهاز */
+            --safe-top:    max(env(safe-area-inset-top, 0px),
+                               var(--tg-content-safe-area-inset-top, 0px));
             --safe-bottom: max(env(safe-area-inset-bottom, 0px),
                                var(--tg-content-safe-area-inset-bottom, 0px));
-            --safe-left: env(safe-area-inset-left, 0px);
-            --safe-right: env(safe-area-inset-right, 0px);
+            --safe-left:   env(safe-area-inset-left, 0px);
+            --safe-right:  env(safe-area-inset-right, 0px);
         }
+
+        /* الوضع الداكن: عبر إعداد الجهاز أو تيليجرام */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg:          #08090F;
+                --surface:     #12131C;
+                --surface-2:   #191B26;
+                --surface-3:   #212433;
+                --border:      rgba(255, 255, 255, .09);
+                --border-soft: rgba(255, 255, 255, .06);
+                --text:        #F4F5FA;
+                --text-muted:  #9AA0B4;
+                --text-faint:  #6B7186;
+                --shadow-sm:   0 1px 2px rgba(0,0,0,.4);
+                --shadow-md:   0 4px 14px rgba(0,0,0,.45);
+                --shadow-lg:   0 24px 48px -12px rgba(0,0,0,.7);
+                --brand:       #8B6BFF;
+                --brand-soft:  rgba(139, 107, 255, .17);
+                --cyan-soft:   rgba(6, 182, 212, .17);
+                --amber-soft:  rgba(245, 158, 11, .17);
+                --emerald-soft:rgba(16, 185, 129, .17);
+                --pink-soft:   rgba(236, 72, 153, .17);
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --bg:          #08090F;
+            --surface:     #12131C;
+            --surface-2:   #191B26;
+            --surface-3:   #212433;
+            --border:      rgba(255, 255, 255, .09);
+            --border-soft: rgba(255, 255, 255, .06);
+            --text:        #F4F5FA;
+            --text-muted:  #9AA0B4;
+            --text-faint:  #6B7186;
+            --shadow-sm:   0 1px 2px rgba(0,0,0,.4);
+            --shadow-md:   0 4px 14px rgba(0,0,0,.45);
+            --shadow-lg:   0 24px 48px -12px rgba(0,0,0,.7);
+            --brand:       #8B6BFF;
+            --brand-soft:  rgba(139, 107, 255, .17);
+            --cyan-soft:   rgba(6, 182, 212, .17);
+            --amber-soft:  rgba(245, 158, 11, .17);
+            --emerald-soft:rgba(16, 185, 129, .17);
+            --pink-soft:   rgba(236, 72, 153, .17);
+        }
+
+        /* ==================================================
+           RESET
+           ================================================== */
 
         * {
             box-sizing: border-box;
@@ -35,578 +122,1574 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        button, input, select, textarea {
-            font-family: inherit;
-        }
+        html { -webkit-text-size-adjust: 100%; }
 
         body {
-            font-family: var(--font-stack);
-            background-color: var(--bg-color);
-            color: var(--text-primary);
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             min-height: 100dvh;
-            max-width: 640px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color .3s ease, color .3s ease;
+        }
+
+        button, input, select { font-family: inherit; color: inherit; }
+        svg { display: block; flex-shrink: 0; }
+        ::selection { background: var(--brand-soft); }
+
+        :focus-visible {
+            outline: 2px solid var(--brand);
+            outline-offset: 2px;
+            border-radius: 6px;
+        }
+
+        /* ==================================================
+           BACKGROUND AURORA
+           ================================================== */
+
+        .aurora {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .aurora::before,
+        .aurora::after {
+            content: '';
+            position: absolute;
+            width: 460px;
+            height: 460px;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: .5;
+        }
+
+        .aurora::before {
+            top: -190px;
+            inset-inline-end: -140px;
+            background: radial-gradient(circle, #6D4AFF, transparent 68%);
+            animation: drift 22s ease-in-out infinite;
+        }
+
+        .aurora::after {
+            bottom: -220px;
+            inset-inline-start: -160px;
+            background: radial-gradient(circle, #06B6D4, transparent 68%);
+            animation: drift 26s ease-in-out infinite reverse;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50%      { transform: translate(-28px, 34px) scale(1.12); }
+        }
+
+        /* ==================================================
+           LAYOUT
+           ================================================== */
+
+        .app {
+            max-width: 680px;
             margin: 0 auto;
             padding:
-                calc(16px + var(--safe-top))
-                calc(16px + var(--safe-right))
-                calc(16px + var(--safe-bottom))
-                calc(16px + var(--safe-left));
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(88, 166, 255, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(188, 140, 255, 0.08) 0%, transparent 40%);
+                calc(18px + var(--safe-top))
+                calc(18px + var(--safe-right))
+                calc(28px + var(--safe-bottom))
+                calc(18px + var(--safe-left));
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
+        .stack > * + * { margin-top: 22px; }
+
+        /* دخول متدرج للعناصر */
+        .rise {
+            opacity: 0;
+            animation: rise .6s var(--ease) forwards;
+            animation-delay: calc(var(--i, 0) * 55ms);
         }
 
-        .logo-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #1f6feb, #8957e5);
-            color: white;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            box-shadow: 0 0 15px rgba(31, 111, 235, 0.4);
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: none; }
         }
 
-        h1 {
-            font-size: clamp(18px, 5vw, 22px);
-            margin-bottom: 4px;
-            color: var(--text-primary);
-        }
+        /* ==================================================
+           HEADER
+           ================================================== */
 
-        p.subtitle {
-            font-size: clamp(12px, 3.2vw, 14px);
-            color: var(--text-secondary);
-        }
-
-        .user-greeting {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 10px 14px;
-            margin-bottom: 16px;
+        .topbar {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(10px);
-            font-size: 13px;
-        }
-
-        .user-greeting span {
-            color: var(--accent-glow);
-            font-weight: bold;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
-        @media (min-width: 560px) {
-            .grid-container {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 14px;
-            }
-        }
-
-        .card {
-            -webkit-user-select: none;
-            user-select: none;
-            min-height: 96px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
+        .mark {
+            width: 46px;
+            height: 46px;
             border-radius: 14px;
-            padding: 14px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            background: var(--gradient);
+            display: grid;
+            place-items: center;
+            color: #fff;
+            box-shadow: 0 8px 22px -6px rgba(109, 74, 255, .55);
+            flex-shrink: 0;
+        }
+
+        .mark svg { width: 24px; height: 24px; }
+
+        .topbar-text { min-width: 0; flex: 1; }
+
+        .topbar h1 {
+            font-size: clamp(15px, 4vw, 17px);
+            font-weight: 700;
+            letter-spacing: -.01em;
+            line-height: 1.35;
+        }
+
+        .topbar p {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .pill {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 11px;
+            border-radius: 999px;
+            background: var(--brand-soft);
+            color: var(--brand);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* ==================================================
+           HERO / GREETING
+           ================================================== */
+
+        .hero {
             position: relative;
+            border-radius: var(--r-xl);
+            padding: 22px;
+            background: var(--gradient);
+            color: #fff;
             overflow: hidden;
+            box-shadow: 0 18px 40px -18px rgba(109, 74, 255, .7);
         }
 
-        /* التحويم فقط على الأجهزة التي تدعمه فعلاً (منع الالتصاق باللمس) */
-        @media (hover: hover) {
-            .card:hover {
-                transform: translateY(-3px);
-                border-color: var(--accent-glow);
-                box-shadow: 0 8px 25px rgba(88, 166, 255, 0.2);
-            }
-        }
-
-        .card:active {
-            transform: scale(0.97);
-            border-color: var(--accent-glow);
-        }
-
-        .card-icon {
-            font-size: 26px;
-            margin-bottom: 8px;
-        }
-
-        .card h3 {
-            font-size: clamp(13px, 3.4vw, 15px);
-            margin-bottom: 4px;
-        }
-
-        .card p {
-            font-size: clamp(10px, 2.8vw, 12px);
-            color: var(--text-secondary);
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(13, 17, 23, 0.85);
-            backdrop-filter: blur(8px);
-            justify-content: center;
-            align-items: center;
-            padding:
-                calc(16px + var(--safe-top))
-                calc(16px + var(--safe-right))
-                calc(16px + var(--safe-bottom))
-                calc(16px + var(--safe-left));
-            z-index: 1000;
-            overscroll-behavior: contain;
-        }
-
-        .modal-content {
-            background: #161b22;
-            border: 1px solid var(--accent-glow);
-            border-radius: 16px;
-            padding: 18px;
-            width: 100%;
-            max-width: 400px;
-            position: relative;
-            box-shadow: 0 0 30px rgba(88, 166, 255, 0.3);
-            max-height: 85vh;
-            max-height: 85dvh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .close-btn {
+        .hero::after {
+            content: '';
             position: absolute;
-            top: 6px;
-            left: 6px;
-            width: 44px;
-            height: 44px;
+            inset-inline-end: -70px;
+            top: -70px;
+            width: 210px;
+            height: 210px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .13);
+        }
+
+        .hero-label {
+            font-size: 12px;
+            font-weight: 500;
+            opacity: .85;
+            position: relative;
+        }
+
+        .hero h2 {
+            font-size: clamp(19px, 5.4vw, 24px);
+            font-weight: 700;
+            margin-top: 2px;
+            letter-spacing: -.02em;
+            position: relative;
+        }
+
+        .hero-meta {
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 22px;
-            line-height: 1;
-            cursor: pointer;
+            gap: 7px;
+            margin-top: 14px;
+            font-size: 12px;
+            font-weight: 500;
+            position: relative;
         }
 
-        .modal-title {
-            font-size: 15px;
-            margin-bottom: 15px;
-            color: var(--accent-glow);
+        .hero-meta svg { width: 15px; height: 15px; opacity: .9; }
+
+        /* ==================================================
+           STAT TILES
+           ================================================== */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .stat {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 14px 12px;
             text-align: center;
+            box-shadow: var(--shadow-sm);
         }
 
-        .form-group {
+        .stat-value {
+            font-size: clamp(19px, 5.5vw, 23px);
+            font-weight: 700;
+            letter-spacing: -.02em;
+            font-variant-numeric: tabular-nums;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 3px;
+        }
+
+        /* ==================================================
+           SECTION TITLE
+           ================================================== */
+
+        .section-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
             margin-bottom: 12px;
         }
 
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            margin-bottom: 5px;
-            color: var(--text-secondary);
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 11px;
-            background: #0d1117;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: white;
-            /* 16px إلزامي: أقل من ذلك يجعل iOS يكبّر الصفحة عند الكتابة */
-            font-size: 16px;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--accent-glow);
-        }
-
-        .file-item {
-            background: rgba(88, 166, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .file-info {
-            min-width: 0;
-            flex: 1 1 60%;
-        }
-
-        .file-info h4 {
-            font-size: 12px;
-            color: var(--text-primary);
-            margin-bottom: 2px;
-        }
-
-        .file-info span {
-            font-size: 10px;
-            color: var(--text-secondary);
-        }
-
-        .btn-download {
-            flex-shrink: 0;
-            background: #1f6feb;
-            color: white;
-            border: none;
-            padding: 9px 14px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .btn-action {
-            width: 100%;
-            min-height: 44px;
+        .section-head h3 {
             font-size: 15px;
-            padding: 12px;
-            background: linear-gradient(135deg, #1f6feb, #8957e5);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
+            font-weight: 700;
+            letter-spacing: -.01em;
         }
 
-        .result-box {
-            margin-top: 12px;
-            padding: 8px;
-            background: rgba(88, 166, 255, 0.1);
-            border-radius: 8px;
-            text-align: center;
-            font-size: 13px;
-            color: var(--accent-glow);
+        .section-head span {
+            font-size: 12px;
+            color: var(--text-faint);
+            font-weight: 500;
+        }
+
+        /* ==================================================
+           BENTO GRID
+           ================================================== */
+
+        .bento {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .bento { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        }
+
+        .tile {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: start;
+            min-height: 138px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            background: var(--surface);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            overflow: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+            transition: transform .22s var(--ease),
+                        box-shadow .22s var(--ease),
+                        border-color .22s var(--ease);
+        }
+
+        /* توهج خفيف بلون البطاقة */
+        .tile::before {
+            content: '';
+            position: absolute;
+            inset-inline-end: -46px;
+            top: -46px;
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            background: var(--tint-soft);
+            opacity: .8;
+            transition: transform .32s var(--ease);
+        }
+
+        @media (hover: hover) {
+            .tile:hover {
+                transform: translateY(-3px);
+                border-color: var(--tint);
+                box-shadow: var(--shadow-md);
+            }
+            .tile:hover::before { transform: scale(1.35); }
+        }
+
+        .tile:active { transform: scale(.975); }
+
+        .tile-icon {
+            position: relative;
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            display: grid;
+            place-items: center;
+            background: var(--tint-soft);
+            color: var(--tint);
+        }
+
+        .tile-icon svg { width: 21px; height: 21px; }
+
+        .tile-body { position: relative; margin-top: auto; }
+
+        .tile h4 {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: -.01em;
+            margin-bottom: 3px;
+        }
+
+        .tile p {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .tile.wide { grid-column: 1 / -1; min-height: 0; }
+
+        .tile.wide {
+            flex-direction: row;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .tile.wide .tile-body { margin-top: 0; flex: 1; }
+
+        .tile-arrow {
+            position: relative;
+            color: var(--text-faint);
+            transition: transform .22s var(--ease);
+        }
+
+        .tile-arrow svg { width: 18px; height: 18px; }
+
+        @media (hover: hover) {
+            .tile.wide:hover .tile-arrow { transform: translateX(4px); }
+        }
+
+        /* الألوان المخصصة لكل بطاقة */
+        .t-brand   { --tint: var(--brand);   --tint-soft: var(--brand-soft); }
+        .t-cyan    { --tint: var(--cyan);    --tint-soft: var(--cyan-soft); }
+        .t-amber   { --tint: var(--amber);   --tint-soft: var(--amber-soft); }
+        .t-emerald { --tint: var(--emerald); --tint-soft: var(--emerald-soft); }
+        .t-pink    { --tint: var(--pink);    --tint-soft: var(--pink-soft); }
+
+        /* ==================================================
+           BOTTOM SHEET
+           ================================================== */
+
+        .sheet {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
             display: none;
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                transition: none !important;
-                animation: none !important;
-            }
+        .sheet.open { display: block; }
+
+        .sheet-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(6, 7, 14, .55);
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            transition: opacity .3s var(--ease);
         }
+
+        .sheet.shown .sheet-backdrop { opacity: 1; }
+
+        .sheet-panel {
+            position: absolute;
+            inset-inline: 0;
+            bottom: 0;
+            background: var(--surface);
+            border-radius: var(--r-xl) var(--r-xl) 0 0;
+            border-top: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            max-height: 88dvh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            transform: translateY(100%);
+            transition: transform .36s var(--ease);
+            padding: 0 18px calc(22px + var(--safe-bottom));
+        }
+
+        .sheet.shown .sheet-panel { transform: translateY(0); }
+
+        @media (min-width: 640px) {
+            .sheet-panel {
+                inset-inline: auto;
+                inset-inline-start: 50%;
+                bottom: 26px;
+                width: min(480px, calc(100vw - 40px));
+                border-radius: var(--r-xl);
+                border: 1px solid var(--border);
+                transform: translate(50%, calc(100% + 40px));
+            }
+            .sheet.shown .sheet-panel { transform: translate(50%, 0); }
+        }
+
+        .grabber {
+            width: 38px;
+            height: 4px;
+            border-radius: 999px;
+            background: var(--surface-3);
+            margin: 10px auto 0;
+        }
+
+        .sheet-top {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            margin: 0 -18px;
+            padding: 0 18px;
+            background: var(--surface);
+        }
+
+        .sheet-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0 16px;
+        }
+
+        .sheet-head h3 {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -.01em;
+            flex: 1;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border: none;
+            border-radius: 50%;
+            background: var(--surface-2);
+            color: var(--text-muted);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background .2s, color .2s;
+        }
+
+        .icon-btn svg { width: 17px; height: 17px; }
+        .icon-btn:active { transform: scale(.92); }
+
+        @media (hover: hover) {
+            .icon-btn:hover { background: var(--surface-3); color: var(--text); }
+        }
+
+        /* ==================================================
+           LIST ROWS
+           ================================================== */
+
+        .row-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: var(--r-md);
+            background: var(--surface-2);
+            margin-bottom: 9px;
+        }
+
+        .row-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            display: grid;
+            place-items: center;
+            background: var(--tint-soft, var(--brand-soft));
+            color: var(--tint, var(--brand));
+            flex-shrink: 0;
+        }
+
+        .row-icon svg { width: 18px; height: 18px; }
+
+        .row-text { flex: 1; min-width: 0; }
+
+        .row-text h5 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 1px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .row-text span {
+            font-size: 11px;
+            color: var(--text-faint);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ==================================================
+           BUTTONS
+           ================================================== */
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 46px;
+            width: 100%;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 14px;
+            background: var(--gradient);
+            color: #fff;
+            font-size: 14.5px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 24px -10px rgba(109, 74, 255, .7);
+            transition: transform .18s var(--ease), filter .18s;
+        }
+
+        .btn svg { width: 17px; height: 17px; }
+        .btn:active { transform: scale(.975); }
+
+        @media (hover: hover) { .btn:hover { filter: brightness(1.08); } }
+
+        .btn-soft {
+            background: var(--surface-2);
+            color: var(--text);
+            box-shadow: none;
+            border: 1px solid var(--border);
+        }
+
+        @media (hover: hover) { .btn-soft:hover { background: var(--surface-3); filter: none; } }
+
+        .btn-sm {
+            width: auto;
+            min-height: 36px;
+            padding: 8px 14px;
+            font-size: 12.5px;
+            border-radius: 10px;
+            box-shadow: none;
+        }
+
+        .btn-ghost {
+            background: none;
+            border: none;
+            color: var(--text-faint);
+            width: auto;
+            min-height: 34px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 500;
+            box-shadow: none;
+            cursor: pointer;
+        }
+
+        @media (hover: hover) { .btn-ghost:hover { color: var(--danger); filter: none; } }
+
+        /* ==================================================
+           FORM
+           ================================================== */
+
+        .field { margin-bottom: 13px; }
+
+        .field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            /* 16px إلزامي: أقل من ذلك يجعل iOS يكبّر الصفحة عند الكتابة */
+            font-size: 16px;
+            font-weight: 500;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: var(--surface-2);
+            transition: border-color .2s, background .2s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .field select {
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A90A6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 14px center;
+            padding-inline-start: 40px;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            outline: none;
+            border-color: var(--brand);
+            background: var(--surface);
+        }
+
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+
+        /* ==================================================
+           GPA RING
+           ================================================== */
+
+        .gpa-display {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 16px;
+            border-radius: var(--r-lg);
+            background: var(--surface-2);
+            margin-bottom: 16px;
+        }
+
+        .ring { position: relative; width: 92px; height: 92px; flex-shrink: 0; }
+        .ring svg { width: 92px; height: 92px; transform: rotate(-90deg); }
+
+        .ring-track { stroke: var(--surface-3); }
+
+        .ring-fill {
+            stroke: url(#ringGradient);
+            stroke-linecap: round;
+            transition: stroke-dashoffset .7s var(--ease);
+        }
+
+        .ring-label {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            text-align: center;
+        }
+
+        .ring-label b {
+            font-size: 23px;
+            font-weight: 700;
+            letter-spacing: -.03em;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+        }
+
+        .ring-label small {
+            display: block;
+            font-size: 10px;
+            color: var(--text-faint);
+            margin-top: 2px;
+        }
+
+        .gpa-side { flex: 1; min-width: 0; }
+        .gpa-side .kv { display: flex; justify-content: space-between; font-size: 12.5px; padding: 3px 0; }
+        .gpa-side .kv span { color: var(--text-muted); }
+        .gpa-side .kv b { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+        .empty {
+            text-align: center;
+            padding: 18px 12px;
+            font-size: 12.5px;
+            color: var(--text-faint);
+        }
+
+        /* ==================================================
+           TIMELINE
+           ================================================== */
+
+        .timeline { position: relative; padding-inline-start: 20px; }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            inset-inline-start: 4px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: var(--surface-3);
+            border-radius: 2px;
+        }
+
+        .tl-item { position: relative; padding-bottom: 18px; }
+        .tl-item:last-child { padding-bottom: 0; }
+
+        .tl-item::before {
+            content: '';
+            position: absolute;
+            inset-inline-start: -20px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--tint, var(--brand));
+            box-shadow: 0 0 0 3px var(--surface);
+        }
+
+        .tl-time {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--tint, var(--brand));
+            font-variant-numeric: tabular-nums;
+        }
+
+        .tl-item h5 { font-size: 13.5px; font-weight: 600; margin: 1px 0 1px; }
+        .tl-item p { font-size: 11.5px; color: var(--text-faint); }
+
+        /* ==================================================
+           FEATURE LIST
+           ================================================== */
+
+        .feature {
+            display: flex;
+            gap: 11px;
+            align-items: flex-start;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        .feature:last-of-type { border-bottom: none; }
+
+        .feature-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 9px;
+            display: grid;
+            place-items: center;
+            background: var(--tint-soft, var(--brand-soft));
+            color: var(--tint, var(--brand));
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .feature-dot svg { width: 14px; height: 14px; }
+        .feature h5 { font-size: 13px; font-weight: 600; }
+        .feature p { font-size: 11.5px; color: var(--text-muted); }
+
+        /* ==================================================
+           FOOTER
+           ================================================== */
 
         footer {
             text-align: center;
-            margin-top: 25px;
-            font-size: 10px;
-            color: var(--text-secondary);
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-soft);
+        }
+
+        footer p { font-size: 11px; color: var(--text-faint); }
+        footer .dot { margin: 0 5px; opacity: .5; }
+
+        /* ==================================================
+           ACCESSIBILITY
+           ================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+            .rise { opacity: 1; }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px; height: 1px;
+            padding: 0; margin: -1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-badge">جامعة مايو • MIU</div>
-        <h1>كلية الحاسبات والذكاء الاصطناعي</h1>
-        <p class="subtitle">بوابة الخدمات الأكاديمية والمادة العلمية</p>
-    </header>
+<div class="aurora"></div>
 
-    <div class="user-greeting">
-        <span>مرحباً بك، <span id="username">طالب/ة الكلية</span></span>
-        <span style="color: var(--accent-purple);">فصل ربيع 2026</span>
+<!-- =========================================================
+     ICON SPRITE
+     ========================================================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <linearGradient id="ringGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%"   stop-color="#6D4AFF"/>
+            <stop offset="55%"  stop-color="#9333EA"/>
+            <stop offset="100%" stop-color="#06B6D4"/>
+        </linearGradient>
+    </defs>
+        <symbol id="i-cap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+        </symbol>
+        <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 7v14"/>
+            <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+        </symbol>
+        <symbol id="i-calc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"/>
+            <path d="M8 6h8"/>
+            <path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01M16 14v4"/>
+        </symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <path d="M16 2v4M8 2v4M3 10h18"/>
+        </symbol>
+        <symbol id="i-bot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 8V4H8"/>
+            <rect x="4" y="8" width="16" height="12" rx="2"/>
+            <path d="M2 14h2M20 14h2M15 13v2M9 13v2"/>
+        </symbol>
+        <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            <path d="M2 12h20"/>
+        </symbol>
+        <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18M6 6l12 12"/>
+        </symbol>
+        <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <path d="m7 10 5 5 5-5M12 15V3"/>
+        </symbol>
+        <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/>
+            <path d="M14 2v5h5M16 13H8M16 17H8M10 9H8"/>
+        </symbol>
+        <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6"/>
+        </symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+        </symbol>
+        <symbol id="i-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>
+        </symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+        </symbol>
+        <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        </symbol>
+        <symbol id="i-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h6v6M10 14 21 3"/>
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+        </symbol>
+        <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 2 9 5-9 5-9-5z"/>
+            <path d="m3 12 9 5 9-5M3 17l9 5 9-5"/>
+        </symbol>
+        <symbol id="i-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m4 17 6-6-6-6M12 19h8"/>
+        </symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 13c0 5-3.5 7.5-7.7 8.9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1 1 0 0 1 1.6 0C14.6 3.8 17 5 19 5a1 1 0 0 1 1 1z"/>
+        </symbol>
+</svg>
+
+<!-- =========================================================
+     APP
+     ========================================================= -->
+<main class="app">
+
+    <div class="topbar rise" style="--i:0">
+        <div class="mark"><svg><use href="#i-cap"/></svg></div>
+        <div class="topbar-text">
+            <h1>الحاسبات والذكاء الاصطناعي</h1>
+            <p>بوابة الطالب الأكاديمية</p>
+        </div>
+        <div class="pill">MIU</div>
     </div>
 
-    <div class="grid-container">
-        <div class="card" onclick="openModal('filesModal')">
-            <div class="card-icon">📁</div>
-            <h3>المكتبة والمحاضرات</h3>
-            <p>ملخصات، كتب، وسكاشن المواد</p>
-        </div>
+    <div class="stack">
 
-        <div class="card" onclick="openModal('gpaModal')">
-            <div class="card-icon">📊</div>
-            <h3>حاسبة GPA</h3>
-            <p>احسب معدلك الفصلي والتراكمي</p>
-        </div>
+        <section class="hero rise" style="--i:1">
+            <div class="hero-label">أهلاً بك مرة أخرى</div>
+            <h2 id="username">طالب/ة الكلية</h2>
+            <div class="hero-meta">
+                <svg><use href="#i-calendar"/></svg>
+                <span>الفصل الدراسي • ربيع 2026</span>
+            </div>
+        </section>
 
-        <div class="card" onclick="openModal('scheduleModal')">
-            <div class="card-icon">📅</div>
-            <h3>الجدول الدراسي</h3>
-            <p>مواعيد المحاضرات والسكاشن</p>
-        </div>
+        <section class="stats rise" style="--i:2" aria-label="ملخص الأداء">
+            <div class="stat">
+                <div class="stat-value" id="statGpa">—</div>
+                <div class="stat-label">المعدل التراكمي</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="statHours">0</div>
+                <div class="stat-label">ساعة معتمدة</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="statCourses">0</div>
+                <div class="stat-label">مقرر مسجّل</div>
+            </div>
+        </section>
 
-        <div class="card" onclick="openModal('aiLabModal')">
-            <div class="card-icon">🤖</div>
-            <h3>معمل الذكاء الاصطناعي</h3>
-            <p>مشاريع وأدوات الـ AI والبرمجة</p>
-        </div>
+        <section class="rise" style="--i:3">
+            <div class="section-head">
+                <h3>الخدمات الأكاديمية</h3>
+                <span>5 خدمات</span>
+            </div>
 
-        <div class="card full-width" onclick="openModal('portalModal')">
-            <div class="card-icon">🌐</div>
-            <h3>بوابة الجامعة الرسمية والعمادة</h3>
-            <p>الانتقال لنظام التسجيل والإعلانات</p>
-        </div>
+            <div class="bento">
+                <button class="tile t-brand" data-sheet="filesSheet">
+                    <div class="tile-icon"><svg><use href="#i-book"/></svg></div>
+                    <div class="tile-body">
+                        <h4>المكتبة والمحاضرات</h4>
+                        <p>ملخصات وكتب وسكاشن المواد</p>
+                    </div>
+                </button>
+
+                <button class="tile t-cyan" data-sheet="gpaSheet">
+                    <div class="tile-icon"><svg><use href="#i-calc"/></svg></div>
+                    <div class="tile-body">
+                        <h4>حاسبة المعدل</h4>
+                        <p>احسب معدلك الفصلي والتراكمي</p>
+                    </div>
+                </button>
+
+                <button class="tile t-amber" data-sheet="scheduleSheet">
+                    <div class="tile-icon"><svg><use href="#i-calendar"/></svg></div>
+                    <div class="tile-body">
+                        <h4>الجدول الدراسي</h4>
+                        <p>مواعيد المحاضرات والسكاشن</p>
+                    </div>
+                </button>
+
+                <button class="tile t-emerald" data-sheet="aiSheet">
+                    <div class="tile-icon"><svg><use href="#i-bot"/></svg></div>
+                    <div class="tile-body">
+                        <h4>معمل الذكاء الاصطناعي</h4>
+                        <p>مشاريع وأدوات الـ AI والبرمجة</p>
+                    </div>
+                </button>
+
+                <button class="tile wide t-pink" data-sheet="portalSheet">
+                    <div class="tile-icon"><svg><use href="#i-globe"/></svg></div>
+                    <div class="tile-body">
+                        <h4>بوابة الجامعة الرسمية</h4>
+                        <p>نظام التسجيل وإعلانات العمادة</p>
+                    </div>
+                    <div class="tile-arrow"><svg><use href="#i-chevron"/></svg></div>
+                </button>
+            </div>
+        </section>
+
+        <footer class="rise" style="--i:4">
+            <p>
+                كلية الحاسبات والذكاء الاصطناعي
+                <span class="dot">•</span>
+                جامعة مصر للمعلوماتية
+            </p>
+            <p style="margin-top:4px">&copy; 2026 MIU</p>
+        </footer>
+
     </div>
+</main>
 
-    <!-- Modal: Files -->
-    <div id="filesModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('filesModal')">&times;</button>
-            <div class="modal-title">📂 مكتبة الملفات والمحاضرات</div>
-            
-            <div class="file-item">
-                <div class="file-info">
-                    <h4>مقدمة في الذكاء الاصطناعي (AI)</h4>
-                    <span>محاضرة 1 • PDF • 4.2 MB</span>
+<!-- =========================================================
+     SHEET: LIBRARY
+     ========================================================= -->
+<div class="sheet" id="filesSheet" role="dialog" aria-modal="true" aria-labelledby="filesTitle">
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel">
+        <div class="sheet-top">
+        <div class="grabber"></div>
+            <div class="sheet-head">
+                <h3 id="filesTitle">المكتبة والمحاضرات</h3>
+                <button class="icon-btn" data-close aria-label="إغلاق">
+                    <svg><use href="#i-x"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="row-item t-brand">
+            <div class="row-icon"><svg><use href="#i-file"/></svg></div>
+            <div class="row-text">
+                <h5>مقدمة في الذكاء الاصطناعي</h5>
+                <span>محاضرة 1 • PDF • 4.2 MB</span>
+            </div>
+            <button class="btn btn-soft btn-sm" data-download>
+                <svg><use href="#i-download"/></svg> تحميل
+            </button>
+        </div>
+
+        <div class="row-item t-cyan">
+            <div class="row-icon"><svg><use href="#i-file"/></svg></div>
+            <div class="row-text">
+                <h5>هياكل البيانات والخوارزميات</h5>
+                <span>ملخص السكاشن • PDF • 2.8 MB</span>
+            </div>
+            <button class="btn btn-soft btn-sm" data-download>
+                <svg><use href="#i-download"/></svg> تحميل
+            </button>
+        </div>
+
+        <div class="row-item t-amber">
+            <div class="row-icon"><svg><use href="#i-file"/></svg></div>
+            <div class="row-text">
+                <h5>أساسيات قواعد البيانات</h5>
+                <span>محاضرة 4 • PDF • 3.1 MB</span>
+            </div>
+            <button class="btn btn-soft btn-sm" data-download>
+                <svg><use href="#i-download"/></svg> تحميل
+            </button>
+        </div>
+
+        <p class="empty">يتم تحديث المكتبة أسبوعياً من قِبل الكنترول.</p>
+    </div>
+</div>
+
+<!-- =========================================================
+     SHEET: GPA
+     ========================================================= -->
+<div class="sheet" id="gpaSheet" role="dialog" aria-modal="true" aria-labelledby="gpaTitle">
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel">
+        <div class="sheet-top">
+        <div class="grabber"></div>
+            <div class="sheet-head">
+                <h3 id="gpaTitle">حاسبة المعدل التراكمي</h3>
+                <button class="icon-btn" data-close aria-label="إغلاق">
+                    <svg><use href="#i-x"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="gpa-display">
+            <div class="ring">
+                <svg viewBox="0 0 92 92">
+                    <circle class="ring-track" cx="46" cy="46" r="38"
+                            fill="none" stroke-width="8"/>
+                    <circle class="ring-fill" id="ringFill" cx="46" cy="46" r="38"
+                            fill="none" stroke-width="8"
+                            stroke-dasharray="238.76" stroke-dashoffset="238.76"/>
+                </svg>
+                <div class="ring-label">
+                    <div>
+                        <b id="gpaValue">0.00</b>
+                        <small>من 4.00</small>
+                    </div>
                 </div>
-                <a href="#" onclick="notify('جاري تحميل الملف...'); return false;" class="btn-download">تحميل</a>
             </div>
-
-            <div class="file-item">
-                <div class="file-info">
-                    <h4>هياكل البيانات وخوارزمياتها</h4>
-                    <span>ملخص السكاشن • PDF • 2.8 MB</span>
-                </div>
-                <a href="#" onclick="notify('جاري تحميل الملف...'); return false;" class="btn-download">تحميل</a>
+            <div class="gpa-side">
+                <div class="kv"><span>عدد المقررات</span><b id="gpaCourses">0</b></div>
+                <div class="kv"><span>الساعات المعتمدة</span><b id="gpaHours">0</b></div>
+                <div class="kv"><span>التقدير العام</span><b id="gpaGrade">—</b></div>
             </div>
         </div>
-    </div>
 
-    <!-- Modal: GPA -->
-    <div id="gpaModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('gpaModal')">&times;</button>
-            <div class="modal-title">حاسبة المعدل التراكمي (GPA)</div>
-            <div class="form-group">
-                <label>التقدير أو النقاط (من 4.0):</label>
-                <input type="number" id="gpaInput" step="0.01" max="4.0" min="0" placeholder="مثال: 3.5">
+        <div class="field">
+            <label for="courseName">اسم المقرر (اختياري)</label>
+            <input type="text" id="courseName" placeholder="مثال: تعلم الآلة" autocomplete="off">
+        </div>
+
+        <div class="field-row">
+            <div class="field">
+                <label for="gradeInput">التقدير</label>
+                <select id="gradeInput">
+                    <option value="4">A+ — ممتاز مرتفع</option>
+                    <option value="3.7">A — ممتاز</option>
+                    <option value="3.3">B+ — جيد جداً مرتفع</option>
+                    <option value="3" selected>B — جيد جداً</option>
+                    <option value="2.7">C+ — جيد مرتفع</option>
+                    <option value="2.3">C — جيد</option>
+                    <option value="2">D+ — مقبول مرتفع</option>
+                    <option value="1.7">D — مقبول</option>
+                    <option value="0">F — راسب</option>
+                </select>
             </div>
-            <div class="form-group">
-                <label>عدد الساعات المعتمدة للمقرر:</label>
-                <input type="number" id="hoursInput" value="3" min="1" max="6">
+            <div class="field">
+                <label for="hoursInput">الساعات</label>
+                <select id="hoursInput">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3" selected>3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
             </div>
-            <button class="btn-action" onclick="calculateGPA()">حساب وحفظ</button>
-            <div id="gpaResult" class="result-box"></div>
         </div>
-    </div>
 
-    <!-- Modal: Schedule -->
-    <div id="scheduleModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('scheduleModal')">&times;</button>
-            <div class="modal-title">الجدول الدراسي اليومي</div>
-            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; text-align: start;">
-                • <b>الأحد:</b> شبكات حاسب متقدمة (09:00 ص)<br>
-                • <b>الإثنين:</b> تعلم الآلة Machine Learning (11:30 ص)<br>
-                • <b>الثلاثاء:</b> نظم ذكية AI Systems (10:00 ص)<br>
-                • <b>الأربعاء:</b> أمن معلومات وسيبر سكيورتي (01:00 م)
-            </p>
-            <button class="btn-action" onclick="closeModal('scheduleModal')">حسناً</button>
+        <button class="btn" onclick="addCourse()">
+            <svg><use href="#i-plus"/></svg> إضافة المقرر
+        </button>
+
+        <div class="section-head" style="margin:20px 0 10px">
+            <h3 style="font-size:13.5px">المقررات المسجّلة</h3>
+            <button class="btn-ghost" onclick="clearCourses()">مسح الكل</button>
         </div>
-    </div>
 
-    <!-- Modal: AI Lab -->
-    <div id="aiLabModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('aiLabModal')">&times;</button>
-            <div class="modal-title">معمل الذكاء الاصطناعي</div>
-            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; text-align: start;">
-                تم تفعيل بيئة العمل السحابية لطلاب الحاسبات والذكاء الاصطناعي بجامعة مايو.
-            </p>
-            <button class="btn-action" onclick="notify('تم تفعيل الاتصال بنجاح!')">بدء الجلسة</button>
+        <div id="courseList"></div>
+    </div>
+</div>
+
+<!-- =========================================================
+     SHEET: SCHEDULE
+     ========================================================= -->
+<div class="sheet" id="scheduleSheet" role="dialog" aria-modal="true" aria-labelledby="schedTitle">
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel">
+        <div class="sheet-top">
+        <div class="grabber"></div>
+            <div class="sheet-head">
+                <h3 id="schedTitle">الجدول الدراسي</h3>
+                <button class="icon-btn" data-close aria-label="إغلاق">
+                    <svg><use href="#i-x"/></svg>
+                </button>
+            </div>
         </div>
-    </div>
 
-    <!-- Modal: Portal -->
-    <div id="portalModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('portalModal')">&times;</button>
-            <div class="modal-title">بوابة جامعة مايو</div>
-            <p style="font-size: 12px; color: var(--text-secondary); text-align: center; margin-bottom: 15px;">
-                الانتقال للنظام الأكاديمي الرسمي للجامعة.
-            </p>
-            <button class="btn-action" onclick="openExternal('https://www.miu.edu.eg')">زيارة الموقع الرسمي</button>
+        <div class="timeline">
+            <div class="tl-item t-brand">
+                <div class="tl-time">الأحد • 09:00 ص</div>
+                <h5>شبكات حاسب متقدمة</h5>
+                <p>مدرج A2 • د. محمد سالم</p>
+            </div>
+            <div class="tl-item t-cyan">
+                <div class="tl-time">الإثنين • 11:30 ص</div>
+                <h5>تعلم الآلة — Machine Learning</h5>
+                <p>معمل 3 • د. هبة عادل</p>
+            </div>
+            <div class="tl-item t-amber">
+                <div class="tl-time">الثلاثاء • 10:00 ص</div>
+                <h5>نظم ذكية — AI Systems</h5>
+                <p>مدرج B1 • د. أحمد فؤاد</p>
+            </div>
+            <div class="tl-item t-emerald">
+                <div class="tl-time">الأربعاء • 01:00 م</div>
+                <h5>أمن معلومات وسيبر سكيورتي</h5>
+                <p>معمل 5 • د. ريم مصطفى</p>
+            </div>
         </div>
+
+        <button class="btn btn-soft" style="margin-top:18px" data-close>حسناً</button>
     </div>
+</div>
 
-    <footer>
-        &copy; 2026 Faculty of Computers & AI - May University in Egypt (MIU)
-    </footer>
+<!-- =========================================================
+     SHEET: AI LAB
+     ========================================================= -->
+<div class="sheet" id="aiSheet" role="dialog" aria-modal="true" aria-labelledby="aiTitle">
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel">
+        <div class="sheet-top">
+        <div class="grabber"></div>
+            <div class="sheet-head">
+                <h3 id="aiTitle">معمل الذكاء الاصطناعي</h3>
+                <button class="icon-btn" data-close aria-label="إغلاق">
+                    <svg><use href="#i-x"/></svg>
+                </button>
+            </div>
+        </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
+        <div class="feature t-emerald">
+            <div class="feature-dot"><svg><use href="#i-terminal"/></svg></div>
+            <div>
+                <h5>بيئة تشغيل سحابية</h5>
+                <p>دفاتر Jupyter جاهزة مع Python و PyTorch</p>
+            </div>
+        </div>
+        <div class="feature t-cyan">
+            <div class="feature-dot"><svg><use href="#i-layers"/></svg></div>
+            <div>
+                <h5>مجموعات بيانات الكلية</h5>
+                <p>داتاسِتس معتمدة لمشاريع التخرج والأبحاث</p>
+            </div>
+        </div>
+        <div class="feature t-brand">
+            <div class="feature-dot"><svg><use href="#i-sparkles"/></svg></div>
+            <div>
+                <h5>نماذج مدرَّبة مسبقاً</h5>
+                <p>نماذج رؤية حاسوبية ومعالجة لغة جاهزة للاستخدام</p>
+            </div>
+        </div>
+        <div class="feature t-amber">
+            <div class="feature-dot"><svg><use href="#i-shield"/></svg></div>
+            <div>
+                <h5>وصول آمن</h5>
+                <p>الدخول عبر حساب الجامعة الرسمي فقط</p>
+            </div>
+        </div>
 
-        // إبلاغ تيليجرام أن الواجهة جاهزة قبل أي شيء آخر
-        tg.ready();
+        <button class="btn" style="margin-top:18px" onclick="notify('تم تفعيل الاتصال بالمعمل بنجاح!')">
+            <svg><use href="#i-terminal"/></svg> بدء الجلسة
+        </button>
+    </div>
+</div>
 
-        // تفعيل وضع ملء الشاشة وتوسيع النافذة تلقائياً
-        tg.expand();
-        if (tg.requestFullscreen) {
-            tg.requestFullscreen();
-        }
+<!-- =========================================================
+     SHEET: PORTAL
+     ========================================================= -->
+<div class="sheet" id="portalSheet" role="dialog" aria-modal="true" aria-labelledby="portalTitle">
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel">
+        <div class="sheet-top">
+        <div class="grabber"></div>
+            <div class="sheet-head">
+                <h3 id="portalTitle">بوابة الجامعة الرسمية</h3>
+                <button class="icon-btn" data-close aria-label="إغلاق">
+                    <svg><use href="#i-x"/></svg>
+                </button>
+            </div>
+        </div>
 
-        // مطابقة شريط تيليجرام العلوي لخلفية التطبيق
+        <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:16px">
+            سيتم فتح الموقع الرسمي للجامعة خارج التطبيق للانتقال إلى النظام
+            الأكاديمي والإعلانات الرسمية.
+        </p>
+
+        <button class="btn" onclick="openExternal('https://www.miu.edu.eg')">
+            <svg><use href="#i-external"/></svg> زيارة الموقع الرسمي
+        </button>
+    </div>
+</div>
+
+<script>
+    /* ======================================================
+       TELEGRAM BOOTSTRAP
+       ====================================================== */
+
+    const tg = (window.Telegram && window.Telegram.WebApp) || {};
+
+    /* واجهة تيليجرام ترمي استثناءً عند استدعاء دالة أحدث من نسخة
+       العميل (WebAppMethodUnsupported)، لذا لا يكفي التحقق من وجودها.
+       كل نداء اختياري يمر عبر safe حتى لا يتوقف التطبيق بالكامل. */
+    function safe(action, fallback) {
         try {
-            tg.setHeaderColor('#0d1117');
-            tg.setBackgroundColor('#0d1117');
+            return action();
         } catch (e) {
-            /* نسخ تيليجرام القديمة لا تدعم هذه الدوال */
+            if (typeof fallback === 'function') return fallback();
+        }
+    }
+
+    safe(function () { tg.ready(); });
+    safe(function () { tg.expand(); });
+    safe(function () { tg.requestFullscreen(); });      // Bot API 8.0
+    safe(function () { tg.disableVerticalSwipes(); });  // Bot API 7.7
+
+    // مطابقة الثيم لإعداد تيليجرام، ومتابعة أي تغيير لاحق
+    function applyTheme() {
+        // خارج تيليجرام تكون platform = 'unknown' و colorScheme = 'light'
+        // دائماً، فنرجع عندها لإعداد الجهاز بدلاً من فرض الوضع الفاتح.
+        const inTelegram = tg.platform && tg.platform !== 'unknown';
+
+        const dark = inTelegram
+            ? tg.colorScheme === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        document.documentElement.setAttribute(
+            'data-theme',
+            dark ? 'dark' : 'light'
+        );
+
+        const shell = dark ? '#08090F' : '#F6F7FB';
+
+        document.querySelector('meta[name=theme-color]')
+                .setAttribute('content', shell);
+
+        safe(function () { tg.setHeaderColor(shell); });      // Bot API 6.1
+        safe(function () { tg.setBackgroundColor(shell); });  // Bot API 6.1
+    }
+
+    applyTheme();
+
+    safe(function () { tg.onEvent('themeChanged', applyTheme); });
+
+    // متابعة إعداد الجهاز عندما نعمل خارج تيليجرام
+    if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)')
+              .addEventListener('change', applyTheme);
+    }
+
+    // اسم الطالب من تيليجرام (غير موثّق التوقيع - للعرض فقط)
+    safe(function () {
+        const first = tg.initDataUnsafe.user.first_name;
+        if (first) {
+            document.getElementById('username').textContent = first;
+        }
+    });
+
+    function haptic(style) {
+        safe(function () {
+            tg.HapticFeedback.impactOccurred(style || 'light');
+        });
+    }
+
+    function notifySuccess() {
+        safe(function () {
+            tg.HapticFeedback.notificationOccurred('success');
+        });
+    }
+
+    // تنبيه داخل تيليجرام بدلاً من alert المتصفح (المحجوب أحياناً)
+    function notify(message) {
+        safe(
+            function () { tg.showAlert(message); },
+            function () { window.alert(message); }
+        );
+    }
+
+    // سؤال تأكيد، مع الرجوع لنافذة المتصفح خارج تيليجرام
+    function confirmAction(message, done) {
+        safe(
+            function () { tg.showConfirm(message, done); },
+            function () { done(window.confirm(message)); }
+        );
+    }
+
+    // فتح الروابط الخارجية عبر تيليجرام لا عبر window.open
+    function openExternal(url) {
+        safe(
+            function () { tg.openLink(url); },
+            function () { window.open(url, '_blank', 'noopener'); }
+        );
+    }
+
+    /* ======================================================
+       BOTTOM SHEETS
+       ====================================================== */
+
+    let openSheetId = null;
+
+    function openSheet(id) {
+        const sheet = document.getElementById(id);
+        if (!sheet) return;
+
+        haptic('medium');
+
+        sheet.classList.add('open');
+        // إجبار المتصفح على حساب الحالة الأولى قبل بدء الحركة
+        void sheet.offsetWidth;
+        sheet.classList.add('shown');
+
+        openSheetId = id;
+        document.body.style.overflow = 'hidden';
+
+        safe(function () { tg.BackButton.show(); });
+    }
+
+    function closeSheet(id) {
+        const sheet = document.getElementById(id || openSheetId);
+        if (!sheet) return;
+
+        sheet.classList.remove('shown');
+
+        // انتظار انتهاء حركة الانزلاق قبل الإخفاء
+        setTimeout(function () {
+            sheet.classList.remove('open');
+        }, 320);
+
+        if (openSheetId === sheet.id) {
+            openSheetId = null;
+            document.body.style.overflow = '';
+
+            safe(function () { tg.BackButton.hide(); });
+        }
+    }
+
+    document.querySelectorAll('[data-sheet]').forEach(function (el) {
+        el.addEventListener('click', function () {
+            openSheet(el.dataset.sheet);
+        });
+    });
+
+    document.querySelectorAll('[data-close]').forEach(function (el) {
+        el.addEventListener('click', function () {
+            closeSheet(el.closest('.sheet').id);
+        });
+    });
+
+    document.querySelectorAll('[data-download]').forEach(function (el) {
+        el.addEventListener('click', function () {
+            haptic('light');
+            notify('جاري تحميل الملف...');
+        });
+    });
+
+    safe(function () {
+        tg.BackButton.onClick(function () {
+            if (openSheetId) closeSheet(openSheetId);
+        });
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && openSheetId) {
+            closeSheet(openSheetId);
+        }
+    });
+
+    /* ======================================================
+       GPA CALCULATOR
+       ====================================================== */
+
+    const STORE_KEY = 'miu.courses.v1';
+    const RING_LENGTH = 238.76;   // 2 * PI * 38
+
+    let courses = loadCourses();
+
+    function loadCourses() {
+        try {
+            const raw = localStorage.getItem(STORE_KEY);
+            return raw ? JSON.parse(raw) : [];
+        } catch (e) {
+            // وضع التصفح الخاص أو تخزين محجوب
+            return [];
+        }
+    }
+
+    function saveCourses() {
+        try {
+            localStorage.setItem(STORE_KEY, JSON.stringify(courses));
+        } catch (e) {
+            /* التخزين غير متاح - الحالة تبقى في الذاكرة فقط */
+        }
+    }
+
+    function letterFor(gpa) {
+        if (gpa >= 3.7) return 'ممتاز';
+        if (gpa >= 3.0) return 'جيد جداً';
+        if (gpa >= 2.3) return 'جيد';
+        if (gpa >= 1.7) return 'مقبول';
+        return 'ضعيف';
+    }
+
+    function addCourse() {
+        const name  = document.getElementById('courseName').value.trim();
+        const gpa   = parseFloat(document.getElementById('gradeInput').value);
+        const hours = parseInt(document.getElementById('hoursInput').value, 10);
+
+        if (isNaN(gpa) || isNaN(hours) || hours <= 0) {
+            notify('يرجى اختيار تقدير وعدد ساعات صحيح.');
+            return;
         }
 
-        // منع الإغلاق بالسحب لأسفل أثناء تصفح المحتوى
-        if (tg.disableVerticalSwipes) {
-            tg.disableVerticalSwipes();
-        }
-
-        // تنبيه داخل تيليجرام بدلاً من alert المتصفح (المحجوب أحياناً)
-        function notify(message) {
-            if (tg.showAlert) {
-                tg.showAlert(message);
-            } else {
-                alert(message);
-            }
-        }
-
-        // فتح الروابط الخارجية عبر تيليجرام لا عبر window.open
-        function openExternal(url) {
-            if (tg.openLink) {
-                tg.openLink(url);
-            } else {
-                window.open(url, '_blank', 'noopener');
-            }
-        }
-
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const user = tg.initDataUnsafe.user;
-            document.getElementById('username').innerText = user.first_name || 'طالب الكلية';
-        }
-
-        // النافذة المفتوحة حالياً (نافذة واحدة كحد أقصى)
-        let openModalId = null;
-
-        function openModal(modalId) {
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-
-            document.getElementById(modalId).style.display = 'flex';
-            openModalId = modalId;
-
-            // منع تمرير الصفحة خلف النافذة
-            document.body.style.overflow = 'hidden';
-
-            // زر الرجوع في تيليجرام يغلق النافذة
-            if (tg.BackButton) {
-                tg.BackButton.show();
-            }
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-
-            if (openModalId === modalId) {
-                openModalId = null;
-                document.body.style.overflow = '';
-
-                if (tg.BackButton) {
-                    tg.BackButton.hide();
-                }
-            }
-        }
-
-        if (tg.BackButton) {
-            tg.BackButton.onClick(function () {
-                if (openModalId) {
-                    closeModal(openModalId);
-                }
-            });
-        }
-
-        // زر Escape على تيليجرام ديسكتوب
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape' && openModalId) {
-                closeModal(openModalId);
-            }
+        courses.push({
+            name: name || ('مقرر ' + (courses.length + 1)),
+            gpa: gpa,
+            hours: hours
         });
 
-        // المواد المسجلة حتى الآن: { gpa, hours }
-        const courses = [];
+        saveCourses();
+        render();
 
-        function calculateGPA() {
-            const gpa = parseFloat(document.getElementById('gpaInput').value);
-            const hours = parseInt(document.getElementById('hoursInput').value, 10);
-            const resultBox = document.getElementById('gpaResult');
+        document.getElementById('courseName').value = '';
+        notifySuccess();
+    }
 
-            resultBox.style.display = 'block';
+    function removeCourse(index) {
+        courses.splice(index, 1);
+        saveCourses();
+        render();
+        haptic('light');
+    }
 
-            if (isNaN(gpa) || gpa < 0 || gpa > 4.0) {
-                resultBox.style.color = '#ff7b72';
-                resultBox.innerText = 'يرجى إدخال تقدير صحيح بين 0 و 4.0';
-                return;
-            }
+    function clearCourses() {
+        if (!courses.length) return;
 
-            if (isNaN(hours) || hours <= 0 || hours > 12) {
-                resultBox.style.color = '#ff7b72';
-                resultBox.innerText = 'يرجى إدخال عدد ساعات صحيح بين 1 و 12';
-                return;
-            }
-
-            courses.push({ gpa: gpa, hours: hours });
-
-            const totalHours = courses.reduce((sum, c) => sum + c.hours, 0);
-            const totalPoints = courses.reduce((sum, c) => sum + (c.gpa * c.hours), 0);
-            const cumulative = totalPoints / totalHours;
-
-            resultBox.style.color = 'var(--accent-glow)';
-            resultBox.innerText =
-                `المعدل التراكمي: ${cumulative.toFixed(2)} — ` +
-                `${courses.length} مادة، ${totalHours} ساعة معتمدة`;
-
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.notificationOccurred('success');
-            }
+        function wipe() {
+            courses = [];
+            saveCourses();
+            render();
+            haptic('medium');
         }
 
-        window.onclick = function (event) {
-            if (event.target.classList.contains('modal')) {
-                closeModal(event.target.id);
-            }
-        };
-    </script>
+        confirmAction('سيتم حذف كل المقررات المسجّلة. متابعة؟',
+            function (ok) { if (ok) wipe(); });
+    }
+
+    function render() {
+        const totalHours  = courses.reduce(function (s, c) { return s + c.hours; }, 0);
+        const totalPoints = courses.reduce(function (s, c) { return s + c.gpa * c.hours; }, 0);
+        const gpa = totalHours ? totalPoints / totalHours : 0;
+
+        // البطاقات العلوية
+        document.getElementById('statGpa').textContent =
+            totalHours ? gpa.toFixed(2) : '—';
+        document.getElementById('statHours').textContent = totalHours;
+        document.getElementById('statCourses').textContent = courses.length;
+
+        // لوحة الحاسبة
+        document.getElementById('gpaValue').textContent = gpa.toFixed(2);
+        document.getElementById('gpaCourses').textContent = courses.length;
+        document.getElementById('gpaHours').textContent = totalHours;
+        document.getElementById('gpaGrade').textContent =
+            totalHours ? letterFor(gpa) : '—';
+
+        document.getElementById('ringFill').style.strokeDashoffset =
+            RING_LENGTH * (1 - Math.min(gpa / 4, 1));
+
+        // قائمة المقررات
+        const list = document.getElementById('courseList');
+        list.innerHTML = '';
+
+        if (!courses.length) {
+            const empty = document.createElement('p');
+            empty.className = 'empty';
+            empty.textContent = 'لم تُضِف أي مقرر بعد.';
+            list.appendChild(empty);
+            return;
+        }
+
+        courses.forEach(function (course, index) {
+            const row = document.createElement('div');
+            row.className = 'row-item t-cyan';
+
+            const icon = document.createElement('div');
+            icon.className = 'row-icon';
+            icon.innerHTML = '<svg><use href="#i-book"/></svg>';
+
+            const text = document.createElement('div');
+            text.className = 'row-text';
+
+            const title = document.createElement('h5');
+            title.textContent = course.name;
+
+            const meta = document.createElement('span');
+            meta.textContent =
+                course.gpa.toFixed(1) + ' نقطة • ' + course.hours + ' ساعات';
+
+            text.appendChild(title);
+            text.appendChild(meta);
+
+            const del = document.createElement('button');
+            del.className = 'icon-btn';
+            del.setAttribute('aria-label', 'حذف المقرر');
+            del.innerHTML = '<svg><use href="#i-trash"/></svg>';
+            del.addEventListener('click', function () { removeCourse(index); });
+
+            row.appendChild(icon);
+            row.appendChild(text);
+            row.appendChild(del);
+            list.appendChild(row);
+        });
+    }
+
+    render();
+</script>
+
 </body>
 </html>
