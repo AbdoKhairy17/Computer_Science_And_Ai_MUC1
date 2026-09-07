@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كلية الحاسبات والذكاء الاصطناعي - جامعة مايو</title>
+    <!-- Tailwind CSS for modern responsive utility styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Cairo Font for academic and tech look -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #090d16 0%, #0f172a 50%, #020617 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        .neon-btn-primary {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.25), rgba(2, 132, 199, 0.45));
+            border: 2px solid #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3), inset 0 0 10px rgba(56, 189, 248, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .neon-btn-primary:hover, .neon-btn-primary:active {
+            background: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.7), inset 0 0 15px rgba(56, 189, 248, 0.4);
+            transform: scale(0.98);
+        }
+        .neon-btn-ai {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(126, 34, 206, 0.45));
+            border: 2px solid #c084fc;
+            box-shadow: 0 0 15px rgba(192, 132, 252, 0.3), inset 0 0 10px rgba(192, 132, 252, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .neon-btn-ai:hover, .neon-btn-ai:active {
+            background: rgba(192, 132, 252, 0.4);
+            box-shadow: 0 0 25px rgba(192, 132, 252, 0.7), inset 0 0 15px rgba(192, 132, 252, 0.4);
+            transform: scale(0.98);
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #38bdf8;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between p-4 selection:bg-sky-500 selection:text-white">
+
+    <header class="w-full max-w-md text-center mt-3">
+        <div class="inline-flex items-center justify-center w-18 h-18 rounded-2xl bg-sky-500/10 border border-sky-400/30 mb-2 shadow-[0_0_25px_rgba(56,189,248,0.25)]">
+            <svg class="w-9 h-9 text-sky-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+        </div>
+        <h1 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-400">كلية الحاسبات والذكاء الاصطناعي</h1>
+        <p class="text-xs font-bold text-sky-300 tracking-wider mt-0.5">جامعة مايو (MIU - FCI)</p>
+        <p id="user-greeting" class="text-xs text-slate-400 mt-1">جاري الاتصال بالنظام الأكاديمي...</p>
+    </header>
+
+    <main class="w-full max-w-md my-4 space-y-4">
+        
+        <!-- Status / Active Tool Card -->
+        <div class="glass-panel p-4 rounded-2xl shadow-xl">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs text-sky-400 font-bold tracking-wider">لوحة التوجيه الأكاديمي</span>
+                <span class="flex h-2.5 w-2.5 relative">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-500"></span>
+                </span>
+            </div>
+            <div id="dynamic-display" class="text-sm text-slate-200 font-medium bg-slate-900/60 p-3 rounded-xl border border-sky-900/40 min-h-[60px] flex items-center justify-center text-center">
+                أهلاً بك زميلنا العزيز. اختر إحدى الأداوت أدناه لبدء الاستعلام أو الحساب.
+            </div>
+        </div>
+
+        <!-- Academic Tools Grid (Custom Shaped Buttons) -->
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="showTool('schedule')" class="neon-btn-primary p-3.5 rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer">
+                <span class="text-2xl mb-1">📅</span>
+                <span class="text-xs font-bold text-sky-200">الجدول الدراسي</span>
+            </button>
+            <button onclick="showTool('gpa')" class="neon-btn-ai p-3.5 rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer">
+                <span class="text-2xl mb-1">📊</span>
+                <span class="text-xs font-bold text-purple-200">حاسبة المعدل (GPA)</span>
+            </button>
+            <button onclick="showTool('ai_hub')" class="neon-btn-ai p-3.5 rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer">
+                <span class="text-2xl mb-1">🤖</span>
+                <span class="text-xs font-bold text-purple-200">معمل الذكاء الاصطناعي</span>
+            </button>
+            <button onclick="showTool('exams')" class="neon-btn-primary p-3.5 rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer">
+                <span class="text-2xl mb-1">📝</span>
+                <span class="text-xs font-bold text-sky-200">إشعارات وامتحانات</span>
+            </button>
+        </div>
+
+        <!-- Full Width Portal Link Button -->
+        <button onclick="openPortal()" class="w-full neon-btn-primary py-3.5 px-6 rounded-2xl flex items-center justify-center space-x-2 space-x-reverse cursor-pointer">
+            <span class="text-xl">🌐</span>
+            <span class="font-bold text-sky-100 text-sm">البوابة الأكاديمية الرسمية للجامعة</span>
+        </button>
+
+    </main>
+
+    <footer class="w-full max-w-md pb-2 text-center">
+        <button onclick="closeApp()" class="w-full py-2.5 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 font-bold text-xs rounded-xl transition-all shadow-lg cursor-pointer">
+            إغلاق نافذة تليجرام
+        </button>
+    </footer>
+
+    <!-- JavaScript logic -->
+    <script>
+        // Initialize Telegram Web App API
+        const tg = window.Telegram?.WebApp;
+
+        if (tg) {
+            tg.ready();
+            tg.expand();
+            
+            try {
+                tg.setHeaderColor('#0f172a');
+                tg.setBackgroundColor('#0f172a');
+            } catch (e) {
+                console.log(e);
+            }
+
+            const user = tg.initDataUnsafe?.user;
+            if (user && user.first_name) {
+                document.getElementById('user-greeting').innerText = `أهلاً بك ياطالب/ة: ${user.first_name} 🎓`;
+            } else {
+                document.getElementById('user-greeting').innerText = `مرحباً بك في بوابة كلية الحاسبات والذكاء الاصطناعي 🚀`;
+            }
+        } else {
+            document.getElementById('user-greeting').innerText = `وضع المعاينة المحلية (جامعة مايو - FCI)`;
+        }
+
+        // Tools Handler Function
+        function showTool(type) {
+            const displayBox = document.getElementById('dynamic-display');
+            
+            // Trigger Telegram Haptic Feedback if available
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+
+            if (type === 'schedule') {
+                displayBox.innerHTML = `
+                    <div class="text-right w-full">
+                        <p class="font-bold text-sky-300 text-xs mb-1">📌 جدول المحاضرات الحالي:</p>
+                        <p class="text-xs text-slate-300">• الأحد: ذكاء اصطناعي تفاعلي (قاعة 302)</p>
+                        <p class="text-xs text-slate-300">• الثلاثاء: هيكلة بيانات متقدمة (معمل 4)</p>
+                    </div>
+                `;
+            } else if (type === 'gpa') {
+                displayBox.innerHTML = `
+                    <div class="w-full">
+                        <p class="font-bold text-purple-300 text-xs mb-1">📊 حاسبة التقدير الفوري:</p>
+                        <div class="flex gap-2 mt-2 items-center justify-center">
+                            <input type="number" id="gpa-input" placeholder="أدخل النقاط (مثال: 3.5)" class="bg-slate-950 border border-purple-500/50 rounded-lg px-2 py-1 text-xs text-white w-36 text-center">
+                            <button onclick="calcGpa()" class="bg-purple-600 hover:bg-purple-500 text-white px-3 py-1 rounded-lg text-xs font-bold">حساب</button>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'ai_hub') {
+                displayBox.innerHTML = `
+                    <div class="text-right w-full">
+                        <p class="font-bold text-purple-300 text-xs mb-1">🤖 مشاريع معمل الذكاء الاصطناعي:</p>
+                        <p class="text-xs text-slate-300">- مشروع رؤية الكمبيوتر (Computer Vision) للتعرف على الوجه.</p>
+                        <p class="text-xs text-slate-300">- نماذج التعلم العميق (Deep Learning) المتقدمة.</p>
+                    </div>
+                `;
+            } else if (type === 'exams') {
+                displayBox.innerHTML = `
+                    <div class="text-right w-full">
+                        <p class="font-bold text-sky-300 text-xs mb-1">📝 تنبيهات الامتحانات:</p>
+                        <p class="text-xs text-yellow-300 font-semibold">⚠️ تم الإعلان عن جدول امتحانات الميدتيرم للفصل الدراسي الحالي.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function calcGpa() {
+            const val = document.getElementById('gpa-input').value;
+            const displayBox = document.getElementById('dynamic-display');
+            if(val) {
+                let grade = val >= 3.5 ? "امتياز (A) 🌟" : (val >= 3.0 ? "جيد جداً (B) 👍" : "جيد (C) 📚");
+                displayBox.innerHTML = `<p class="text-xs text-green-300 font-bold">التقدير المتوقع بناءً على معدلك (${val}): ${grade}</p>`;
+            } else {
+                displayBox.innerHTML = `<p class="text-xs text-red-400">يرجى إدخال قيمة صحيحة أولاً.</p>`;
+            }
+        }
+
+        function openPortal() {
+            if (tg && tg.openLink) {
+                tg.openLink('https://www.mayo.edu.eg');
+            } else {
+                window.open('https://www.mayo.edu.eg', '_blank');
+            }
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.notificationOccurred('success');
+            }
+        }
+
+        function closeApp() {
+            if (tg) {
+                tg.close();
+            } else {
+                alert('تم إغلاق النافذة بنجاح.');
+            }
+        }
+    </script>
+</body>
+</html>
