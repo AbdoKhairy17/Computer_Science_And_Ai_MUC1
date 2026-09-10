@@ -3,6 +3,8 @@
  * MAIN CONTROLLER & APPLICATION LOGIC (main.js)
  */
 
+const SIDEBAR_STORAGE_KEY = 'muc_sidebar_collapsed';
+
 document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initMobileDrawer();
@@ -30,12 +32,32 @@ function initNavigation() {
     const toggleBtn = document.getElementById('sidebar-toggle');
     const sidebar = document.getElementById('sidebar');
     if (toggleBtn && sidebar) {
+
+        // اتجاه السهم صار عبر CSS، فلا نلمس className هنا
+        const applyCollapsed = (isCollapsed) => {
+            sidebar.classList.toggle('collapsed', isCollapsed);
+            toggleBtn.setAttribute('aria-expanded', String(!isCollapsed));
+            toggleBtn.title = isCollapsed
+                ? 'توسيع القائمة الجانبية | Expand sidebar'
+                : 'طي القائمة الجانبية | Collapse sidebar';
+        };
+
+        // استعادة آخر وضع اختاره المستخدم
+        let stored = null;
+        try {
+            stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);
+        } catch (e) {
+            /* التخزين محجوب - نكمل بالوضع الافتراضي */
+        }
+        applyCollapsed(stored === '1');
+
         toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            const icon = toggleBtn.querySelector('i');
-            if (icon) {
-                const isCollapsed = sidebar.classList.contains('collapsed');
-                icon.className = isCollapsed ? 'fa-solid fa-angles-right' : 'fa-solid fa-angles-left';
+            const isCollapsed = !sidebar.classList.contains('collapsed');
+            applyCollapsed(isCollapsed);
+            try {
+                localStorage.setItem(SIDEBAR_STORAGE_KEY, isCollapsed ? '1' : '0');
+            } catch (e) {
+                /* التخزين محجوب - الوضع يبقى لهذه الجلسة فقط */
             }
         });
     }

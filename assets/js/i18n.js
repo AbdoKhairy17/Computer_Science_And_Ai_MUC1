@@ -26,7 +26,7 @@ const translations = {
         nav_sis_portal: "بوابة SIS الرسمية",
 
         // Student Mini Profile
-        student_name: "عبدالمجيد خيرت",
+        student_name: "عبدالمجيد خيري",
         student_level: "المستوى الثاني • ذكاء اصطناعي",
         student_id_prefix: "ID: ",
 
@@ -154,7 +154,7 @@ const translations = {
         nav_sis_portal: "Official SIS Portal",
 
         // Student Mini Profile
-        student_name: "Abdelmajeed Khairat",
+        student_name: "Abdelmajeed Khairy",
         student_level: "Sophomore (Level 2) • AI Major",
         student_id_prefix: "ID: ",
 

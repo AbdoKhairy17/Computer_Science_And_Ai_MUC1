@@ -249,18 +249,25 @@
 
 .countdown-label {
     font-size: 0.75rem;
+    font-weight: 600;
     color: var(--text-secondary);
+    white-space: nowrap;
 }
 
+/* كان الصندوق أسود بشفافية 30% مع نص ذهبي: غير مقروء في الوضع الفاتح.
+   الآن يستمد لونه من رموز الثيم فيظل واضحاً في الوضعين. */
 .countdown-timer {
-    font-family: monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.95rem;
     font-weight: 700;
-    padding: 0.4rem 0.75rem;
-    border-radius: var(--radius-sm);
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-medium);
-    color: var(--muc-gold);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-full);
+    background: var(--countdown-bg);
+    border: 1px solid var(--countdown-border);
+    color: var(--countdown-fg);
+    white-space: nowrap;
 }
 
 /* --------------------------------------------------------------------------
@@ -1056,6 +1063,15 @@
     justify-content: center;
     font-size: 3rem;
     color: #FFFFFF;
+    overflow: hidden;
+}
+
+.id-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 45%;
+    display: block;
 }
 
 .id-student-name {
@@ -1132,4 +1148,88 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
+}
+
+/* ==========================================================================
+   DATA TABLE (Exam Schedule)
+   ========================================================================== */
+.data-table-wrap {
+    padding: 1.25rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    /* كل الأعمدة متمركزة أفقياً ورأسياً */
+    text-align: center;
+}
+
+.data-table th,
+.data-table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 0.85rem 1rem;
+    white-space: nowrap;
+}
+
+.data-table thead th {
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--border-medium);
+}
+
+.data-table tbody tr {
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background var(--transition-fast);
+}
+
+.data-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+    background: var(--border-subtle);
+}
+
+.data-table .cell-code {
+    font-family: monospace;
+    color: var(--muc-gold);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.data-table .cell-title {
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: normal;
+    min-width: 200px;
+}
+
+.data-table .cell-num {
+    font-family: monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-pill.status-confirmed {
+    color: var(--accent-emerald);
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }

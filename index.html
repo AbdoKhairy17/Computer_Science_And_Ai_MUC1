@@ -50,13 +50,9 @@
                             <span class="sidebar-brand-title" data-i18n="univ_name">جامعة مايو بالقاهرة</span>
                             <span class="sidebar-brand-sub">
                                 <span data-i18n="faculty_name">كلية الحاسبات والذكاء الاصطناعي</span>
-                                <span class="sidebar-tag" data-i18n="tag_muc">MUC</span>
                             </span>
                         </div>
                     </a>
-                    <button id="sidebar-toggle" class="sidebar-toggle-btn" title="Toggle Sidebar">
-                        <i class="fa-solid fa-angles-right"></i>
-                    </button>
                 </div>
 
                 <!-- Navigation Links -->
@@ -73,7 +69,7 @@
                     <a href="#gpa" class="nav-link" data-tab="gpa" title="حاسبة المعدل | GPA Predictor">
                         <i class="fa-solid fa-calculator"></i>
                         <span class="nav-text" data-i18n="nav_gpa">حاسبة المعدل</span>
-                        <span class="nav-badge" style="background: rgba(139, 92, 246, 0.25); color: #C4B5FD;">GPA</span>
+                        <span class="nav-badge nav-badge--gpa">GPA</span>
                     </a>
 
                     <!-- Timetable -->
@@ -86,14 +82,14 @@
                     <a href="#library" class="nav-link" data-tab="library" title="المكتبة والمحاضرات | Library">
                         <i class="fa-solid fa-book-bookmark"></i>
                         <span class="nav-text" data-i18n="nav_library">المكتبة والمحاضرات</span>
-                        <span class="nav-badge" style="background: rgba(37, 99, 235, 0.25); color: #93C5FD;">Drive</span>
+                        <span class="nav-badge nav-badge--drive">Drive</span>
                     </a>
 
                     <!-- AI Code Lab -->
                     <a href="#ai" class="nav-link" data-tab="ai" title="معمل الذكاء الاصطناعي | AI Code Lab">
                         <i class="fa-solid fa-brain"></i>
                         <span class="nav-text" data-i18n="nav_ai">معمل الذكاء الاصطناعي</span>
-                        <span class="nav-badge" style="background: rgba(16, 185, 129, 0.25); color: #6EE7B7;">AI</span>
+                        <span class="nav-badge nav-badge--ai">AI</span>
                     </a>
 
                     <!-- Exam Schedule -->
@@ -105,7 +101,7 @@
                     <div class="nav-category-label" data-i18n="nav_category_links">روابط خارجية</div>
 
                     <!-- Official SIS Portal External -->
-                    <a href="https://mayu.edu.eg" target="_blank" rel="noopener noreferrer" class="nav-link" title="بوابة SIS الرسمية">
+                    <a href="https://www.muc.edu.eg/ar" target="_blank" rel="noopener noreferrer" class="nav-link" title="بوابة SIS الرسمية">
                         <i class="fa-solid fa-globe"></i>
                         <span class="nav-text" data-i18n="nav_sis_portal">بوابة SIS الرسمية</span>
                         <i class="fa-solid fa-arrow-up-right-from-square nav-external-icon" style="font-size: 0.75rem; margin-inline-start: auto; width: auto;"></i>
@@ -113,16 +109,27 @@
                 </nav>
             </div>
 
+            <!-- Collapse handle: floats on the panel's inner edge, vertically centred -->
+            <button id="sidebar-toggle" class="sidebar-toggle-btn"
+                    type="button"
+                    aria-expanded="true"
+                    aria-controls="sidebar"
+                    title="طي القائمة الجانبية | Collapse sidebar">
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only" data-i18n="toggle_sidebar">طي القائمة الجانبية</span>
+            </button>
+
             <!-- Bottom: Student Quick ID Card Trigger -->
             <div class="sidebar-student-card" onclick="openStudentCardModal()" title="View Digital ID">
                 <div class="student-avatar-wrap">
                     <div class="student-avatar">
-                        <i class="fa-solid fa-user-graduate"></i>
+                        <img src="assets/images/profile.jpeg" alt=""
+                             class="student-avatar-img" loading="lazy" decoding="async">
                     </div>
                     <span class="student-online-dot"></span>
                 </div>
                 <div class="student-preview-info">
-                    <div class="student-preview-name" data-i18n="student_name">عبدالمجيد خيرت</div>
+                    <div class="student-preview-name" data-i18n="student_name">عبدالمجيد خيري</div>
                     <div class="student-preview-id">ID: 202688412</div>
                 </div>
                 <i class="fa-solid fa-id-card text-muc-gold" style="font-size: 1.1rem;"></i>
@@ -316,7 +323,7 @@
                         </div>
 
                         <!-- Card 5: Official SIS Portal -->
-                        <a href="https://mayu.edu.eg" target="_blank" rel="noopener noreferrer" class="glass-panel-interactive service-card service-red">
+                        <a href="https://www.muc.edu.eg/ar" target="_blank" rel="noopener noreferrer" class="glass-panel-interactive service-card service-red">
                             <div class="service-card-top">
                                 <div class="service-icon-wrap">
                                     <i class="fa-solid fa-globe"></i>
@@ -683,42 +690,42 @@
                         <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="exams_subtitle">مواعيد امتحانات منتصف الفصل ونهاية الفصل وأرقام اللجان والجلوس</p>
                     </div>
 
-                    <div class="glass-panel" style="overflow-x: auto; padding: 1.25rem;">
-                        <table style="width: 100%; border-collapse: collapse; text-align: start; font-size: 0.88rem;">
+                    <div class="glass-panel data-table-wrap">
+                        <table class="data-table">
                             <thead>
-                                <tr style="border-bottom: 1px solid var(--border-medium); color: var(--text-secondary);">
-                                    <th style="padding: 0.75rem 1rem;">كود المادة</th>
-                                    <th style="padding: 0.75rem 1rem;">اسم المقرر</th>
-                                    <th style="padding: 0.75rem 1rem;">التاريخ والوقت</th>
-                                    <th style="padding: 0.75rem 1rem;">قاعة الامتحان</th>
-                                    <th style="padding: 0.75rem 1rem;">رقم الجلوس</th>
-                                    <th style="padding: 0.75rem 1rem;">الحالة</th>
+                                <tr>
+                                    <th data-i18n="exam_col_code">كود المادة</th>
+                                    <th data-i18n="exam_col_course">اسم المقرر</th>
+                                    <th data-i18n="exam_col_datetime">التاريخ والوقت</th>
+                                    <th data-i18n="exam_col_hall">قاعة الامتحان</th>
+                                    <th data-i18n="exam_col_seat">رقم الجلوس</th>
+                                    <th data-i18n="exam_col_status">الحالة</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style="border-bottom: 1px solid var(--border-subtle);">
-                                    <td style="padding: 0.85rem 1rem; font-family: monospace; color: var(--muc-gold);">CS201</td>
-                                    <td style="padding: 0.85rem 1rem; font-weight: 700;">تراكيب البيانات (Data Structures)</td>
-                                    <td style="padding: 0.85rem 1rem;">15 مايو 2026 • 10:00 ص</td>
-                                    <td style="padding: 0.85rem 1rem;">مدرج C1 (لجنة 4)</td>
-                                    <td style="padding: 0.85rem 1rem; font-family: monospace;">240812</td>
-                                    <td style="padding: 0.85rem 1rem;"><span style="color: var(--accent-emerald); font-weight: 700;">مؤكد</span></td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid var(--border-subtle);">
-                                    <td style="padding: 0.85rem 1rem; font-family: monospace; color: var(--muc-gold);">AI202</td>
-                                    <td style="padding: 0.85rem 1rem; font-weight: 700;">ذكاء اصطناعي وأنساق خبيرة</td>
-                                    <td style="padding: 0.85rem 1rem;">18 مايو 2026 • 12:30 م</td>
-                                    <td style="padding: 0.85rem 1rem;">مدرج B2 (لجنة 2)</td>
-                                    <td style="padding: 0.85rem 1rem; font-family: monospace;">240812</td>
-                                    <td style="padding: 0.85rem 1rem;"><span style="color: var(--accent-emerald); font-weight: 700;">مؤكد</span></td>
+                                <tr>
+                                    <td class="cell-code">CS201</td>
+                                    <td class="cell-title">تراكيب البيانات (Data Structures)</td>
+                                    <td>15 مايو 2026 • 10:00 ص</td>
+                                    <td>مدرج C1 (لجنة 4)</td>
+                                    <td class="cell-num">240812</td>
+                                    <td><span class="status-pill status-confirmed">مؤكد</span></td>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 0.85rem 1rem; font-family: monospace; color: var(--muc-gold);">MATH204</td>
-                                    <td style="padding: 0.85rem 1rem; font-weight: 700;">رياضيات متقطعة ونظرية الرسوم</td>
-                                    <td style="padding: 0.85rem 1rem;">22 مايو 2026 • 10:00 ص</td>
-                                    <td style="padding: 0.85rem 1rem;">مدرج A3 (لجنة 7)</td>
-                                    <td style="padding: 0.85rem 1rem; font-family: monospace;">240812</td>
-                                    <td style="padding: 0.85rem 1rem;"><span style="color: var(--accent-emerald); font-weight: 700;">مؤكد</span></td>
+                                    <td class="cell-code">AI202</td>
+                                    <td class="cell-title">ذكاء اصطناعي وأنساق خبيرة</td>
+                                    <td>18 مايو 2026 • 12:30 م</td>
+                                    <td>مدرج B2 (لجنة 2)</td>
+                                    <td class="cell-num">240812</td>
+                                    <td><span class="status-pill status-confirmed">مؤكد</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="cell-code">MATH204</td>
+                                    <td class="cell-title">رياضيات متقطعة ونظرية الرسوم</td>
+                                    <td>22 مايو 2026 • 10:00 ص</td>
+                                    <td>مدرج A3 (لجنة 7)</td>
+                                    <td class="cell-num">240812</td>
+                                    <td><span class="status-pill status-confirmed">مؤكد</span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -785,10 +792,11 @@
                         <div class="id-student-center">
                             <div class="id-avatar-frame">
                                 <div class="id-avatar-inner">
-                                    <i class="fa-solid fa-user-graduate"></i>
+                                    <img src="assets/images/profile.jpeg" alt=""
+                                         class="id-avatar-img" decoding="async">
                                 </div>
                             </div>
-                            <div class="id-student-name" data-i18n="student_name">عبدالمجيد خيرت</div>
+                            <div class="id-student-name" data-i18n="student_name">عبدالمجيد خيري</div>
                             <div class="id-student-faculty" data-i18n="id_student_major">كلية الحاسبات والذكاء الاصطناعي</div>
                             <div class="id-student-num">ID: 202688412</div>
                         </div>
