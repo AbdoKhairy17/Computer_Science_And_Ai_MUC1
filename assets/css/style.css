@@ -962,3 +962,43 @@ input, select, textarea {
         padding: 0 0.85rem;
     }
 }
+
+/* ==========================================================================
+   TELEGRAM MINI APP / FULLSCREEN MODE
+   ========================================================================== */
+
+:root {
+    /* تُحدَّث من telegram.js؛ صفر في المتصفح العادي */
+    --tg-safe-top: 0px;
+    --tg-safe-bottom: 0px;
+}
+
+/* في وضع ملء الشاشة يمتد المحتوى تحت شريط حالة الجهاز وزر إغلاق تيليجرام،
+   فيُزاح الشريط العلوي للأسفل بمقدار المساحة الآمنة. */
+.tg-fullscreen #topbar {
+    height: calc(var(--topbar-height) + var(--tg-safe-top));
+    padding-top: var(--tg-safe-top);
+}
+
+/* زر الإغلاق والقائمة يظهران أعلى اليسار في RTL: نترك لهما فراغاً */
+.tg-fullscreen .topbar-end {
+    padding-inline-start: 3.25rem;
+}
+
+.tg-fullscreen #sidebar {
+    padding-top: calc(1.5rem + var(--tg-safe-top));
+}
+
+/* شريط التنقل السفلي يرتفع فوق مؤشر الشاشة الرئيسية */
+.tg-fullscreen #mobile-dock {
+    bottom: calc(12px + var(--tg-safe-bottom));
+}
+
+.tg-fullscreen #main-content {
+    padding-bottom: calc(6rem + var(--tg-safe-bottom));
+}
+
+/* داخل تيليجرام لا يوجد شريط عنوان متصفح: امنع سحب الصفحة/التحديد العرضي */
+.tg-miniapp body {
+    overscroll-behavior-y: contain;
+}
