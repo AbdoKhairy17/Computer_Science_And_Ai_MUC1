@@ -1,0 +1,1135 @@
+/* ==========================================================================
+   MAY UNIVERSITY IN CAIRO (MUC) - FACULTY OF COMPUTERS & AI
+   UI COMPONENTS & WIDGETS (components.css)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. GLASS PANELS & CARDS
+   -------------------------------------------------------------------------- */
+.glass-panel {
+    background: var(--bg-card);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: background-color var(--transition-smooth), border-color var(--transition-smooth);
+}
+
+.glass-panel-interactive {
+    background: var(--bg-card);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.glass-panel-interactive:hover {
+    border-color: var(--border-highlight);
+    box-shadow: var(--shadow-brand);
+    transform: translateY(-4px);
+    background: var(--bg-card-hover);
+}
+
+/* --------------------------------------------------------------------------
+   2. HERO BANNER & GREETING
+   -------------------------------------------------------------------------- */
+.hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-xl);
+    padding: 2rem 2.25rem;
+    background: linear-gradient(135deg, var(--muc-dark-maroon) 0%, var(--muc-maroon) 50%, #2A0845 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: var(--shadow-brand);
+    color: #FFFFFF;
+    margin-bottom: 1.75rem;
+}
+
+.hero-glow-orb {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 260px;
+    height: 260px;
+    background: rgba(230, 0, 66, 0.25);
+    border-radius: 50%;
+    filter: blur(50px);
+    pointer-events: none;
+}
+[dir="rtl"] .hero-glow-orb {
+    right: auto;
+    left: -50px;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+    .hero-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.hero-welcome-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    font-size: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(8px);
+    width: fit-content;
+}
+
+.hero-title {
+    font-size: 1.75rem;
+    font-weight: 900;
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.25;
+}
+
+.hero-subtitle {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* Quick Stat Badges */
+.hero-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.85rem;
+    min-width: 320px;
+}
+
+.hero-stat-card {
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.25rem;
+}
+
+.stat-num {
+    font-size: 1.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    font-family: monospace;
+}
+.stat-num.gold { color: var(--muc-gold); }
+.stat-num.green { color: var(--accent-emerald); }
+
+/* --------------------------------------------------------------------------
+   3. LIVE ACADEMIC NOTICE BANNER
+   -------------------------------------------------------------------------- */
+.live-notice-banner {
+    padding: 1.1rem 1.4rem;
+    border-radius: var(--radius-lg);
+    border-inline-start: 4px solid var(--muc-bright-red);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .live-notice-banner {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.live-notice-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.notice-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: rgba(230, 0, 66, 0.12);
+    border: 1px solid rgba(230, 0, 66, 0.25);
+    color: var(--muc-bright-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.notice-tags {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.notice-badge-red {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--muc-bright-red);
+    letter-spacing: 0.05em;
+}
+
+.live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.68rem;
+    font-weight: 700;
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.pulse-red-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #EF4444;
+    animation: pulseDot 1.5s infinite;
+}
+
+.notice-heading {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.notice-details {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.2rem;
+}
+
+.countdown-box {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    align-self: flex-end;
+}
+@media (min-width: 768px) {
+    .countdown-box {
+        align-self: center;
+    }
+}
+
+.countdown-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.countdown-timer {
+    font-family: monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-sm);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-medium);
+    color: var(--muc-gold);
+}
+
+/* --------------------------------------------------------------------------
+   4. ACADEMIC SERVICES GRID
+   -------------------------------------------------------------------------- */
+.services-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.15rem;
+}
+
+.services-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.services-title i {
+    color: var(--muc-bright-red);
+}
+
+.services-count {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.service-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px;
+}
+
+.service-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.service-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    transition: transform var(--transition-fast);
+}
+.service-card:hover .service-icon-wrap {
+    transform: scale(1.1);
+}
+
+.service-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+}
+
+.service-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+    transition: color var(--transition-fast);
+}
+
+.service-desc {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Service Variations */
+.service-purple .service-icon-wrap {
+    background: rgba(139, 92, 246, 0.15);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: #A78BFA;
+}
+.service-purple .service-tag {
+    background: rgba(139, 92, 246, 0.12);
+    color: #C4B5FD;
+}
+.service-purple:hover .service-title { color: #C4B5FD; }
+
+.service-blue .service-icon-wrap {
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    color: #60A5FA;
+}
+.service-blue .service-tag {
+    background: rgba(37, 99, 235, 0.12);
+    color: #93C5FD;
+}
+.service-blue:hover .service-title { color: #93C5FD; }
+
+.service-amber .service-icon-wrap {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #FBBF24;
+}
+.service-amber .service-tag {
+    background: rgba(245, 158, 11, 0.12);
+    color: #FDE68A;
+}
+.service-amber:hover .service-title { color: #FDE68A; }
+
+.service-emerald .service-icon-wrap {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #34D399;
+}
+.service-emerald .service-tag {
+    background: rgba(16, 185, 129, 0.12);
+    color: #A7F3D0;
+}
+.service-emerald:hover .service-title { color: #A7F3D0; }
+
+.service-red .service-icon-wrap {
+    background: rgba(230, 0, 66, 0.15);
+    border: 1px solid rgba(230, 0, 66, 0.3);
+    color: var(--muc-bright-red);
+}
+.service-red .service-tag {
+    background: rgba(230, 0, 66, 0.12);
+    color: #FDA4AF;
+}
+.service-red:hover .service-title { color: var(--muc-bright-red); }
+
+/* --------------------------------------------------------------------------
+   5. GPA PREDICTOR & CALCULATOR
+   -------------------------------------------------------------------------- */
+.gpa-card-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+@media (min-width: 992px) {
+    .gpa-card-layout {
+        grid-template-columns: 320px 1fr;
+    }
+}
+
+.gpa-gauge-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    text-align: center;
+}
+
+.gpa-ring-wrapper {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    margin-bottom: 1.25rem;
+}
+
+.gpa-ring-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.gpa-ring-bg {
+    fill: none;
+    stroke: var(--border-subtle);
+    stroke-width: 10;
+}
+
+.gpa-ring-fill {
+    fill: none;
+    stroke: url(#gpaGradient);
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 452.39; /* 2 * PI * 72 */
+    stroke-dashoffset: 452.39;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gpa-ring-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.gpa-ring-val {
+    font-size: 2.2rem;
+    font-weight: 900;
+    font-family: monospace;
+    color: var(--muc-gold);
+    line-height: 1;
+}
+
+.gpa-ring-max {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+}
+
+.gpa-standing-chip {
+    padding: 0.35rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.82rem;
+    font-weight: 700;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--accent-emerald);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    margin-bottom: 1rem;
+}
+
+.gpa-meta-pills {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    justify-content: center;
+}
+.gpa-meta-pill {
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-md);
+    background: var(--border-subtle);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+.gpa-meta-pill b {
+    color: var(--text-primary);
+    margin-inline-start: 0.25rem;
+}
+
+/* GPA Form & Rows */
+.gpa-form-panel {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.gpa-row-header {
+    display: grid;
+    grid-template-columns: 5fr 3fr 3fr 1fr;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    padding: 0 0.5rem;
+}
+
+.gpa-row-item {
+    display: grid;
+    grid-template-columns: 5fr 3fr 3fr 1fr;
+    gap: 0.75rem;
+    align-items: center;
+    background: var(--border-subtle);
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    transition: all var(--transition-fast);
+}
+.gpa-row-item:hover {
+    border-color: var(--border-medium);
+}
+
+.input-field {
+    width: 100%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    transition: border-color var(--transition-fast);
+}
+.input-field:focus {
+    border-color: var(--muc-bright-red);
+    outline: none;
+}
+
+.btn-icon-danger {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+}
+.btn-icon-danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+}
+
+.gpa-controls-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius-md);
+    background: var(--border-subtle);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+.btn-secondary:hover {
+    background: var(--border-medium);
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--muc-maroon) 0%, var(--muc-bright-red) 100%);
+    color: #FFFFFF;
+    font-size: 0.88rem;
+    font-weight: 700;
+    box-shadow: var(--shadow-brand);
+    transition: all var(--transition-fast);
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -6px rgba(139, 21, 56, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   6. TIMETABLE & SCHEDULE
+   -------------------------------------------------------------------------- */
+.schedule-days-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.day-tab-btn {
+    padding: 0.55rem 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--border-subtle);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+}
+.day-tab-btn:hover {
+    color: var(--text-primary);
+    background: var(--border-medium);
+}
+.day-tab-btn.active {
+    background: linear-gradient(135deg, var(--muc-maroon), var(--muc-bright-red));
+    color: #FFFFFF;
+    border-color: transparent;
+    box-shadow: var(--shadow-brand);
+}
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.schedule-item-card {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    border-inline-start: 4px solid var(--muc-bright-red);
+}
+@media (min-width: 768px) {
+    .schedule-item-card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.schedule-course-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.35rem;
+}
+
+.schedule-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+.schedule-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.session-type-badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: var(--border-subtle);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    align-self: flex-start;
+}
+@media (min-width: 768px) {
+    .session-type-badge {
+        align-self: center;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   7. DIGITAL LIBRARY & MUC DRIVE
+   -------------------------------------------------------------------------- */
+.library-filter-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+@media (min-width: 768px) {
+    .library-filter-bar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.search-input-wrap {
+    position: relative;
+    flex: 1;
+    max-width: 420px;
+}
+.search-input-wrap i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    right: 1rem;
+}
+[dir="rtl"] .search-input-wrap i {
+    right: auto;
+    left: 1rem;
+}
+.search-input {
+    padding-inline-end: 2.5rem;
+}
+[dir="rtl"] .search-input {
+    padding-inline-end: 0.75rem;
+    padding-inline-start: 2.5rem;
+}
+
+.library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+}
+
+.resource-card {
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.resource-left {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    overflow: hidden;
+}
+
+.resource-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+.resource-icon.pdf {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+}
+.resource-icon.pptx {
+    background: rgba(245, 158, 11, 0.15);
+    color: #F59E0B;
+}
+.resource-icon.code {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10B981;
+}
+
+.resource-info {
+    overflow: hidden;
+}
+.resource-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.2rem;
+}
+.resource-meta {
+    font-size: 0.74rem;
+    color: var(--text-secondary);
+}
+
+.btn-download {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--border-subtle);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+.btn-download:hover {
+    background: var(--muc-maroon);
+    color: #FFFFFF;
+    border-color: var(--muc-maroon);
+    transform: scale(1.05);
+}
+
+/* --------------------------------------------------------------------------
+   8. AI CODE LAB & ASSISTANT
+   -------------------------------------------------------------------------- */
+.ai-lab-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.ai-icon-large {
+    width: 54px;
+    height: 54px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: var(--accent-emerald);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+}
+
+.ai-chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.ai-prompt-chip {
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--radius-full);
+    background: var(--border-subtle);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+.ai-prompt-chip:hover {
+    background: var(--border-medium);
+    color: var(--text-primary);
+}
+
+.code-editor-box {
+    width: 100%;
+    height: 160px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    resize: vertical;
+    outline: none;
+    transition: border-color var(--transition-fast);
+}
+.code-editor-box:focus {
+    border-color: var(--accent-emerald);
+}
+
+.ai-output-box {
+    display: none;
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: var(--text-primary);
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   9. DIGITAL STUDENT ID CARD (3D FLIP MODAL)
+   -------------------------------------------------------------------------- */
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: fadeIn 0.25s ease-out;
+}
+.modal-backdrop.active {
+    display: flex;
+}
+
+.modal-dialog {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: -45px;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all var(--transition-fast);
+}
+[dir="rtl"] .modal-close-btn {
+    right: auto;
+    left: 0;
+}
+.modal-close-btn:hover {
+    background: var(--muc-bright-red);
+    transform: rotate(90deg);
+}
+
+/* 3D Card Flip Perspective Container */
+.id-card-perspective {
+    perspective: 1200px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.id-card-inner {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    border-radius: 24px;
+    transform-style: preserve-3d;
+    transition: transform 0.75s cubic-bezier(0.4, 0.2, 0.2, 1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(139, 21, 56, 0.4);
+}
+.id-card-inner.flipped {
+    transform: rotateY(180deg);
+}
+
+.id-card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    border: 2px solid rgba(212, 175, 55, 0.5);
+}
+
+/* ID Card Front & Back Unified Design */
+.id-card-front,
+.id-card-back {
+    background: linear-gradient(160deg, #5A0B22 0%, #1A040B 50%, #09080E 100%);
+    color: #FFFFFF;
+}
+
+.id-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 1rem;
+}
+
+.id-crest-logo {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+}
+
+.id-univ-text {
+    text-align: right;
+}
+[dir="ltr"] .id-univ-text {
+    text-align: left;
+}
+.id-univ-title {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+.id-univ-badge-name {
+    font-size: 0.72rem;
+    color: var(--muc-gold);
+}
+
+.id-student-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.id-avatar-frame {
+    width: 105px;
+    height: 105px;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(135deg, var(--muc-gold), var(--muc-bright-red));
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    margin-bottom: 0.85rem;
+}
+
+.id-avatar-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #1F1B2E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #FFFFFF;
+}
+
+.id-student-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.id-student-faculty {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 0.15rem;
+}
+
+.id-student-num {
+    font-family: monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--muc-gold);
+    margin-top: 0.35rem;
+    letter-spacing: 0.05em;
+}
+
+.id-footer-row {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.id-status-active {
+    color: var(--accent-emerald);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* ID Card Back Specifics */
+.id-card-back {
+    transform: rotateY(180deg);
+}
+
+.id-qr-box {
+    background: #FFFFFF;
+    padding: 0.85rem;
+    border-radius: var(--radius-md);
+    border: 3px solid var(--muc-gold);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.id-qr-box i {
+    font-size: 5.2rem;
+    color: #000000;
+}
+
+.id-barcode-mock {
+    font-family: monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.25em;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 0.5rem;
+}
+
+.id-flip-hint {
+    margin-top: 0.85rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}

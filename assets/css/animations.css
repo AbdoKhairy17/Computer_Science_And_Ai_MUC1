@@ -1,0 +1,114 @@
+/* ==========================================================================
+   MAY UNIVERSITY IN CAIRO (MUC) - FACULTY OF COMPUTERS & AI
+   ANIMATIONS & KEYFRAMES (animations.css)
+   ========================================================================== */
+
+/* 1. Ambient Background Floating Glows */
+@keyframes ambientFloat1 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translate(40px, -30px) scale(1.1);
+        opacity: 0.75;
+    }
+    100% {
+        transform: translate(-30px, 40px) scale(0.95);
+        opacity: 0.6;
+    }
+}
+
+@keyframes ambientFloat2 {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0.4;
+    }
+    50% {
+        transform: translate(-50px, 35px) rotate(180deg);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translate(35px, -45px) rotate(360deg);
+        opacity: 0.5;
+    }
+}
+
+@keyframes ambientPulse {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.3;
+    }
+    50% {
+        transform: scale(1.15);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(0.9);
+        opacity: 0.3;
+    }
+}
+
+/* 2. Live Notification Dot Pulsing */
+@keyframes pulseDot {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+/* 3. Smooth Fade In */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 4. Modal Pop In */
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 5. Shimmer Effect */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* 6. Subtle Floating Card Hover */
+.animate-float {
+    animation: cardFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes cardFloat {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-6px);
+    }
+}
