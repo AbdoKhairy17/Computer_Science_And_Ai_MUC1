@@ -1,4 +1,4 @@
-# Computer Science & AI — MIU Telegram Mini App
+# Computer Science & AI — MUC Telegram Mini App
 
 A Telegram bot + Mini App for the Faculty of Computers & Artificial
 Intelligence. `/start` sends a welcome message with a button that opens the
@@ -147,5 +147,5 @@ renders and the fallbacks (`alert`, `window.open`) take over in a plain browser.
   placeholder data**, not a live feed from any university system.
 - The GPA calculator accumulates credit-weighted courses in memory only; state
   is lost on reload.
-- Naming is inconsistent between the bot copy (`جامعة مصر للمعلوماتية`) and the
+- Naming is inconsistent between the bot copy (`جامعة مايو بالقاهرة`) and the
   Mini App (`جامعة مايو` / `May University in Egypt`). Pick one before release.
