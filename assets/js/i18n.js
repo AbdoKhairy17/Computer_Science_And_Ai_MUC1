@@ -117,6 +117,14 @@ const translations = {
         exams_title: "جدول امتحانات الفصل الدراسي",
         exams_subtitle: "مواعيد امتحانات منتصف الفصل ونهاية الفصل وأرقام اللجان والجلوس",
 
+        // Exam table column headers
+        exam_col_code: "كود المادة",
+        exam_col_course: "اسم المقرر",
+        exam_col_datetime: "التاريخ والوقت",
+        exam_col_hall: "قاعة الامتحان",
+        exam_col_seat: "رقم الجلوس",
+        exam_col_status: "الحالة",
+
         // Digital Student ID Modal
         id_modal_title: "جامعة مايو بالقاهرة - MUC",
         id_badge_subtitle: "بطاقة الطالب الرقمية الموحدة",
@@ -244,6 +252,14 @@ const translations = {
         // Exams Tab
         exams_title: "Semester Exam Schedule",
         exams_subtitle: "Midterm & Final exam dates, hall numbers, and student seat assignments",
+
+        // Exam table column headers
+        exam_col_code: "Course Code",
+        exam_col_course: "Course Name",
+        exam_col_datetime: "Date & Time",
+        exam_col_hall: "Exam Hall",
+        exam_col_seat: "Seat No.",
+        exam_col_status: "Status",
 
         // Digital Student ID Modal
         id_modal_title: "May University in Cairo - MUC",
