@@ -1,8 +1,22 @@
-# Computer Science & AI — MUC Telegram Mini App
+# Computer Science & AI — MUC Student Portal
 
-A Telegram bot + Mini App for the Faculty of Computers & Artificial
-Intelligence. `/start` sends a welcome message with a button that opens the
-student portal as a Telegram Mini App.
+A Telegram bot plus a web student portal for the Faculty of Computers &
+Artificial Intelligence. `/start` sends a welcome message with a button that
+opens the portal **in the browser**, outside Telegram.
+
+### Why a `url` button and not a `web_app` button
+
+A `web_app` button opens the page inside Telegram's own Mini App container.
+A plain `url` button opens it as an ordinary link, which is what this bot uses.
+
+One limit cannot be controlled from the server: Telegram's **In-App Browser**
+setting may still open the link inside Telegram's built-in browser rather than
+the system browser. The Bot API offers no flag to force it out. What the `url`
+button does guarantee is that the page is no longer a Mini App, and that the
+user gets an "Open in browser" option.
+
+The page still runs correctly inside Telegram if it is ever opened that way —
+`telegram.js` detects the context and falls back cleanly in a plain browser.
 
 Bot: [@Computer_Science_And_Ai_MUC1bot](https://t.me/Computer_Science_And_Ai_MUC1bot)
 
@@ -13,7 +27,7 @@ Bot: [@Computer_Science_And_Ai_MUC1bot](https://t.me/Computer_Science_And_Ai_MUC
 ├── api/
 │   ├── webhook.py   # Vercel Python serverless function → /api/webhook
 │   └── setup.py     # one-click webhook registration → /api/setup
-├── index.html       # the Mini App (served at /)
+├── index.html       # the portal (served at /)
 └── README.md
 ```
 
@@ -21,7 +35,7 @@ There is no build step and no dependencies — `webhook.py` uses only the Python
 standard library, and `index.html` is a single self-contained file.
 
 > **`index.html` must keep that exact name.** Vercel serves the site root from
-> `index.html`; renaming it makes `/` return a 404 and the Mini App button opens
+> `index.html`; renaming it makes `/` return a 404 and the portal button opens
 > an error page.
 
 ## Environment variables
@@ -73,7 +87,7 @@ variable is unset.
 | `?key=<SECRET>&action=delete` | unregister the webhook |
 
 The page also warns when `WEB_APP_URL` does not match the deployment it is
-running on — the mistake that leaves `/start` working while the Mini App button
+running on — the mistake that leaves `/start` working while the portal button
 opens a dead address.
 
 You only need this again if the domain changes or you revoke the token.
@@ -94,7 +108,7 @@ not match exactly, every update is rejected with `403`.
 
 | URL | Expected |
 | --- | --- |
-| `/` | `200` — the Mini App |
+| `/` | `200` — the portal |
 | `/api/webhook` (GET) | `200 Telegram Bot Webhook is running successfully.` |
 | `/api/webhook` (POST, no secret) | `403` |
 | `/api/setup` (no key) | `403` |
@@ -104,19 +118,29 @@ not match exactly, every update is rejected with `403`.
 
 | Command | Behaviour |
 | --- | --- |
-| `/start` | Welcome message + Mini App button. |
-| `/start <tab>` | Opens the Mini App directly on that tab. |
+| `/start` | Welcome message + a button that opens the portal in the browser. |
+| `/start <tab>` | Opens the portal directly on that tab. |
 | `/help` | Lists available commands. |
 
 ### Deep links
 
-`/start <tab>` opens the Mini App on a specific screen. Valid values:
+`/start <tab>` opens the portal on a specific screen. Valid values:
 
 `home` · `gpa` · `schedule` · `library` · `ai` · `exams`
 
-The value arrives as `initDataUnsafe.start_param` and is checked against that
-allow-list in `telegram.js` before routing — anything else is ignored silently,
-so a crafted link cannot drive the app into an unexpected state.
+The tab is checked against that allow-list **twice** — once in `webhook.py`
+before it is appended to the URL, and again in `telegram.js` before routing.
+Anything else is ignored and the portal opens on the home tab.
+
+The value travels differently depending on how the page was opened:
+
+| Opened as | Carried by |
+| --- | --- |
+| Browser link (the `url` button) | `?tab=<name>` query string |
+| Mini App, if opened that way | `initDataUnsafe.start_param` |
+
+`telegram.js` reads the Mini App parameter first and falls back to the query
+string, so one code path serves both.
 
 ## How the webhook works
 
@@ -168,11 +192,11 @@ renders and the fallbacks (`alert`, `window.open`) take over in a plain browser.
 
 ## Notes
 
-- The Mini App content (files, schedule, AI lab) is currently **static
+- The portal content (files, schedule, AI lab) is currently **static
   placeholder data**, not a live feed from any university system.
 - The GPA calculator accumulates credit-weighted courses in memory only; state
   is lost on reload.
-- Naming is now consistent across the bot and the Mini App:
+- Naming is now consistent across the bot and the portal:
   `جامعة مايو بالقاهرة` / `May University in Cairo` (MUC).
 - The UI uses FontAwesome as an icon font (~252 KB: 102 KB CSS + 150 KB WOFF2)
   for 34 icons. Inlining those as SVG would cut it to roughly 10–15 KB, which

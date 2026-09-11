@@ -112,9 +112,6 @@ function initTelegram() {
         });
     });
 
-    // بعد أن تكتمل بقية مستمعي DOMContentLoaded: هذا الملف يُسجَّل أولاً،
-    // فالتوجيه الفوري يسبق تهيئة التنقّل والحركة.
-    setTimeout(applyStartParam, 0);
 }
 
 /**
@@ -128,13 +125,33 @@ function initTelegram() {
 const DEEP_LINK_TABS = ['home', 'gpa', 'schedule', 'library', 'ai', 'exams'];
 
 function applyStartParam() {
+    let raw = '';
+
+    // داخل تيليجرام: المعامل يصل عبر initData
     tgSafe(function () {
-        const raw = (tg.initDataUnsafe && tg.initDataUnsafe.start_param) || '';
-        const target = String(raw).toLowerCase().trim();
-        if (DEEP_LINK_TABS.indexOf(target) === -1) return;
-        if (typeof window.switchTab !== 'function') return;
-        window.switchTab(target);
+        raw = (tg.initDataUnsafe && tg.initDataUnsafe.start_param) || '';
     });
+
+    // خارجه: زر البوت صار رابطاً عادياً يحمل ?tab=
+    if (!raw) {
+        try {
+            raw = new URLSearchParams(window.location.search).get('tab') || '';
+        } catch (e) {
+            raw = '';
+        }
+    }
+
+    const target = String(raw).toLowerCase().trim();
+    if (DEEP_LINK_TABS.indexOf(target) === -1) return;
+    if (typeof window.switchTab !== 'function') return;
+    window.switchTab(target);
 }
 
-document.addEventListener('DOMContentLoaded', initTelegram);
+document.addEventListener('DOMContentLoaded', function () {
+    initTelegram();
+
+    // خارج تيليجرام لا يعمل initTelegram، لكن ?tab= يظل صالحاً —
+    // فالتوجيه يُستدعى دائماً لا داخل initTelegram فقط.
+    // التأجيل يترك بقية مستمعي DOMContentLoaded تُنهي التهيئة أولاً.
+    setTimeout(applyStartParam, 0);
+});

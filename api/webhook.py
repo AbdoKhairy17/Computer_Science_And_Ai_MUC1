@@ -39,6 +39,10 @@ SECRET_TOKEN = os.environ.get("TELEGRAM_SECRET_TOKEN", "")
 _SEEN_UPDATES = []
 _SEEN_LIMIT = 256
 
+# تبويبات البوابة التي يجوز فتحها عبر /start <tab>.
+# تطابق DEEP_LINK_TABS في assets/js/telegram.js.
+PORTAL_TABS = ("home", "gpa", "schedule", "library", "ai", "exams")
+
 
 class handler(BaseHTTPRequestHandler):
 
@@ -295,13 +299,8 @@ class handler(BaseHTTPRequestHandler):
         # Optional start parameter
         # ----------------------------------------------------
 
-        if start_parameter:
-
-            welcome_text += (
-                "\n\n"
-                f"Start parameter: "
-                f"<code>{escape(start_parameter)}</code>"
-            )
+        # المعامل صار يُستعمل في بناء الرابط بدل أن يُطبع للمستخدم،
+        # فلم يعد هناك داعٍ لعرضه كنص تشخيصي.
 
         # ----------------------------------------------------
         # Telegram payload
@@ -314,10 +313,16 @@ class handler(BaseHTTPRequestHandler):
         }
 
         # ----------------------------------------------------
-        # Mini App button
+        # زر رابط عادي (url) لا زر تطبيق مصغّر (web_app).
         #
-        # Telegram rejects a web_app button without a valid
-        # https URL, so only attach it when WEB_APP_URL is set.
+        # web_app يفتح الصفحة داخل حاوية تيليجرام نفسها؛ url يفتحها
+        # كرابط عادي فيخرج المستخدم من التطبيق.
+        #
+        # حدّ لا يمكن تجاوزه من الخادم: إعداد "المتصفّح المدمج" في
+        # تيليجرام قد يفتح الرابط في متصفّح تيليجرام الداخلي بدل متصفّح
+        # النظام. لا يوفّر Bot API أي وسيلة لفرض الخروج. الفرق الذي
+        # نضمنه أن الصفحة لم تعد تطبيقاً مصغّراً، ويظهر للمستخدم خيار
+        # "فتح في المتصفّح".
         # ----------------------------------------------------
 
         if WEB_APP_URL:
@@ -326,10 +331,8 @@ class handler(BaseHTTPRequestHandler):
                 "inline_keyboard": [
                     [
                         {
-                            "text": "📱 فتح بوابة الطالب (Mini App)",
-                            "web_app": {
-                                "url": WEB_APP_URL
-                            }
+                            "text": "🎓 فتح بوابة الطالب",
+                            "url": self.build_portal_url(start_parameter)
                         }
                     ]
                 ]
@@ -344,13 +347,40 @@ class handler(BaseHTTPRequestHandler):
             print(
                 "ERROR: WEB_APP_URL environment variable "
                 "is missing, sending message without the "
-                "Mini App button."
+                "portal button."
             )
 
         self.call_telegram_api(
             "sendMessage",
             payload
         )
+
+    # ========================================================
+    # رابط البوابة (مع الربط العميق)
+    # ========================================================
+
+    def build_portal_url(self, start_parameter=None):
+
+        """يبني رابط البوابة، ويحمل التبويب المطلوب كمعامل استعلام.
+
+        الربط العميق كان يصل عبر initData.start_param، وهو متاح داخل
+        التطبيق المصغّر فقط. بعد التحوّل إلى رابط عادي لم يعد موجوداً،
+        فننقله إلى ?tab= كي يستمر /start gpa في فتح تبويب المعدل.
+        """
+
+        if not start_parameter:
+            return WEB_APP_URL
+
+        tab = str(start_parameter).strip().lower()
+
+        # قائمة بيضاء: المعامل يأتي من رابط يكتبه أي شخص، فلا يُلحق
+        # بالرابط كما هو.
+        if tab not in PORTAL_TABS:
+            return WEB_APP_URL
+
+        separator = "&" if "?" in WEB_APP_URL else "?"
+
+        return WEB_APP_URL + separator + urllib.parse.urlencode({"tab": tab})
 
     # ========================================================
     # SEND SIMPLE TEXT MESSAGE
