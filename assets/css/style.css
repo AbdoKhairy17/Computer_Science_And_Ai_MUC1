@@ -1013,22 +1013,32 @@ img { max-width: 100%; }
 @media (max-width: 768px) {
     .topbar-mobile-logo { display: flex; }
     .academic-term-chip { display: none; }
+
+    /* الزر يصير أيقونة فقط: دائرة 44×44 تماماً كأزرار المجموعة
+       المجاورة. كان 38×44 — كبسولة مضغوطة تكسر انتظام الصف. */
     .btn-student-card span { display: none; }
-    .btn-student-card { padding-inline: var(--space-3); }
+    .btn-student-card {
+        width: var(--tap-min);
+        padding-inline: 0;
+        flex-shrink: 0;
+    }
+
     #topbar { padding-inline: var(--space-4); }
     #main-content { padding: var(--space-6) var(--space-4) var(--space-10); }
 }
 
+@media (max-width: 640px) {
+    /* اسم الكلية يحتاج 224px ولا يجد إلا 41px، فيُقصّ إلى حروف مبتورة
+       لا تُقرأ. الشعار يحمل الهوية نفسها في 44px، فنُبقيه ونُسقط النص
+       بدل أن نعرض بقايا كلمة. */
+    .topbar-title-block { display: none; }
+}
+
 @media (max-width: 560px) {
-    .lang-label { display: none; }
+    /* لا نُخفي .lang-label هنا:
+       الزر صار نصياً بحتاً بعد إعادة بناء الشريط (لا أيقونة بداخله)،
+       فإخفاء النص كان يتركه فارغاً تماماً — زر بلا أي محتوى مرئي. */
     .utility-btn { padding-inline: var(--space-2); }
-    .topbar-faculty-subtitle { display: none; }
-    .topbar-faculty-title {
-        font-size: var(--text-base);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
 }
 
 /* ==========================================================================

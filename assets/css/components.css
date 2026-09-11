@@ -67,16 +67,19 @@
     box-shadow: var(--shadow-lg);
 }
 /* طبقتان فوق العنّابي:
-   ::before نمط هندسي إسلامي متكرّر — هوية ثقافية بتنفيذ حديث
+   ::before علامة MUC متكرّرة — توقيع العلامة على السطح
    ::after  توهّج قطري يمنع الكتلة المصمتة من أن تبدو مسطّحة */
 .hero-banner::before {
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url("../images/pattern-geometric.svg");
-    background-size: 64px;
+    /* بلاطة مولّدة من شعار MUC بهامش حولها.
+       الملف الأصلي إطاره ملتصق بالحروف، فتكراره مباشرةً كان يرصّ
+       الأحرف ويقصّها عند الحدود. */
+    background-image: url("../images/pattern-monogram.svg");
+    background-size: 108px;
     background-repeat: repeat;
-    opacity: 0.13;
+    opacity: 0.1;
     pointer-events: none;
     /* يتلاشى مبكراً في اتجاه القراءة فلا يمرّ خلف الاسم ولا الأرقام */
     mask-image: linear-gradient(to bottom left, #000 0%, transparent 58%);

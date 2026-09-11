@@ -353,13 +353,22 @@ function setLanguage(lang) {
         }
     });
 
-    // Update Language switcher button label
+    // زر اللغة: رمز من حرفين لا اسم كامل.
+    // "English" / "العربية" كانا يأخذان عرضاً لا يتوفّر في شريط الجوال،
+    // والاسم المنطوق يبقى كاملاً في aria-label.
     const langBtn = document.getElementById('lang-toggle-btn');
     if (langBtn) {
         const labelSpan = langBtn.querySelector('.lang-label');
         if (labelSpan) {
-            labelSpan.textContent = isRtl ? 'English' : 'العربية';
+            labelSpan.textContent = isRtl ? 'EN' : 'AR';
         }
+        // الاسم الثابت في الوسم كان يبقى "التبديل إلى الإنجليزية" حتى
+        // بعد التحوّل للإنجليزية، فيصف الزر عكس ما يفعل.
+        langBtn.setAttribute(
+            'aria-label',
+            isRtl ? 'التبديل إلى الإنجليزية | Switch to English'
+                  : 'Switch to Arabic | التبديل إلى العربية'
+        );
     }
 }
 
