@@ -18,7 +18,7 @@ from http.server import BaseHTTPRequestHandler
 # Set these in Vercel Environment Variables.
 #
 # TELEGRAM_BOT_TOKEN     = your NEW token from @BotFather
-# WEB_APP_URL            = https://codeartifact-2-ten.vercel.app/
+# WEB_APP_URL            = https://<your-app>.vercel.app/   (بشرطة مائلة في النهاية)
 # TELEGRAM_SECRET_TOKEN  = any random string you also pass to
 #                          setWebhook as ?secret_token=...
 #

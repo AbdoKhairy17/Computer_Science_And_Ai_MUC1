@@ -71,10 +71,23 @@ function initTelegram() {
 
     // لون شريط تيليجرام يطابق خلفية التطبيق
     tgSafe(function () {
+        // --bg-primary لم يعد موجوداً بعد إعادة تسمية الرموز، فكان اللون
+        // يسقط دائماً إلى الاحتياطي الداكن حتى في الوضع الفاتح.
         const shell = getComputedStyle(document.documentElement)
-            .getPropertyValue('--bg-primary').trim() || '#09080E';
+            .getPropertyValue('--bg-page').trim() || '#F5F5F8';
         tg.setHeaderColor(shell);
         tg.setBackgroundColor(shell);
+    });
+
+    // شريط تيليجرام يتبع تبديل المظهر داخل التطبيق
+    tgSafe(function () {
+        window.addEventListener('muc:themechange', function () {
+            const shell = getComputedStyle(document.documentElement)
+                .getPropertyValue('--bg-page').trim();
+            if (!shell) return;
+            tgSafe(function () { tg.setHeaderColor(shell); });
+            tgSafe(function () { tg.setBackgroundColor(shell); });
+        });
     });
 
     markFullscreen(tg.isFullscreen);
@@ -97,6 +110,30 @@ function initTelegram() {
         document.querySelectorAll('[data-tg-user-name]').forEach(function (el) {
             el.textContent = first;
         });
+    });
+
+    // بعد أن تكتمل بقية مستمعي DOMContentLoaded: هذا الملف يُسجَّل أولاً،
+    // فالتوجيه الفوري يسبق تهيئة التنقّل والحركة.
+    setTimeout(applyStartParam, 0);
+}
+
+/**
+ * الربط العميق: /start gpa يفتح تبويب المعدل مباشرة.
+ * كان البوت يمرّر الوسيط ويعرضه في الرسالة، لكن التطبيق لم يقرأه أبداً،
+ * فكانت البنية نصف مكتملة.
+ *
+ * القيمة تأتي من المستخدم عبر رابط، فلا تُمرَّر إلى switchTab كما هي:
+ * تُقارن بقائمة بيضاء، وأي شيء خارجها يُتجاهل بصمت.
+ */
+const DEEP_LINK_TABS = ['home', 'gpa', 'schedule', 'library', 'ai', 'exams'];
+
+function applyStartParam() {
+    tgSafe(function () {
+        const raw = (tg.initDataUnsafe && tg.initDataUnsafe.start_param) || '';
+        const target = String(raw).toLowerCase().trim();
+        if (DEEP_LINK_TABS.indexOf(target) === -1) return;
+        if (typeof window.switchTab !== 'function') return;
+        window.switchTab(target);
     });
 }
 

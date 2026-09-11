@@ -8,6 +8,7 @@ const SIDEBAR_STORAGE_KEY = 'muc_sidebar_collapsed';
 document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initMobileDrawer();
+    initNotifications();
     initStudentIdModal();
     initScheduleTabs();
     initLibraryFilters();
@@ -74,23 +75,34 @@ function switchTab(tabId) {
     if (targetTab) {
         targetTab.classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // تتابع دخول عناصر اللوحة — اختياري تماماً
+        if (typeof window.animateTabEnter === 'function') {
+            window.animateTabEnter(targetTab);
+        }
     }
 
     // 3. Update active state in Sidebar
+    //    aria-current يخبر قارئ الشاشة أي وجهة هي الحالية.
+    //    الصنف .active لون فقط، ولا يُنقل لأي تقنية مساعدة.
     document.querySelectorAll('#sidebar .nav-link').forEach(link => {
-        if (link.getAttribute('data-tab') === tabId) {
-            link.classList.add('active');
+        const isCurrent = link.getAttribute('data-tab') === tabId;
+        link.classList.toggle('active', isCurrent);
+        if (isCurrent) {
+            link.setAttribute('aria-current', 'page');
         } else {
-            link.classList.remove('active');
+            link.removeAttribute('aria-current');
         }
     });
 
     // 4. Update active state in Mobile Dock
     document.querySelectorAll('#mobile-dock .dock-item').forEach(item => {
-        if (item.getAttribute('data-tab') === tabId) {
-            item.classList.add('active');
+        const isCurrent = item.getAttribute('data-tab') === tabId;
+        item.classList.toggle('active', isCurrent);
+        if (isCurrent) {
+            item.setAttribute('aria-current', 'page');
         } else {
-            item.classList.remove('active');
+            item.removeAttribute('aria-current');
         }
     });
 
@@ -99,37 +111,188 @@ function switchTab(tabId) {
 }
 
 /* ==========================================================================
-   2. MOBILE DRAWER NAVIGATION
-   ========================================================================== */
-function initMobileDrawer() {
-    const mobileBtn = document.getElementById('mobile-menu-btn');
-    const backdrop = document.getElementById('drawer-backdrop');
+   2. درج التنقل (الشاشات الصغيرة)
+   ==========================================================================
+   لم يعد هناك شريط سفلي: القائمة الجانبية نفسها تنزلق كدرج، فالتنقل
+   واحد على كل المقاسات. الدرج يتصرف كحوار: يحصر التركيز، ويُغلق
+   بـ Escape أو بالنقر خارجه، ويعيد التركيز إلى الزر الذي فتحه. */
 
-    if (mobileBtn) {
-        mobileBtn.addEventListener('click', openMobileDrawer);
+let lastFocusedBeforeDrawer = null;
+
+function isDrawerMode() {
+    // نفس عتبة CSS التي تحوّل القائمة إلى درج
+    return window.matchMedia('(max-width: 1024px)').matches;
+}
+
+function initMobileDrawer() {
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const closeBtn = document.getElementById('drawer-close-btn');
+    const backdrop = document.getElementById('drawer-backdrop');
+    const sidebar = document.getElementById('sidebar');
+
+    if (menuBtn) menuBtn.addEventListener('click', openMobileDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeMobileDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeMobileDrawer);
+
+    // Escape يغلق الدرج
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar && sidebar.classList.contains('mobile-open')) {
+            closeMobileDrawer();
+        }
+    });
+
+    // حصر التركيز داخل الدرج ما دام مفتوحاً
+    if (sidebar) {
+        sidebar.addEventListener('keydown', (e) => {
+            if (e.key !== 'Tab' || !sidebar.classList.contains('mobile-open')) return;
+
+            const focusable = sidebar.querySelectorAll(
+                'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            const visible = Array.prototype.filter.call(focusable, (el) => el.offsetParent !== null);
+            if (!visible.length) return;
+
+            const first = visible[0];
+            const last = visible[visible.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        });
     }
-    if (backdrop) {
-        backdrop.addEventListener('click', closeMobileDrawer);
-    }
+
+    // العودة إلى عرض سطح المكتب تُنهي وضع الدرج، وإلا بقيت الصفحة مقفلة
+    window.addEventListener('resize', () => {
+        if (!isDrawerMode() && sidebar && sidebar.classList.contains('mobile-open')) {
+            closeMobileDrawer();
+        }
+    });
 }
 
 function openMobileDrawer() {
     const sidebar = document.getElementById('sidebar');
     const backdrop = document.getElementById('drawer-backdrop');
-    if (sidebar) sidebar.classList.add('mobile-open');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    if (!sidebar) return;
+
+    lastFocusedBeforeDrawer = document.activeElement;
+    sidebar.classList.add('mobile-open');
     if (backdrop) backdrop.classList.add('active');
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+
+    // التركيز ينتقل داخل الدرج فور فتحه
+    const closeBtn = document.getElementById('drawer-close-btn');
+    if (closeBtn) closeBtn.focus();
 }
 
 function closeMobileDrawer() {
     const sidebar = document.getElementById('sidebar');
     const backdrop = document.getElementById('drawer-backdrop');
-    if (sidebar) sidebar.classList.remove('mobile-open');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    if (!sidebar) return;
+
+    const wasOpen = sidebar.classList.contains('mobile-open');
+    sidebar.classList.remove('mobile-open');
     if (backdrop) backdrop.classList.remove('active');
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+
+    // إعادة التركيز فقط إن كان الدرج مفتوحاً فعلاً
+    if (wasOpen && lastFocusedBeforeDrawer && typeof lastFocusedBeforeDrawer.focus === 'function') {
+        lastFocusedBeforeDrawer.focus();
+    }
+    lastFocusedBeforeDrawer = null;
+}
+
+/* ==========================================================================
+   2.5 لوحة التنبيهات
+   ==========================================================================
+   كان الجرس يطلق رسالة عابرة تقول "لا توجد تنبيهات" ثم تختفي — أي أن
+   الضغط عليه لا يوصل شيئاً يمكن الرجوع إليه. صار يفتح لوحة فعلية
+   بمحتوى دائم، تُغلق بـ Escape أو بالنقر خارجها. */
+function initNotifications() {
+    const btn = document.getElementById('notif-btn');
+    const panel = document.getElementById('notif-panel');
+    if (!btn || !panel) return;
+
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        togglePanel(!isOpen());
+    });
+
+    function isOpen() { return !panel.hasAttribute('hidden'); }
+
+    function togglePanel(open) {
+        panel.toggleAttribute('hidden', !open);
+        btn.setAttribute('aria-expanded', String(open));
+        if (open) {
+            const first = panel.querySelector('button, a[href]');
+            if (first) first.focus();
+        }
+    }
+
+    // النقر خارج اللوحة يغلقها
+    document.addEventListener('click', (e) => {
+        if (!isOpen()) return;
+        if (panel.contains(e.target) || btn.contains(e.target)) return;
+        togglePanel(false);
+    });
+
+    // Escape يغلقها ويعيد التركيز إلى الجرس
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isOpen()) {
+            togglePanel(false);
+            btn.focus();
+        }
+    });
+
+    // التركيز الخارج من اللوحة يغلقها أيضاً
+    panel.addEventListener('focusout', () => {
+        setTimeout(() => {
+            if (isOpen() && !panel.contains(document.activeElement) &&
+                document.activeElement !== btn) {
+                togglePanel(false);
+            }
+        }, 0);
+    });
+}
+
+function clearNotifications() {
+    const panel = document.getElementById('notif-panel');
+    const btn = document.getElementById('notif-btn');
+    if (!panel) return;
+
+    panel.querySelectorAll('.notif-item.is-unread').forEach((el) => {
+        el.classList.remove('is-unread');
+    });
+
+    // العدّاد والاسم المنطوق يتبعان الحالة الجديدة
+    const count = panel.querySelectorAll('.notif-item.is-unread').length;
+    const badge = document.querySelector('.notif-count');
+    if (badge) badge.remove();
+    if (btn) {
+        btn.setAttribute('aria-label',
+            count === 0 ? 'التنبيهات، لا جديد | Notifications, none unread'
+                        : 'التنبيهات | Notifications');
+    }
+
+    const isEn = document.documentElement.getAttribute('lang') === 'en';
+    showNotification(isEn ? 'All notifications marked as read.'
+                          : 'تم تعليم كل التنبيهات كمقروءة.');
 }
 
 /* ==========================================================================
    3. DIGITAL STUDENT ID CARD (3D FLIP MODAL)
    ========================================================================== */
+/* العنصر الذي فتح المودال: إليه يعود التركيز عند الإغلاق، وإلا قفز
+   إلى بداية الصفحة وفقد المستخدم موضعه تماماً. */
+let lastFocusedBeforeModal = null;
+
 function initStudentIdModal() {
     const modal = document.getElementById('student-card-modal');
     const flipContainer = document.getElementById('id-card-flip');
@@ -137,9 +300,10 @@ function initStudentIdModal() {
     if (flipContainer) {
         flipContainer.addEventListener('click', () => {
             const inner = document.getElementById('id-card-inner');
-            if (inner) {
-                inner.classList.toggle('flipped');
-            }
+            if (!inner) return;
+            const flipped = inner.classList.toggle('flipped');
+            // الحالة تُعلن لقارئ الشاشة: الوجه المرئي تغيّر فعلاً
+            flipContainer.setAttribute('aria-pressed', String(flipped));
         });
     }
 
@@ -150,11 +314,33 @@ function initStudentIdModal() {
                 closeStudentCardModal();
             }
         });
+
+        // حصر التركيز داخل الحوار: بدونه يتنقل Tab إلى محتوى الخلفية
+        // المحجوب بصرياً، فيتوه مستخدم لوحة المفاتيح خارج ما يراه.
+        modal.addEventListener('keydown', (e) => {
+            if (e.key !== 'Tab' || !modal.classList.contains('active')) return;
+
+            const focusable = modal.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            if (!focusable.length) return;
+
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        });
     }
 
-    // Close on Escape key
+    // Close on Escape key — فقط عندما يكون الحوار مفتوحاً
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
+        if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
             closeStudentCardModal();
         }
     });
@@ -162,21 +348,35 @@ function initStudentIdModal() {
 
 function openStudentCardModal() {
     const modal = document.getElementById('student-card-modal');
-    if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
+    if (!modal) return;
+
+    lastFocusedBeforeModal = document.activeElement;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // التركيز ينتقل داخل الحوار فور فتحه، وإلا بقي على الصفحة خلفه
+    const closeBtn = modal.querySelector('.modal-close-btn');
+    if (closeBtn) closeBtn.focus();
 }
 
 function closeStudentCardModal() {
     const modal = document.getElementById('student-card-modal');
-    if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-        // Reset card flip to front side
-        const inner = document.getElementById('id-card-inner');
-        if (inner) inner.classList.remove('flipped');
+    if (!modal) return;
+
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+
+    // Reset card flip to front side
+    const inner = document.getElementById('id-card-inner');
+    if (inner) inner.classList.remove('flipped');
+    const flipBtn = document.getElementById('id-card-flip');
+    if (flipBtn) flipBtn.setAttribute('aria-pressed', 'false');
+
+    // إعادة التركيز إلى الزر الذي فتح الحوار
+    if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function') {
+        lastFocusedBeforeModal.focus();
     }
+    lastFocusedBeforeModal = null;
 }
 
 /* ==========================================================================
@@ -268,33 +468,54 @@ function initAiLabAssistant() {
 
     if (analyzeBtn && editor) {
         analyzeBtn.addEventListener('click', () => {
+            const isEn = document.documentElement.getAttribute('lang') === 'en';
             const query = editor.value.trim();
+
             if (!query) {
-                const isEn = document.documentElement.getAttribute('lang') === 'en';
-                alert(isEn ? "Please enter some code or a question." : "يرجى كتابة كود أو سؤال في المربع.");
+                // alert() يوقف الصفحة ويخرج من أسلوب الواجهة تماماً.
+                // التنبيه العابر يوصل نفس الرسالة ويعيد التركيز للحقل.
+                showNotification(isEn
+                    ? 'Please enter some code or a question.'
+                    : 'يرجى كتابة كود أو سؤال في المربع.');
+                editor.focus();
                 return;
             }
 
             const output = document.getElementById('ai-output-box');
-            if (output) {
-                output.style.display = 'block';
-                const isEn = document.documentElement.getAttribute('lang') === 'en';
-                output.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${isEn ? "AI is analyzing your code and drafting insights..." : "جاري تحليل الكود وصياغة الملاحظات والحل بواسطة الذكاء الاصطناعي..."}`;
+            if (!output) return;
 
-                setTimeout(() => {
-                    output.innerHTML = `
-                        <div style="font-weight: 700; color: var(--accent-emerald); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fa-solid fa-circle-check"></i> ${isEn ? "Analysis Complete:" : "تم التحليل بنجاح:"}
-                        </div>
-                        <p style="margin-bottom: 0.5rem;">
-                            ${isEn ? 
-                                "1. <b>Time Complexity</b>: O(n log n) efficient recursion observed.<br>2. <b>Memory Safety</b>: Ensure pointers are deleted or wrapped with <code>std::unique_ptr</code>.<br>3. <b>Clean Code Tip</b>: Separate definition into header <code>.h</code> and source <code>.cpp</code>." : 
-                                "1. <b>التعقيد الزمني (Time Complexity)</b>: تم رصد كفاءة خوارزمية بمعدل O(n log n) ممتاز.<br>2. <b>أمان الذاكرة (Memory Management)</b>: تأكد من تحرير المؤشرات الديناميكية عبر <code>delete</code> أو الاعتماد على <code>std::unique_ptr</code> لتجنب Memory Leaks.<br>3. <b>نصيحة الأسلوب النظيف</b>: يُفضل فصل توقيع الدوال في ملف Header <code>.hpp</code> وتنفيذها في <code>.cpp</code>."
-                            }
-                        </p>
-                    `;
-                }, 800);
-            }
+            // حالة التحميل: الزر معطّل فلا يُرسل الطلب مرتين، ونصه يشرح الانتظار
+            const originalHTML = analyzeBtn.innerHTML;
+            analyzeBtn.disabled = true;
+            analyzeBtn.setAttribute('aria-busy', 'true');
+            analyzeBtn.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> <span>' +
+                (isEn ? 'Analyzing…' : 'جاري التحليل…') + '</span>';
+
+            output.style.display = 'block';
+            output.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> ' +
+                (isEn
+                    ? 'AI is analyzing your code and drafting insights...'
+                    : 'جاري تحليل الكود وصياغة الملاحظات والحل بواسطة الذكاء الاصطناعي...');
+
+            setTimeout(() => {
+                output.innerHTML = `
+                    <div class="ai-output-head">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i> ${isEn ? "Analysis Complete:" : "تم التحليل بنجاح:"}
+                    </div>
+                    <p>
+                        ${isEn ?
+                            "1. <b>Time Complexity</b>: O(n log n) efficient recursion observed.<br>2. <b>Memory Safety</b>: Ensure pointers are deleted or wrapped with <code>std::unique_ptr</code>.<br>3. <b>Clean Code Tip</b>: Separate definition into header <code>.h</code> and source <code>.cpp</code>." :
+                            "1. <b>التعقيد الزمني (Time Complexity)</b>: تم رصد كفاءة خوارزمية بمعدل O(n log n) ممتاز.<br>2. <b>أمان الذاكرة (Memory Management)</b>: تأكد من تحرير المؤشرات الديناميكية عبر <code>delete</code> أو الاعتماد على <code>std::unique_ptr</code> لتجنب Memory Leaks.<br>3. <b>نصيحة الأسلوب النظيف</b>: يُفضل فصل توقيع الدوال في ملف Header <code>.hpp</code> وتنفيذها في <code>.cpp</code>."
+                        }
+                    </p>
+                `;
+
+                // استعادة الزر لحالته الأصلية
+                analyzeBtn.disabled = false;
+                analyzeBtn.removeAttribute('aria-busy');
+                analyzeBtn.innerHTML = originalHTML;
+            }, 800);
         });
     }
 }
@@ -325,33 +546,43 @@ function startCountdownTimer() {
 
 /* ==========================================================================
    8. TOAST NOTIFICATION
-   ========================================================================== */
-function showNotification(text) {
-    const toast = document.createElement('div');
-    toast.className = 'glass-panel';
-    toast.style.cssText = `
-        position: fixed;
-        bottom: 24px;
-        right: 24px;
-        z-index: 100;
-        padding: 0.85rem 1.25rem;
-        border-radius: var(--radius-md);
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        box-shadow: var(--shadow-lg);
-        border: 1px solid var(--muc-bright-red);
-        animation: fadeIn 0.3s ease-out;
-        color: var(--text-primary);
-        font-size: 0.88rem;
-        font-weight: 600;
-    `;
-    toast.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--muc-bright-red);"></i> <span>${text}</span>`;
-    document.body.appendChild(toast);
+   ==========================================================================
+   منطقة حيّة واحدة تُنشأ مرة واحدة. role="status" مع aria-live="polite"
+   يجعل قارئ الشاشة ينطق التنبيه دون أن يسحب التركيز من عمل المستخدم. */
+function getToastRegion() {
+    let region = document.getElementById('toast-region');
+    if (!region) {
+        region = document.createElement('div');
+        region.id = 'toast-region';
+        region.setAttribute('role', 'status');
+        region.setAttribute('aria-live', 'polite');
+        document.body.appendChild(region);
+    }
+    return region;
+}
 
+function showNotification(text) {
+    const region = getToastRegion();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+
+    const icon = document.createElement('i');
+    icon.className = 'fa-solid fa-circle-info';
+    icon.setAttribute('aria-hidden', 'true');
+
+    // textContent لا innerHTML: النص يُعرض كنص مهما احتوى من رموز
+    const label = document.createElement('span');
+    label.textContent = text;
+
+    toast.append(icon, label);
+    region.appendChild(toast);
+
+    // 4 ثوانٍ: ضمن المدى الموصى به (3-5s) لقراءة سطر قصير
     setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.3s ease';
+        toast.classList.add('toast-leaving');
+        toast.addEventListener('animationend', () => toast.remove(), { once: true });
+        // شبكة أمان: إن كانت الحركة معطّلة لا يقع حدث animationend
         setTimeout(() => toast.remove(), 300);
-    }, 2800);
+    }, 4000);
 }

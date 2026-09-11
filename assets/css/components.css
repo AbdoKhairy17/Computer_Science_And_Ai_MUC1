@@ -1,465 +1,562 @@
 /* ==========================================================================
-   MAY UNIVERSITY IN CAIRO (MUC) - FACULTY OF COMPUTERS & AI
-   UI COMPONENTS & WIDGETS (components.css)
+   MAY UNIVERSITY IN CAIRO (MUC) — المكوّنات (components.css)
+   ==========================================================================
+   لغة بصرية واحدة: بلاطات (Bento) بحواف دائرية واسعة وعمق خفيف.
+   الهوية تأتي من العنّابي والذهبي والطباعة الثقيلة — لا من محاكاة الورق.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. GLASS PANELS & CARDS
+   1. الأسطح الأساسية
    -------------------------------------------------------------------------- */
 .glass-panel {
-    background: var(--bg-card);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
-    transition: background-color var(--transition-smooth), border-color var(--transition-smooth);
 }
 
 .glass-panel-interactive {
-    background: var(--bg-card);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
-    transition: all var(--transition-fast);
     position: relative;
-    overflow: hidden;
     cursor: pointer;
+    transition: transform var(--transition-spring), box-shadow var(--transition-smooth),
+                border-color var(--transition-fast);
+}
+.glass-panel-interactive:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: transparent;
+}
+.glass-panel-interactive:active { transform: translateY(-1px); }
+
+/* --------------------------------------------------------------------------
+   2. رأس الصفحة
+   -------------------------------------------------------------------------- */
+.page-header { margin-bottom: var(--space-8); }
+
+.page-header h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
 }
 
-.glass-panel-interactive:hover {
-    border-color: var(--border-highlight);
-    box-shadow: var(--shadow-brand);
-    transform: translateY(-4px);
-    background: var(--bg-card-hover);
+.page-header p {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    margin-top: var(--space-2);
+    max-width: 62ch;
 }
 
 /* --------------------------------------------------------------------------
-   2. HERO BANNER & GREETING
-   -------------------------------------------------------------------------- */
+   3. البلاطة الرئيسية — بطاقة الطالب
+   --------------------------------------------------------------------------
+   كتلة عنّابية واثقة: أوضح تعبير عن لون العلامة في الصفحة كلها. */
 .hero-banner {
     position: relative;
     overflow: hidden;
-    border-radius: var(--radius-xl);
-    padding: 2rem 2.25rem;
-    background: linear-gradient(135deg, var(--muc-dark-maroon) 0%, var(--muc-maroon) 50%, #2A0845 100%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: var(--shadow-brand);
+    padding: var(--space-8);
+    margin-bottom: var(--space-6);
+    border-radius: var(--radius-2xl);
+    background: var(--accent);
     color: #FFFFFF;
-    margin-bottom: 1.75rem;
+    box-shadow: var(--shadow-lg);
+}
+/* طبقتان فوق العنّابي:
+   ::before نمط هندسي إسلامي متكرّر — هوية ثقافية بتنفيذ حديث
+   ::after  توهّج قطري يمنع الكتلة المصمتة من أن تبدو مسطّحة */
+.hero-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("../images/pattern-geometric.svg");
+    background-size: 64px;
+    background-repeat: repeat;
+    opacity: 0.13;
+    pointer-events: none;
+    /* يتلاشى مبكراً في اتجاه القراءة فلا يمرّ خلف الاسم ولا الأرقام */
+    mask-image: linear-gradient(to bottom left, #000 0%, transparent 58%);
+    -webkit-mask-image: linear-gradient(to bottom left, #000 0%, transparent 58%);
 }
 
-.hero-glow-orb {
+.hero-banner::after {
+    content: "";
     position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 260px;
-    height: 260px;
-    background: rgba(230, 0, 66, 0.25);
-    border-radius: 50%;
-    filter: blur(50px);
+    inset: 0;
+    background: radial-gradient(
+        120% 140% at 85% 0%,
+        rgba(255, 255, 255, 0.2) 0%,
+        transparent 55%
+    );
     pointer-events: none;
 }
-[dir="rtl"] .hero-glow-orb {
-    right: auto;
-    left: -50px;
-}
+
+
+/* لا علامة مائية للشعار هنا.
+   كانت توضع على الحافة النهائية — وهو بالضبط موضع بطاقات الأرقام —
+   فتختفي خلفها، وتتزاحم في الوقت نفسه مع النمط الهندسي. طبقتان
+   زخرفيتان تتنافسان على مساحة واحدة. النمط يكفي لحمل الهوية،
+   والشعار حاضر أصلاً في الشريط الجانبي والعلوي. */
+.hero-glow-orb { display: none; }
 
 .hero-content {
     position: relative;
     z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--space-6);
+}
+@media (min-width: 1100px) {
+    .hero-content { flex-direction: row; align-items: center; justify-content: space-between; }
 }
 
-@media (min-width: 900px) {
-    .hero-content {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
+/* هوية الطالب: صورته تجعل البطاقة تخصّه فعلاً لا أن تكون لوحة عامة */
+.hero-identity { display: flex; align-items: center; gap: var(--space-5); min-width: 0; }
+
+.hero-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    object-position: center 45%;
+    flex-shrink: 0;
+    border: 2px solid rgba(255, 255, 255, 0.5);
 }
+@media (max-width: 560px) { .hero-avatar { width: 48px; height: 48px; } }
 
 .hero-welcome-tag {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.35rem 0.85rem;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
     border-radius: var(--radius-full);
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    font-size: 0.8rem;
-    font-weight: 600;
-    backdrop-filter: blur(8px);
-    width: fit-content;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semi);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+}
+[data-theme="dark"] .hero-welcome-tag { background: rgba(255, 255, 255, 0.16); }
+
+/* لمعة تعبر البلاطة مرة واحدة عند الدخول — لا تتكرّر فلا تشتّت */
+.hero-banner .hero-shine {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: -40%;
+    width: 35%;
+    background: linear-gradient(
+        100deg,
+        transparent,
+        rgba(255, 255, 255, 0.22),
+        transparent
+    );
+    transform: skewX(-18deg);
+    pointer-events: none;
+    z-index: 3;
 }
 
 .hero-title {
-    font-size: 1.75rem;
-    font-weight: 900;
-    margin-top: 0.5rem;
-    margin-bottom: 0.25rem;
-    line-height: 1.25;
+    font-family: var(--font-display);
+    /* كان يصل إلى 48px: ثقيل على بطاقة ملخّص. الاسم يظل أبرز عنصر
+       دون أن يبتلع الأرقام المجاورة له. */
+    font-size: clamp(1.4rem, 3.6vw, 2rem);
+    font-weight: var(--weight-bold);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    margin-bottom: var(--space-2);
+    overflow-wrap: anywhere;
 }
 
 .hero-subtitle {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.85);
+    font-size: var(--text-sm);
+    opacity: 0.85;
+    max-width: 44ch;
 }
 
-/* Quick Stat Badges */
+/* الأرقام كبلاطات صغيرة شبه شفافة فوق العنّابي */
 .hero-stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.85rem;
-    min-width: 320px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+    min-width: 0;
 }
+@media (min-width: 900px) { .hero-stats-grid { min-width: 380px; } }
 
 .hero-stat-card {
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    min-width: 0;
+    /* داخل بلاطة نصف قطرها 36 وحشوها 32 → 16 يحافظ على التوازي */
     border-radius: var(--radius-md);
-    text-align: center;
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 }
+[data-theme="dark"] .hero-stat-card { background: rgba(255, 255, 255, 0.1); }
 
+/* 0.78 كانت تُنزل النص إلى 4.12:1 فوق بطاقة الرقم — تحت الحد.
+   0.9 ترفعه إلى 4.9:1 دون أن تفقد التدرّج البصري عن الرقم. */
 .stat-label {
     display: block;
-    font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 0.25rem;
+    font-size: var(--text-2xs);
+    opacity: 0.9;
+    margin-bottom: var(--space-1);
+    line-height: 1.4;
 }
 
 .stat-num {
-    font-size: 1.5rem;
-    font-weight: 900;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
     line-height: 1.1;
-    font-family: monospace;
+    letter-spacing: -0.03em;
 }
-.stat-num.gold { color: var(--muc-gold); }
-.stat-num.green { color: var(--accent-emerald); }
+/* لا نعيد تلوين الأرقام فوق العنّابي: الأبيض هو الأعلى تبايناً */
+.stat-num.gold, .stat-num.green { color: inherit; }
+
+/* الكسر مقطع لاتيني داخل سطر عربي: بلا عزل صريح يعيد المحرّك
+   ترتيبه فيُقرأ "144/48" بدل "48/144". */
+.stat-num {
+    direction: ltr;
+    unicode-bidi: isolate;
+}
+[dir="rtl"] .stat-num { text-align: right; }
+
+/* المقام: "من ١٤٤" يوضّح أن ٤٨ ليست رقماً مطلقاً */
+.stat-of {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-normal);
+    opacity: 0.7;
+    margin-inline-start: var(--space-1);
+}
+
+.stat-meta {
+    display: block;
+    font-size: var(--text-2xs);
+    opacity: 0.9;
+    line-height: 1.45;
+    margin-top: var(--space-1);
+}
+
+.stat-trend { display: block; opacity: 1; }
+
+/* شريط التقدّم نحو التخرّج */
+.stat-progress {
+    height: 4px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+    margin-top: var(--space-2);
+}
+.stat-progress > span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: #FFFFFF;
+}
+
+/* البطاقة الأولى هي المحور: تُبرز بخلفية أوضح */
+.hero-stat-primary {
+    background: rgba(255, 255, 255, 0.22) !important;
+}
+.hero-stat-primary .stat-num { font-size: var(--text-2xl); }
 
 /* --------------------------------------------------------------------------
-   3. LIVE ACADEMIC NOTICE BANNER
+   4. بلاطة التنبيه
    -------------------------------------------------------------------------- */
 .live-notice-banner {
-    padding: 1.1rem 1.4rem;
+    padding: var(--space-5) var(--space-6);
+    border: 1px solid var(--rule);
     border-radius: var(--radius-lg);
-    border-inline-start: 4px solid var(--muc-bright-red);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 1.75rem;
-    position: relative;
-    overflow: hidden;
+    gap: var(--space-4);
+    margin-bottom: var(--space-10);
 }
-
 @media (min-width: 768px) {
-    .live-notice-banner {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
+    .live-notice-banner { flex-direction: row; align-items: center; justify-content: space-between; }
 }
 
-.live-notice-main {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-}
+.live-notice-main { display: flex; align-items: flex-start; gap: var(--space-4); min-width: 0; }
 
 .notice-icon-box {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-md);
-    background: rgba(230, 0, 66, 0.12);
-    border: 1px solid rgba(230, 0, 66, 0.25);
-    color: var(--muc-bright-red);
+    width: 44px; height: 44px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+    color: var(--accent-text);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
+    font-size: 1rem;
     flex-shrink: 0;
 }
 
 .notice-tags {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.25rem;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+    flex-wrap: wrap;
 }
 
 .notice-badge-red {
-    font-size: 0.7rem;
-    font-weight: 800;
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semi);
+    color: var(--accent-text);
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--muc-bright-red);
-    letter-spacing: 0.05em;
 }
 
 .live-indicator {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0.15rem 0.5rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.68rem;
-    font-weight: 700;
-    background: rgba(239, 68, 68, 0.15);
-    color: #EF4444;
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    gap: var(--space-2);
+    padding: 2px var(--space-2);
+    border-radius: var(--radius-full);
+    background: var(--accent-soft);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-medium);
+    color: var(--accent-text);
 }
 
 .pulse-red-dot {
-    width: 6px;
-    height: 6px;
+    width: 6px; height: 6px;
     border-radius: 50%;
-    background: #EF4444;
-    animation: pulseDot 1.5s infinite;
+    background: currentColor;
+    animation: pulseDot 2s ease-out infinite;
 }
 
 .notice-heading {
-    font-size: 0.98rem;
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semi);
+    letter-spacing: -0.02em;
     color: var(--text-primary);
+    line-height: 1.35;
 }
 
-.notice-details {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-top: 0.2rem;
-}
+.notice-details { font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-1); }
 
+/* العدّاد: بلاطة مستقلة تلفت النظر للرقم */
 .countdown-box {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    align-self: flex-end;
-}
-@media (min-width: 768px) {
-    .countdown-box {
-        align-self: center;
-    }
+    gap: var(--space-3);
+    flex-shrink: 0;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-md);
+    background: var(--bg-sunken);
 }
 
-.countdown-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    white-space: nowrap;
-}
+.countdown-label { font-size: var(--text-2xs); color: var(--text-muted); white-space: nowrap; }
 
-/* كان الصندوق أسود بشفافية 30% مع نص ذهبي: غير مقروء في الوضع الفاتح.
-   الآن يستمد لونه من رموز الثيم فيظل واضحاً في الوضعين. */
 .countdown-timer {
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.95rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.04em;
-    padding: 0.4rem 0.8rem;
-    border-radius: var(--radius-full);
-    background: var(--countdown-bg);
-    border: 1px solid var(--countdown-border);
-    color: var(--countdown-fg);
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
     white-space: nowrap;
 }
 
 /* --------------------------------------------------------------------------
-   4. ACADEMIC SERVICES GRID
-   -------------------------------------------------------------------------- */
+   5. شبكة بنتو للخدمات
+   --------------------------------------------------------------------------
+   بلاطات بمقاسات متفاوتة بدل صف متطابق: هذا ما يعطي اللوحة إيقاعها
+   الحديث. الترقيم العربي-الهندي يبقى كتوقيع هوية صغير. */
 .services-section-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.15rem;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
 }
 
 .services-title {
-    font-size: 1.1rem;
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.02em;
     color: var(--text-primary);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-3);
 }
-.services-title i {
-    color: var(--muc-bright-red);
-}
+.services-title i { color: var(--accent-text); font-size: 0.8em; }
 
 .services-count {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: var(--bg-sunken);
+    white-space: nowrap;
 }
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.25rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-10);
 }
 
+/* الإيقاع: بلاطتان عريضتان ثم ثلاث متوسطة */
+.service-card:nth-child(1),
+.service-card:nth-child(2) { grid-column: span 3; }
+.service-card:nth-child(3),
+.service-card:nth-child(4),
+.service-card:nth-child(5) { grid-column: span 2; }
+
+/* بقعة ضوء تتبع المؤشر داخل البلاطة.
+   الإحداثيات --mx/--my يحدّثهما motion.js، وتبقى البلاطة سليمة
+   تماماً بدونهما (القيمة الافتراضية هي المركز). */
 .service-card {
-    padding: 1.5rem;
+    --mx: 50%;
+    --my: 50%;
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    min-height: 180px;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    min-height: 168px;
+    border-radius: var(--radius-xl);
+    text-align: inherit;
+    color: inherit;
+    font: inherit;
+    overflow: hidden;
 }
+
+/* لا ترقيم على البلاطات: العناوين وحدها أوضح */
+
+.service-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+        220px circle at var(--mx) var(--my),
+        var(--accent-soft) 0%,
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity var(--transition-smooth);
+    pointer-events: none;
+}
+.service-card:hover::after { opacity: 1; }
 
 .service-card-top {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
+    gap: var(--space-3);
+    justify-content: flex-start;
 }
 
 .service-icon-wrap {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-md);
+    width: 42px; height: 42px;
+    /* داخل بلاطة نصف قطرها 28 وحشوها 24 → 12 هو القطر المتناغم */
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.35rem;
-    transition: transform var(--transition-fast);
+    font-size: 1rem;
+    background: var(--accent-soft);
+    color: var(--accent-text);
+    flex-shrink: 0;
+    transition: transform var(--transition-spring);
 }
-.service-card:hover .service-icon-wrap {
-    transform: scale(1.1);
-}
+.service-card:hover .service-icon-wrap { transform: scale(1.08) rotate(-4deg); }
 
 .service-tag {
-    font-size: 0.7rem;
-    padding: 0.2rem 0.6rem;
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-medium);
+    color: var(--text-secondary);
+    padding: 2px var(--space-2);
     border-radius: var(--radius-full);
-    font-weight: 700;
+    background: var(--bg-sunken);
 }
 
 .service-title {
-    font-size: 1.05rem;
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: var(--weight-semi);
+    letter-spacing: -0.02em;
     color: var(--text-primary);
-    margin-bottom: 0.4rem;
-    transition: color var(--transition-fast);
+    line-height: 1.35;
 }
 
-.service-desc {
-    font-size: 0.82rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
+.service-desc { font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.6; }
 
-/* Service Variations */
-.service-purple .service-icon-wrap {
-    background: rgba(139, 92, 246, 0.15);
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    color: #A78BFA;
-}
-.service-purple .service-tag {
-    background: rgba(139, 92, 246, 0.12);
-    color: #C4B5FD;
-}
-.service-purple:hover .service-title { color: #C4B5FD; }
+/* البلاطة الأولى هي الأبرز: لهجة ذهبية تميّزها */
+.service-card:nth-child(1) .service-icon-wrap { background: var(--gold-soft); color: var(--gold); }
 
-.service-blue .service-icon-wrap {
-    background: rgba(37, 99, 235, 0.15);
-    border: 1px solid rgba(37, 99, 235, 0.3);
-    color: #60A5FA;
+@media (max-width: 1024px) {
+    .services-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .service-card:nth-child(1),
+    .service-card:nth-child(2) { grid-column: span 2; }
+    .service-card:nth-child(3),
+    .service-card:nth-child(4) { grid-column: span 2; }
+    .service-card:nth-child(5) { grid-column: span 4; }
 }
-.service-blue .service-tag {
-    background: rgba(37, 99, 235, 0.12);
-    color: #93C5FD;
+@media (max-width: 640px) {
+    .services-grid { grid-template-columns: 1fr; gap: var(--space-3); }
+    .service-card:nth-child(n) { grid-column: span 1; }
+    .service-card { min-height: 0; padding: var(--space-5); }
 }
-.service-blue:hover .service-title { color: #93C5FD; }
-
-.service-amber .service-icon-wrap {
-    background: rgba(245, 158, 11, 0.15);
-    border: 1px solid rgba(245, 158, 11, 0.3);
-    color: #FBBF24;
-}
-.service-amber .service-tag {
-    background: rgba(245, 158, 11, 0.12);
-    color: #FDE68A;
-}
-.service-amber:hover .service-title { color: #FDE68A; }
-
-.service-emerald .service-icon-wrap {
-    background: rgba(16, 185, 129, 0.15);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    color: #34D399;
-}
-.service-emerald .service-tag {
-    background: rgba(16, 185, 129, 0.12);
-    color: #A7F3D0;
-}
-.service-emerald:hover .service-title { color: #A7F3D0; }
-
-.service-red .service-icon-wrap {
-    background: rgba(230, 0, 66, 0.15);
-    border: 1px solid rgba(230, 0, 66, 0.3);
-    color: var(--muc-bright-red);
-}
-.service-red .service-tag {
-    background: rgba(230, 0, 66, 0.12);
-    color: #FDA4AF;
-}
-.service-red:hover .service-title { color: var(--muc-bright-red); }
 
 /* --------------------------------------------------------------------------
-   5. GPA PREDICTOR & CALCULATOR
+   6. حاسبة المعدل
    -------------------------------------------------------------------------- */
 .gpa-card-layout {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: var(--space-5);
+    align-items: start;
 }
-@media (min-width: 992px) {
-    .gpa-card-layout {
-        grid-template-columns: 320px 1fr;
-    }
+/* العتبة تقيس النافذة لا المحتوى، والشريط الجانبي يقتطع منها */
+@media (min-width: 1200px) {
+    .gpa-card-layout { grid-template-columns: 320px minmax(0, 1fr); }
 }
 
 .gpa-gauge-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 2rem 1.5rem;
+    padding: var(--space-8) var(--space-6);
     text-align: center;
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+}
+.gpa-gauge-card > span:first-child {
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semi);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: var(--space-5);
 }
 
-.gpa-ring-wrapper {
-    position: relative;
-    width: 170px;
-    height: 170px;
-    margin-bottom: 1.25rem;
-}
-
-.gpa-ring-svg {
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-}
-
-.gpa-ring-bg {
-    fill: none;
-    stroke: var(--border-subtle);
-    stroke-width: 10;
-}
-
+.gpa-ring-wrapper { position: relative; width: 180px; height: 180px; margin-bottom: var(--space-5); }
+.gpa-ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.gpa-ring-bg { fill: none; stroke: var(--bg-sunken); stroke-width: 12; }
 .gpa-ring-fill {
     fill: none;
-    stroke: url(#gpaGradient);
-    stroke-width: 10;
+    stroke: var(--accent);
+    stroke-width: 12;
     stroke-linecap: round;
-    stroke-dasharray: 452.39; /* 2 * PI * 72 */
+    stroke-dasharray: 452.39;
     stroke-dashoffset: 452.39;
-    transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: stroke-dashoffset 0.9s var(--ease-out);
 }
 
 .gpa-ring-inner {
@@ -470,766 +567,747 @@
     align-items: center;
     justify-content: center;
 }
-
 .gpa-ring-val {
-    font-size: 2.2rem;
-    font-weight: 900;
-    font-family: monospace;
-    color: var(--muc-gold);
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.05em;
+    color: var(--text-primary);
     line-height: 1;
 }
-
-.gpa-ring-max {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    margin-top: 0.2rem;
-}
+.gpa-ring-max { font-size: var(--text-xs); color: var(--text-muted); margin-top: var(--space-1); }
 
 .gpa-standing-chip {
-    padding: 0.35rem 1rem;
+    display: inline-block;
+    padding: var(--space-2) var(--space-5);
     border-radius: var(--radius-full);
-    font-size: 0.82rem;
-    font-weight: 700;
-    background: rgba(16, 185, 129, 0.15);
-    color: var(--accent-emerald);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    margin-bottom: 1rem;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semi);
+    background: var(--bg-sunken);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-5);
+    transition: background var(--transition-fast), color var(--transition-fast);
 }
+/* الخلفية واللون يتغيّران معاً، فلا يقع نص أحمر على خلفية خضراء */
+.gpa-standing-chip.standing-excellent { color: var(--state-success); background: rgba(22, 121, 79, 0.12); }
+.gpa-standing-chip.standing-verygood  { color: var(--state-info);    background: rgba(29, 95, 168, 0.12); }
+.gpa-standing-chip.standing-good      { color: var(--state-warn);    background: rgba(138, 90, 8, 0.12); }
+.gpa-standing-chip.standing-pass      { color: var(--state-danger);  background: rgba(176, 18, 48, 0.12); }
 
-.gpa-meta-pills {
-    display: flex;
-    gap: 0.75rem;
-    width: 100%;
-    justify-content: center;
-}
+.gpa-meta-pills { display: flex; gap: var(--space-3); width: 100%; }
 .gpa-meta-pill {
-    padding: 0.4rem 0.75rem;
-    border-radius: var(--radius-md);
-    background: var(--border-subtle);
-    font-size: 0.75rem;
+    flex: 1;
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    background: var(--bg-sunken);
+    font-size: var(--text-2xs);
     color: var(--text-secondary);
 }
 .gpa-meta-pill b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
     color: var(--text-primary);
-    margin-inline-start: 0.25rem;
+    margin-top: 2px;
 }
 
-/* GPA Form & Rows */
 .gpa-form-panel {
-    padding: 1.5rem;
+    padding: var(--space-6);
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: var(--space-4);
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+}
+
+.gpa-row-header,
+.gpa-row-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 80px 128px var(--tap-min);
+    gap: var(--space-3);
 }
 
 .gpa-row-header {
-    display: grid;
-    grid-template-columns: 5fr 3fr 3fr 1fr;
-    gap: 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semi);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--text-muted);
-    padding: 0 0.5rem;
+    padding-inline: var(--space-3);
 }
 
 .gpa-row-item {
-    display: grid;
-    grid-template-columns: 5fr 3fr 3fr 1fr;
-    gap: 0.75rem;
     align-items: center;
-    background: var(--border-subtle);
-    padding: 0.6rem 0.75rem;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-subtle);
-    transition: all var(--transition-fast);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    background: var(--bg-sunken);
+    transition: background var(--transition-fast);
 }
-.gpa-row-item:hover {
-    border-color: var(--border-medium);
-}
+.gpa-row-item:hover { background: var(--accent-soft); }
 
 .input-field {
     width: 100%;
-    background: var(--bg-primary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-sm);
-    padding: 0.55rem 0.75rem;
-    font-size: 0.85rem;
+    min-height: var(--tap-min);
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-xs);
+    padding: var(--space-2) var(--space-3);
+    /* 16px إلزامي: أقل من ذلك يجعل iOS يقرّب الصفحة عند التركيز */
+    font-size: var(--text-md);
     color: var(--text-primary);
-    transition: border-color var(--transition-fast);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
-.input-field:focus {
-    border-color: var(--muc-bright-red);
-    outline: none;
+.input-field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.input-field::placeholder { color: var(--text-muted); }
+
+select.input-field {
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238E8E9C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left var(--space-3) center;
+    background-size: 10px;
+    padding-inline-start: var(--space-8);
 }
+[dir="ltr"] select.input-field { background-position: right var(--space-3) center; }
 
 .btn-icon-danger {
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-sm);
+    width: var(--tap-min);
+    height: var(--tap-min);
+    border-radius: var(--radius-xs);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-muted);
-    transition: all var(--transition-fast);
+    transition: color var(--transition-fast), background var(--transition-fast);
 }
-.btn-icon-danger:hover {
-    background: rgba(239, 68, 68, 0.15);
-    color: #EF4444;
-}
+.btn-icon-danger:hover,
+.btn-icon-danger:focus-visible { color: var(--state-danger); background: var(--bg-surface); }
+.btn-icon-danger:active { transform: scale(0.92); }
 
 .gpa-controls-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-subtle);
-}
-
-.btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.55rem 1rem;
-    border-radius: var(--radius-md);
-    background: var(--border-subtle);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-primary);
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: all var(--transition-fast);
-}
-.btn-secondary:hover {
-    background: var(--border-medium);
-    transform: translateY(-1px);
-}
-
-.btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.4rem;
-    border-radius: var(--radius-md);
-    background: linear-gradient(135deg, var(--muc-maroon) 0%, var(--muc-bright-red) 100%);
-    color: #FFFFFF;
-    font-size: 0.88rem;
-    font-weight: 700;
-    box-shadow: var(--shadow-brand);
-    transition: all var(--transition-fast);
-}
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px -6px rgba(139, 21, 56, 0.6);
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule);
 }
 
 /* --------------------------------------------------------------------------
-   6. TIMETABLE & SCHEDULE
+   7. الأزرار
+   -------------------------------------------------------------------------- */
+.btn-primary,
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: var(--tap-min);
+    padding-inline: var(--space-5);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semi);
+    transition: background var(--transition-fast), border-color var(--transition-fast),
+                transform var(--transition-spring), box-shadow var(--transition-fast);
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: var(--on-accent);
+    border: 1px solid transparent;
+    box-shadow: 0 4px 14px -4px var(--accent-glow);
+}
+.btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.btn-primary:active { transform: translateY(0) scale(0.98); }
+
+.btn-secondary {
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
+    color: var(--text-primary);
+}
+.btn-secondary:hover { border-color: var(--accent-text); color: var(--accent-text); transform: translateY(-2px); }
+.btn-secondary:active { transform: translateY(0) scale(0.98); }
+
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-download:disabled,
+.utility-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   8. الجدول الدراسي
    -------------------------------------------------------------------------- */
 .schedule-days-nav {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-2);
     overflow-x: auto;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
+    padding: var(--space-1);
+    margin-bottom: var(--space-6);
+    border-radius: var(--radius-full);
+    background: var(--bg-sunken);
+    scrollbar-width: none;
+    width: fit-content;
+    max-width: 100%;
 }
+.schedule-days-nav::-webkit-scrollbar { display: none; }
 
+/* شريط مقسّم: الحبة النشطة ترتفع بالأبيض والظل */
 .day-tab-btn {
-    padding: 0.55rem 1.25rem;
-    border-radius: var(--radius-md);
-    background: var(--border-subtle);
-    border: 1px solid var(--border-subtle);
+    min-height: 38px;
+    padding: var(--space-2) var(--space-5);
+    border-radius: var(--radius-full);
+    background: transparent;
     color: var(--text-secondary);
-    font-size: 0.85rem;
-    font-weight: 700;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     white-space: nowrap;
-    transition: all var(--transition-fast);
+    transition: background var(--transition-fast), color var(--transition-fast),
+                box-shadow var(--transition-fast);
 }
-.day-tab-btn:hover {
-    color: var(--text-primary);
-    background: var(--border-medium);
-}
+.day-tab-btn:hover { color: var(--text-primary); }
 .day-tab-btn.active {
-    background: linear-gradient(135deg, var(--muc-maroon), var(--muc-bright-red));
-    color: #FFFFFF;
-    border-color: transparent;
-    box-shadow: var(--shadow-brand);
+    background: var(--bg-surface);
+    color: var(--accent-text);
+    font-weight: var(--weight-semi);
+    box-shadow: var(--shadow-sm);
 }
 
-.schedule-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
+.schedule-list { display: flex; flex-direction: column; gap: var(--space-3); }
 
 .schedule-item-card {
-    padding: 1.25rem 1.5rem;
+    padding: var(--space-5);
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
-    border-inline-start: 4px solid var(--muc-bright-red);
+    gap: var(--space-3);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--transition-spring), box-shadow var(--transition-smooth);
 }
+/* شريط لوني على الحافة الداخلية يرمز لنوع الجلسة */
+.schedule-item-card::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 4px;
+    background: var(--accent);
+}
+.schedule-item-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 @media (min-width: 768px) {
-    .schedule-item-card {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
+    .schedule-item-card { flex-direction: row; align-items: center; justify-content: space-between; gap: var(--space-5); }
 }
 
 .schedule-course-title {
-    font-size: 1.05rem;
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: var(--weight-semi);
+    letter-spacing: -0.02em;
     color: var(--text-primary);
-    margin-bottom: 0.35rem;
+    margin-bottom: var(--space-2);
+    line-height: 1.35;
 }
 
 .schedule-meta-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 1rem;
-    font-size: 0.8rem;
+    gap: var(--space-2) var(--space-5);
+    font-size: var(--text-sm);
     color: var(--text-secondary);
 }
-.schedule-meta-item {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
+.schedule-meta-item { display: flex; align-items: center; gap: var(--space-2); }
+.schedule-meta-item i { font-size: 0.8em; }
+
+/* نوع الجلسة يحمل معلومة حقيقية: محاضرة / عملي / تمرين.
+   توحيدها بلون واحد أضاع تمييزاً كان الطالب يقرأه بلمحة، فأُعيد
+   عبر أصناف دلالية تتبع الثيم — لا عبر ألوان مضمّنة في الوسم. */
+.session-type-badge {
+    padding: var(--space-1) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semi);
+    background: var(--bg-sunken);
+    color: var(--text-secondary);
+    align-self: flex-start;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-.session-type-badge {
-    padding: 0.35rem 0.85rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.78rem;
-    font-weight: 700;
-    background: var(--border-subtle);
-    color: var(--text-primary);
-    border: 1px solid var(--border-subtle);
-    align-self: flex-start;
-}
-@media (min-width: 768px) {
-    .session-type-badge {
-        align-self: center;
-    }
-}
+.session-type-badge.session-lecture  { background: var(--accent-soft);          color: var(--accent-text); }
+.session-type-badge.session-lab      { background: rgba(22, 121, 79, 0.12);     color: var(--state-success); }
+.session-type-badge.session-tutorial { background: rgba(138, 90, 8, 0.12);      color: var(--state-warn); }
+
+/* الشريط الجانبي على البطاقة يكرّر التمييز نفسه، فيُقرأ النوع
+   من موضعين: اللون والنص — لا من اللون وحده. */
+.schedule-item-card.session-lecture::before  { background: var(--accent); }
+.schedule-item-card.session-lab::before      { background: var(--state-success); }
+.schedule-item-card.session-tutorial::before { background: var(--state-warn); }
+@media (min-width: 768px) { .session-type-badge { align-self: center; } }
 
 /* --------------------------------------------------------------------------
-   7. DIGITAL LIBRARY & MUC DRIVE
+   9. المكتبة
    -------------------------------------------------------------------------- */
 .library-filter-bar {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
 }
 @media (min-width: 768px) {
-    .library-filter-bar {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
+    .library-filter-bar { flex-direction: row; align-items: center; justify-content: space-between; }
 }
 
-.search-input-wrap {
-    position: relative;
-    flex: 1;
-    max-width: 420px;
-}
+.search-input-wrap { position: relative; flex: 1; max-width: 440px; }
 .search-input-wrap i {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    translate: 0 -50%;
+    inset-inline-start: var(--space-3);
     color: var(--text-muted);
-    font-size: 0.9rem;
-    right: 1rem;
+    font-size: 0.85rem;
+    pointer-events: none;
 }
-[dir="rtl"] .search-input-wrap i {
-    right: auto;
-    left: 1rem;
-}
-.search-input {
-    padding-inline-end: 2.5rem;
-}
-[dir="rtl"] .search-input {
-    padding-inline-end: 0.75rem;
-    padding-inline-start: 2.5rem;
-}
+.search-input { padding-inline-start: var(--space-8); border-radius: var(--radius-full); }
 
 .library-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-3);
 }
 
 .resource-card {
-    padding: 1.25rem;
+    padding: var(--space-4);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-4);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-spring), box-shadow var(--transition-smooth);
 }
+.resource-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 
-.resource-left {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    overflow: hidden;
-}
+.resource-left { display: flex; align-items: center; gap: var(--space-4); min-width: 0; }
 
 .resource-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    flex-shrink: 0;
-}
-.resource-icon.pdf {
-    background: rgba(239, 68, 68, 0.15);
-    color: #EF4444;
-}
-.resource-icon.pptx {
-    background: rgba(245, 158, 11, 0.15);
-    color: #F59E0B;
-}
-.resource-icon.code {
-    background: rgba(16, 185, 129, 0.15);
-    color: #10B981;
-}
-
-.resource-info {
-    overflow: hidden;
-}
-.resource-title {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 0.2rem;
-}
-.resource-meta {
-    font-size: 0.74rem;
-    color: var(--text-secondary);
-}
-
-.btn-download {
-    width: 38px;
-    height: 38px;
+    width: 42px; height: 42px;
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--border-subtle);
-    color: var(--text-secondary);
-    border: 1px solid var(--border-subtle);
-    transition: all var(--transition-fast);
+    font-size: 1rem;
     flex-shrink: 0;
 }
-.btn-download:hover {
-    background: var(--muc-maroon);
-    color: #FFFFFF;
-    border-color: var(--muc-maroon);
-    transform: scale(1.05);
-}
+/* النص المجاور يذكر النوع صراحةً، فاللون تعزيز لا ناقل وحيد للمعنى */
+.resource-icon.pdf  { color: var(--state-danger);  background: rgba(176, 18, 48, 0.12); }
+.resource-icon.pptx { color: var(--state-warn);    background: rgba(138, 90, 8, 0.12); }
+.resource-icon.code { color: var(--state-success); background: rgba(22, 121, 79, 0.12); }
 
-/* --------------------------------------------------------------------------
-   8. AI CODE LAB & ASSISTANT
-   -------------------------------------------------------------------------- */
-.ai-lab-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+.resource-info { min-width: 0; }
+.resource-title {
+    font-size: var(--text-base);
+    font-weight: var(--weight-semi);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+.resource-meta { font-size: var(--text-2xs); color: var(--text-muted); margin-top: 2px; }
 
-.ai-icon-large {
-    width: 54px;
-    height: 54px;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
-    border: 1px solid rgba(16, 185, 129, 0.35);
-    color: var(--accent-emerald);
+.btn-download {
+    width: var(--tap-min);
+    height: var(--tap-min);
+    border-radius: var(--radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.6rem;
+    background: var(--bg-sunken);
+    color: var(--text-secondary);
+    border: none;
+    flex-shrink: 0;
+    transition: background var(--transition-fast), color var(--transition-fast),
+                transform var(--transition-spring);
+}
+.btn-download:hover { background: var(--accent); color: var(--on-accent); transform: scale(1.08); }
+.btn-download:active { transform: scale(0.94); }
+
+/* --------------------------------------------------------------------------
+   10. معمل الذكاء الاصطناعي
+   -------------------------------------------------------------------------- */
+.ai-lab-header { display: flex; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-6); }
+
+.ai-icon-large {
+    width: 52px; height: 52px;
+    border-radius: var(--radius-md);
+    background: var(--accent);
+    color: var(--on-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    box-shadow: 0 6px 18px -6px var(--accent-glow);
 }
 
-.ai-chips-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
+.ai-chips-row { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-4); }
 
 .ai-prompt-chip {
-    padding: 0.35rem 0.8rem;
+    min-height: var(--tap-min);
+    padding: var(--space-2) var(--space-4);
     border-radius: var(--radius-full);
-    background: var(--border-subtle);
-    border: 1px solid var(--border-subtle);
+    background: var(--bg-sunken);
+    border: 1px solid transparent;
     color: var(--text-secondary);
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all var(--transition-fast);
+    font-size: var(--text-xs);
+    transition: border-color var(--transition-fast), color var(--transition-fast),
+                transform var(--transition-spring);
 }
-.ai-prompt-chip:hover {
-    background: var(--border-medium);
-    color: var(--text-primary);
-}
+.ai-prompt-chip:hover { border-color: var(--accent-text); color: var(--accent-text); transform: translateY(-2px); }
+.ai-prompt-chip:active { transform: scale(0.97); }
 
 .code-editor-box {
     width: 100%;
-    height: 160px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    font-family: monospace;
-    font-size: 0.85rem;
+    height: 190px;
+    background: var(--bg-sunken);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: var(--text-md);
+    line-height: 1.65;
     color: var(--text-primary);
     resize: vertical;
-    outline: none;
-    transition: border-color var(--transition-fast);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
-.code-editor-box:focus {
-    border-color: var(--accent-emerald);
-}
+.code-editor-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 
 .ai-output-box {
     display: none;
-    margin-top: 1.25rem;
-    padding: 1.25rem;
-    border-radius: var(--radius-md);
-    background: rgba(16, 185, 129, 0.08);
-    border: 1px solid rgba(16, 185, 129, 0.25);
+    margin-top: var(--space-5);
+    padding: var(--space-5);
+    background: var(--bg-sunken);
+    border-radius: var(--radius-lg);
     color: var(--text-primary);
-    font-size: 0.88rem;
-    line-height: 1.6;
+    font-size: var(--text-base);
+    line-height: 1.7;
+}
+.ai-output-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: var(--weight-bold);
+    color: var(--state-success);
+    margin-bottom: var(--space-2);
+}
+
+.ai-output-box code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: var(--bg-surface);
 }
 
 /* --------------------------------------------------------------------------
-   9. DIGITAL STUDENT ID CARD (3D FLIP MODAL)
+   11. جدول الامتحانات
+   -------------------------------------------------------------------------- */
+.data-table-wrap {
+    padding: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.data-table { width: 100%; min-width: 720px; border-collapse: collapse; font-size: var(--text-sm); }
+
+.data-table th,
+.data-table td { text-align: start; vertical-align: middle; padding: var(--space-4); white-space: nowrap; }
+
+.data-table thead th {
+    color: var(--text-muted);
+    font-weight: var(--weight-semi);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg-sunken);
+}
+
+.data-table tbody tr { border-top: 1px solid var(--rule); transition: background var(--transition-fast); }
+.data-table tbody tr:hover { background: var(--accent-soft); }
+
+.data-table .cell-code { color: var(--accent-text); font-weight: var(--weight-semi); }
+.data-table .cell-title { font-weight: var(--weight-semi); color: var(--text-primary); white-space: normal; min-width: 220px; }
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 3px var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semi);
+    white-space: nowrap;
+}
+.status-pill.status-confirmed { color: var(--state-success); background: rgba(22, 121, 79, 0.12); }
+
+/* --------------------------------------------------------------------------
+   12. بطاقة الهوية الرقمية
    -------------------------------------------------------------------------- */
 .modal-backdrop {
     display: none;
     position: fixed;
     inset: 0;
     z-index: 90;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(13, 13, 16, 0.7);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     align-items: center;
     justify-content: center;
-    padding: 1rem;
-    animation: fadeIn 0.25s ease-out;
+    padding: var(--space-4);
 }
-.modal-backdrop.active {
-    display: flex;
-}
+.modal-backdrop.active { display: flex; animation: fadeIn 0.22s var(--ease-out); }
 
-.modal-dialog {
-    position: relative;
-    width: 100%;
-    max-width: 420px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+.modal-dialog { position: relative; width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; }
 
 .modal-close-btn {
     position: absolute;
-    top: -45px;
-    right: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.15);
+    top: -58px;
+    inset-inline-end: 0;
+    width: var(--tap-min);
+    height: var(--tap-min);
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.14);
     color: #FFFFFF;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    transition: all var(--transition-fast);
+    font-size: 1.1rem;
+    transition: background var(--transition-fast), transform var(--transition-spring);
 }
-[dir="rtl"] .modal-close-btn {
-    right: auto;
-    left: 0;
-}
-.modal-close-btn:hover {
-    background: var(--muc-bright-red);
-    transform: rotate(90deg);
-}
+.modal-close-btn:hover { background: var(--accent); transform: rotate(90deg); }
 
-/* 3D Card Flip Perspective Container */
-.id-card-perspective {
-    perspective: 1200px;
+button.id-card-perspective {
+    perspective: 1400px;
     width: 100%;
+    display: block;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    color: inherit;
+    -webkit-appearance: none;
+    appearance: none;
     cursor: pointer;
+}
+button.id-card-perspective:focus-visible { outline: none; }
+button.id-card-perspective:focus-visible .id-card-inner {
+    outline: var(--focus-ring-width) solid var(--gold);
+    outline-offset: 4px;
 }
 
 .id-card-inner {
     position: relative;
     width: 100%;
-    height: 480px;
-    border-radius: 24px;
+    height: 470px;
+    border-radius: var(--radius-2xl);
     transform-style: preserve-3d;
-    transition: transform 0.75s cubic-bezier(0.4, 0.2, 0.2, 1);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(139, 21, 56, 0.4);
+    transition: transform 0.8s var(--ease-in-out);
+    box-shadow: var(--shadow-overlay);
 }
-.id-card-inner.flipped {
-    transform: rotateY(180deg);
-}
+.id-card-inner.flipped { transform: rotateY(180deg); }
 
 .id-card-face {
     position: absolute;
     inset: 0;
-    border-radius: 24px;
+    border-radius: var(--radius-2xl);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    padding: 1.75rem;
+    padding: var(--space-6);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
-    border: 2px solid rgba(212, 175, 55, 0.5);
-}
-
-/* ID Card Front & Back Unified Design */
-.id-card-front,
-.id-card-back {
-    background: linear-gradient(160deg, #5A0B22 0%, #1A040B 50%, #09080E 100%);
+    background: linear-gradient(150deg, #8B1538 0%, #5A0B22 55%, #2E0611 100%);
     color: #FFFFFF;
+}
+/* لمعة قطرية تعطي البطاقة حسّ المادة */
+.id-card-face::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(90% 60% at 80% 0%, rgba(255, 255, 255, 0.16), transparent 60%);
+    pointer-events: none;
 }
 
 .id-header-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    padding-bottom: 1rem;
+    gap: var(--space-3);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    position: relative;
+    z-index: 1;
 }
 
-.id-crest-logo {
-    height: 48px;
-    width: auto;
-    object-fit: contain;
-}
-
-.id-univ-text {
-    text-align: right;
-}
-[dir="ltr"] .id-univ-text {
-    text-align: left;
-}
+.id-crest-logo { height: 42px; width: auto; object-fit: contain; flex-shrink: 0; }
+.id-univ-text { text-align: end; min-width: 0; }
 .id-univ-title {
-    font-size: 0.92rem;
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semi);
     color: #FFFFFF;
+    line-height: 1.3;
 }
-.id-univ-badge-name {
-    font-size: 0.72rem;
-    color: var(--muc-gold);
-}
+.id-univ-badge-name { font-size: var(--text-2xs); color: #E5C065; margin-top: 2px; }
 
 .id-student-center {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin: 1rem 0;
+    gap: var(--space-1);
+    position: relative;
+    z-index: 1;
 }
 
 .id-avatar-frame {
-    width: 105px;
-    height: 105px;
-    border-radius: 50%;
-    padding: 4px;
-    background: linear-gradient(135deg, var(--muc-gold), var(--muc-bright-red));
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-    margin-bottom: 0.85rem;
+    width: 104px; height: 104px;
+    padding: 3px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(140deg, #E5C065, #B08A1E);
+    margin-bottom: var(--space-3);
 }
-
-.id-avatar-inner {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: #1F1B2E;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    color: #FFFFFF;
-    overflow: hidden;
-}
-
-.id-avatar-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 45%;
-    display: block;
-}
+.id-avatar-inner { width: 100%; height: 100%; border-radius: var(--radius-full); overflow: hidden; background: #2E0611; }
+.id-avatar-img { width: 100%; height: 100%; object-fit: cover; object-position: center 45%; display: block; }
 
 .id-student-name {
-    font-size: 1.2rem;
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.03em;
     color: #FFFFFF;
+    line-height: 1.25;
 }
-
-.id-student-faculty {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.8);
-    margin-top: 0.15rem;
-}
-
+.id-student-faculty { font-size: var(--text-xs); color: rgba(255, 255, 255, 0.78); }
 .id-student-num {
-    font-family: monospace;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--muc-gold);
-    margin-top: 0.35rem;
-    letter-spacing: 0.05em;
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semi);
+    color: #E5C065;
+    letter-spacing: 0.12em;
+    margin-top: var(--space-2);
 }
 
 .id-footer-row {
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    padding-top: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    padding-top: var(--space-3);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.75);
+    gap: var(--space-3);
+    font-size: var(--text-2xs);
+    color: rgba(255, 255, 255, 0.7);
+    position: relative;
+    z-index: 1;
 }
+.id-status-active { color: #E5C065; font-weight: var(--weight-semi); display: flex; align-items: center; gap: var(--space-1); }
 
-.id-status-active {
-    color: var(--accent-emerald);
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-}
-
-/* ID Card Back Specifics */
-.id-card-back {
-    transform: rotateY(180deg);
-}
-
+.id-card-back { transform: rotateY(180deg); }
 .id-qr-box {
     background: #FFFFFF;
-    padding: 0.85rem;
+    padding: var(--space-3);
     border-radius: var(--radius-md);
-    border: 3px solid var(--muc-gold);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.id-qr-box i {
-    font-size: 5.2rem;
-    color: #000000;
-}
-
-.id-barcode-mock {
-    font-family: monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.25em;
-    color: rgba(255, 255, 255, 0.75);
-    margin-bottom: 0.5rem;
-}
+.id-qr-box i { font-size: 4.6rem; color: #000000; }
+.id-barcode-mock { font-family: ui-monospace, monospace; font-size: var(--text-xs); letter-spacing: 0.3em; color: rgba(255, 255, 255, 0.6); }
 
 .id-flip-hint {
-    margin-top: 0.85rem;
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.7);
+    margin-top: var(--space-4);
+    font-size: var(--text-2xs);
+    color: rgba(255, 255, 255, 0.8);
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: var(--space-2);
 }
 
-/* ==========================================================================
-   DATA TABLE (Exam Schedule)
-   ========================================================================== */
-.data-table-wrap {
-    padding: 1.25rem;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+/* --------------------------------------------------------------------------
+   13. التنبيهات العابرة
+   -------------------------------------------------------------------------- */
+#toast-region {
+    position: fixed;
+    z-index: 100;
+    inset-inline-end: var(--space-6);
+    inset-block-end: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    pointer-events: none;
+    max-width: min(calc(100vw - var(--space-8)), 380px);
+}
+@media (max-width: 768px) {
+    #toast-region {
+        inset-inline: var(--space-4);
+        inset-block-end: calc(var(--space-4) + var(--tg-safe-bottom, 0px));
+        max-width: none;
+    }
 }
 
-.data-table {
-    width: 100%;
-    min-width: 720px;
-    border-collapse: collapse;
-    font-size: 0.88rem;
-    /* كل الأعمدة متمركزة أفقياً ورأسياً */
-    text-align: center;
-}
-
-.data-table th,
-.data-table td {
-    text-align: center;
-    vertical-align: middle;
-    padding: 0.85rem 1rem;
-    white-space: nowrap;
-}
-
-.data-table thead th {
-    color: var(--text-secondary);
-    font-weight: 700;
-    font-size: 0.8rem;
-    padding-block: 0.75rem;
-    border-bottom: 1px solid var(--border-medium);
-}
-
-.data-table tbody tr {
-    border-bottom: 1px solid var(--border-subtle);
-    transition: background var(--transition-fast);
-}
-
-.data-table tbody tr:last-child {
-    border-bottom: none;
-}
-
-.data-table tbody tr:hover {
-    background: var(--border-subtle);
-}
-
-.data-table .cell-code {
-    font-family: monospace;
-    color: var(--muc-gold);
-    font-weight: 700;
-    letter-spacing: 0.02em;
-}
-
-.data-table .cell-title {
-    font-weight: 700;
-    color: var(--text-primary);
-    white-space: normal;
-    min-width: 200px;
-}
-
-.data-table .cell-num {
-    font-family: monospace;
-    font-variant-numeric: tabular-nums;
-}
-
-.status-pill {
-    display: inline-flex;
+.toast {
+    pointer-events: auto;
+    display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.35rem;
-    padding: 0.25rem 0.7rem;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-5);
     border-radius: var(--radius-full);
-    font-size: 0.75rem;
-    font-weight: 700;
-    white-space: nowrap;
+    background: var(--bg-inverse);
+    color: var(--bg-page);
+    box-shadow: var(--shadow-overlay);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    line-height: 1.5;
+    animation: toastIn 0.3s var(--ease-spring);
 }
+.toast i { color: var(--gold); flex-shrink: 0; }
+.toast.toast-leaving { animation: toastOut 0.2s ease-in forwards; }
 
-.status-pill.status-confirmed {
-    color: var(--accent-emerald);
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.3);
+/* --------------------------------------------------------------------------
+   14. الشاشات الضيقة
+   -------------------------------------------------------------------------- */
+@media (max-width: 560px) {
+    .hero-banner { padding: var(--space-6); border-radius: var(--radius-xl); }
+    .hero-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    /* المعدل التراكمي أهم رقم: يأخذ الصف كاملاً */
+    .hero-stat-card:first-child { grid-column: 1 / -1; }
+    .stat-num { font-size: var(--text-lg); }
+
+    .live-notice-banner { padding: var(--space-4); }
+    .countdown-box { width: 100%; justify-content: space-between; }
+
+    .gpa-form-panel { padding: var(--space-4); }
+    .gpa-row-header { display: none; }
+    .gpa-row-item { grid-template-columns: 1fr 1fr var(--tap-min); }
+    .gpa-row-item > div:first-child { grid-column: 1 / -1; }
+    .gpa-controls-bar { flex-direction: column; align-items: stretch; }
+    .gpa-meta-pills { flex-direction: row; }
 }

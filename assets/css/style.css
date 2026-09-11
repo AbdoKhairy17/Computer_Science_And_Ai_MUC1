@@ -1,141 +1,217 @@
 /* ==========================================================================
-   MAY UNIVERSITY IN CAIRO (MUC) - FACULTY OF COMPUTERS & AI
-   CORE DESIGN SYSTEM & LAYOUT (style.css)
+   MAY UNIVERSITY IN CAIRO (MUC) — FACULTY OF COMPUTERS & AI
+   نظام التصميم الأساسي والتخطيط (style.css)
+   ==========================================================================
+
+   لغة التصميم: "بنتو حديث بهوية جامعية"
+   ---------------------------------------
+   منتج رقمي معاصر لا وثيقة ورقية: بلاطات مُجمّعة (Bento)، حواف دائرية
+   واسعة، وعمق خفيف بالظل بدل الخطوط المسطّرة. الهوية تأتي من اللون
+   والطباعة لا من محاكاة الورق.
+
+   • بلاطات بنصف قطر 16–24px وظل ناعم متعدّد الطبقات.
+   • العنّابي لون العلامة، يظهر ككتلة واثقة في البلاطة الرئيسية.
+   • الذهبي لهجة ثانوية: أرقام، حدود مميّزة، تفاصيل صغيرة.
+   • أرقام عربية-هندية (٠١ ٠٢) تبقى — هوية محلية داخل لغة حديثة.
+   • Cairo بأوزانه المتعدّدة: عائلة واحدة تحمل التسلسل كله.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. CSS CUSTOM PROPERTIES / DESIGN TOKENS
+   1. الرموز التصميمية (Design Tokens)
    -------------------------------------------------------------------------- */
 :root {
-    /* Brand Colors - May University Identity */
+    /* --- هوية جامعة مايو --- */
     --muc-maroon: #8B1538;
-    --muc-dark-maroon: #5A0B22;
-    --muc-deep-maroon: #3D0717;
-    --muc-bright-red: #E60042;
-    --muc-gold: #D4AF37;
-    --muc-gold-light: #F3E5AB;
-    --muc-gold-dark: #997A15;
+    --muc-maroon-deep: #5A0B22;
+    --muc-maroon-ink: #3D0717;
+    --muc-crimson: #C8102E;
+    --muc-gold: #C9A227;
+    --muc-gold-deep: #8A6D14;
+    --muc-gold-pale: #EFE3BC;
 
-    /* Semantic Accents */
-    --accent-blue: #2563EB;
-    --accent-cyan: #06B6D4;
-    --accent-emerald: #10B981;
-    --accent-amber: #F59E0B;
-    --accent-purple: #8B5CF6;
+    /* --- الطباعة ---
+       نسق أكاديمي: نسخ كلاسيكي للعناوين + محايد حديث للنص،
+       وهو التقابل نفسه المستعمل في الدوريات العلمية. */
+    --font-display: 'Cairo', system-ui, sans-serif;
+    --font-ui: 'Cairo', system-ui, sans-serif;
+    --font-num: 'Cairo', system-ui, sans-serif;
+    --font-family: var(--font-ui);
 
-    /* Typography */
-    --font-ar: 'Cairo', 'IBM Plex Sans Arabic', system-ui, sans-serif;
-    --font-en: 'IBM Plex Sans Arabic', 'Cairo', system-ui, sans-serif;
-    --font-family: var(--font-ar);
+    /* --- سلّم الطباعة ---
+       نِسب أوسع من المعتاد: التسلسل في الوثيقة يُقرأ من فرق الحجم
+       لا من فرق اللون. */
+    --text-2xs:  0.6875rem;  /* 11px */
+    --text-xs:   0.75rem;    /* 12px */
+    --text-sm:   0.8125rem;  /* 13px */
+    --text-base: 0.9375rem;  /* 15px */
+    --text-md:   1rem;       /* 16px */
+    --text-lg:   1.25rem;    /* 20px */
+    --text-xl:   1.625rem;   /* 26px */
+    --text-2xl:  2.25rem;    /* 36px */
+    --text-3xl:  3rem;       /* 48px */
+    --text-4xl:  4rem;       /* 64px */
 
-    /* Radius & Transition */
-    --radius-sm: 8px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-    --radius-xl: 28px;
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semi:   600;
+    --weight-bold:   700;
+
+    /* --- المسافات: وحدة 8px --- */
+    --space-1:  0.25rem;
+    --space-2:  0.5rem;
+    --space-3:  0.75rem;
+    --space-4:  1rem;
+    --space-5:  1.25rem;
+    --space-6:  1.5rem;
+    --space-8:  2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+
+    /* --- الشبكة: 12 عموداً صارمة --- */
+    --grid-gap: var(--space-6);
+    --container-max: 1280px;
+
+    /* --- نصف الأقطار ---
+       القاعدة البصرية: نصف قطر العنصر الداخلي = نصف قطر الحاوية ناقص
+       الحشو بينهما. لذلك السلّم متدرّج لا موحّد — الزوايا المتداخلة
+       تبدو متنافرة حين تتساوى. */
+    --radius-xs: 8px;    /* شارات ووسوم صغيرة */
+    --radius-sm: 12px;   /* أيقونات، عناصر داخل البطاقات */
+    --radius-md: 16px;   /* حقول الإدخال، روابط التنقل */
+    --radius-lg: 22px;   /* البطاقات والألواح */
+    --radius-xl: 28px;   /* بلاطات البنتو */
+    --radius-2xl: 36px;  /* البلاطة الرئيسية وبطاقة الهوية */
     --radius-full: 9999px;
-    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    /* Layout Dimensions */
-    --sidebar-width: 280px;
-    --sidebar-collapsed-width: 84px;
-    --topbar-height: 74px;
-    --mobile-dock-height: 68px;
+    /* --- الحركة --- */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    /* ارتداد خفيف: يمنح التفاعل إحساساً حيّاً لا آلياً */
+    --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+    --transition-fast: 0.18s var(--ease-out);
+    --transition-smooth: 0.32s var(--ease-out);
+    --transition-spring: 0.38s var(--ease-spring);
+
+    /* --- أبعاد التخطيط --- */
+    --sidebar-width: 272px;
+    --sidebar-collapsed-width: 76px;
+    --topbar-height: 68px;
+
+    /* --- اللمس والتركيز --- */
+    --tap-min: 44px;
+    --focus-ring-width: 3px;
+    --focus-ring-offset: 2px;
+
+    /* تُحدَّث من telegram.js؛ صفر في المتصفح العادي */
+    --tg-safe-top: 0px;
+    --tg-safe-bottom: 0px;
 }
 
 /* --------------------------------------------------------------------------
-   2. DARK THEME (DEFAULT)
-   -------------------------------------------------------------------------- */
-:root, [data-theme="dark"] {
-    --bg-primary: #09080E;
-    --bg-secondary: #120E19;
-    --bg-tertiary: #1A1424;
-    --bg-card: rgba(22, 16, 32, 0.65);
-    --bg-card-hover: rgba(30, 22, 44, 0.85);
-    --bg-glass: rgba(18, 13, 26, 0.65);
-    
-    --text-primary: #FFFFFF;
-    --text-secondary: #A0A5B8;
-    --text-muted: #6B7280;
-    --text-inverse: #09080E;
-
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-medium: rgba(255, 255, 255, 0.16);
-    --border-highlight: rgba(230, 0, 66, 0.35);
-
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.7);
-    --shadow-brand: 0 10px 30px -8px rgba(139, 21, 56, 0.55);
-    --shadow-gold: 0 6px 20px -4px rgba(212, 175, 55, 0.3);
-
-    --ambient-glow-1: rgba(139, 21, 56, 0.35);
-    --ambient-glow-2: rgba(90, 11, 34, 0.4);
-    --ambient-glow-3: rgba(110, 40, 180, 0.18);
-
-    /* شارات القائمة الجانبية: نص فاتح على خلفية داكنة شفافة */
-    --badge-violet-bg: rgba(139, 92, 246, 0.18);
-    --badge-violet-fg: #C4B5FD;
-    --badge-blue-bg:   rgba(59, 130, 246, 0.18);
-    --badge-blue-fg:   #93C5FD;
-    --badge-green-bg:  rgba(16, 185, 129, 0.18);
-    --badge-green-fg:  #6EE7B7;
-    --badge-border:    rgba(255, 255, 255, 0.12);
-
-    /* عدّاد المحاضرة القادمة */
-    --countdown-bg:     rgba(230, 0, 66, 0.14);
-    --countdown-border: rgba(230, 0, 66, 0.38);
-    --countdown-fg:     #FF9EB5;
-}
-
-/* --------------------------------------------------------------------------
-   3. LIGHT THEME
-   -------------------------------------------------------------------------- */
+   2. الوضع الفاتح (الأساسي)
+   --------------------------------------------------------------------------
+   رمادي محايد بارد قليلاً كخلفية، وبلاطات بيضاء ترتفع فوقه بالظل.
+   الفصل بين الطبقات يأتي من العمق لا من الخطوط. */
+:root,
 [data-theme="light"] {
-    --bg-primary: #F4F6FB;
-    --bg-secondary: #EAEEF6;
-    --bg-tertiary: #DFE4F0;
-    --bg-card: rgba(255, 255, 255, 0.88);
-    --bg-card-hover: rgba(255, 255, 255, 0.98);
-    --bg-glass: rgba(255, 255, 255, 0.82);
+    --bg-page: #F5F5F8;
+    --bg-surface: #FFFFFF;
+    --bg-sunken: #EFEFF3;
+    --bg-elevated: #FFFFFF;
+    --bg-inverse: #17171C;
 
-    --text-primary: #111827;
-    --text-secondary: #4B5563;
-    --text-muted: #9CA3AF;
-    --text-inverse: #FFFFFF;
+    --text-primary: #101014;
+    --text-secondary: #5E5E6B;
+    /* كان #8E8E9C: 3.23:1 على الأبيض و2.82:1 على السطح الغائر.
+       هذه القيمة تحقق 5.3:1 و4.6:1 على الترتيب. */
+    --text-muted: #6A6A78;
+    --text-on-dark: #F7F7FA;
 
-    --border-subtle: rgba(17, 24, 39, 0.08);
-    --border-medium: rgba(17, 24, 39, 0.15);
-    --border-highlight: rgba(139, 21, 56, 0.3);
+    --rule: #E6E6EC;
+    --rule-strong: #101014;
 
-    /* الوضع الفاتح يحتاج نصاً داكناً: الألوان الباستيل كانت غير مقروءة */
-    --badge-violet-bg: rgba(109, 40, 217, 0.10);
-    --badge-violet-fg: #5B21B6;
-    --badge-blue-bg:   rgba(29, 78, 216, 0.10);
-    --badge-blue-fg:   #1D4ED8;
-    --badge-green-bg:  rgba(4, 120, 87, 0.10);
-    --badge-green-fg:  #047857;
-    --badge-border:    rgba(17, 24, 39, 0.10);
+    /* العنّابي لون العلامة: يبقى كما هو في الوضعين على الأسطح الممتلئة.
+       الأبيض عليه يحقق 8.6:1، فلا حاجة لتفتيحه — تفتيحه كان يحوّله
+       إلى وردي ويفقد الهوية الجامعية. */
+    --accent: #8B1538;
+    --accent-hover: #6E102C;
+    /* نسخة النص: تُستعمل للنص والأيقونات فوق خلفية الصفحة فقط */
+    --accent-text: #8B1538;
+    --accent-soft: rgba(139, 21, 56, 0.08);
+    --accent-glow: rgba(139, 21, 56, 0.24);
+    --on-accent: #FFFFFF;
 
-    --countdown-bg:     rgba(139, 21, 56, 0.08);
-    --countdown-border: rgba(139, 21, 56, 0.28);
-    --countdown-fg:     #8B1538;
+    --gold: #B08A1E;
+    --gold-soft: rgba(201, 162, 39, 0.14);
 
-    --shadow-sm: 0 2px 6px rgba(17, 24, 39, 0.04);
-    --shadow-md: 0 10px 25px -5px rgba(17, 24, 39, 0.08);
-    --shadow-lg: 0 20px 40px -10px rgba(17, 24, 39, 0.12);
-    --shadow-brand: 0 10px 30px -8px rgba(139, 21, 56, 0.25);
-    --shadow-gold: 0 6px 20px -4px rgba(212, 175, 55, 0.25);
+    --state-success: #16794F;
+    --state-info: #1D5FA8;
+    --state-warn: #8A5A08;
+    --state-danger: #B01230;
 
-    --ambient-glow-1: rgba(139, 21, 56, 0.12);
-    --ambient-glow-2: rgba(212, 175, 55, 0.12);
-    --ambient-glow-3: rgba(59, 130, 246, 0.08);
+    --focus-ring: #8B1538;
+
+    /* ظل متعدّد الطبقات: الطبقة القريبة تعرّف الحافة، والبعيدة تعطي العمق */
+    --shadow-sm: 0 1px 2px rgba(16, 16, 20, 0.05),
+                 0 1px 3px rgba(16, 16, 20, 0.04);
+    --shadow-md: 0 2px 4px rgba(16, 16, 20, 0.04),
+                 0 8px 16px -4px rgba(16, 16, 20, 0.08);
+    --shadow-lg: 0 4px 8px rgba(16, 16, 20, 0.04),
+                 0 16px 32px -8px rgba(16, 16, 20, 0.12);
+    --shadow-overlay: 0 24px 64px -16px rgba(16, 16, 20, 0.28);
+    --shadow-raised: var(--shadow-sm);
 }
 
 /* --------------------------------------------------------------------------
-   4. BASE RESETS & GLOBAL STYLES
+   3. الوضع الداكن
+   --------------------------------------------------------------------------
+   ليس أسود مطلقاً: الأسطح ترتفع بالإضاءة لا بالظل، وهو ما يجعل
+   الوضع الداكن يبدو معاصراً بدل أن يبدو مطفأً. */
+[data-theme="dark"] {
+    --bg-page: #0D0D10;
+    --bg-surface: #17171C;
+    --bg-sunken: #101014;
+    --bg-elevated: #1F1F26;
+    --bg-inverse: #F7F7FA;
+
+    --text-primary: #F4F4F7;
+    --text-secondary: #A8A8B6;
+    /* كان #74748A: 3.92:1 على السطح. هذه تحقق 5.4:1. */
+    --text-muted: #8B8BA0;
+    --text-on-dark: #F4F4F7;
+
+    --rule: #27272F;
+    --rule-strong: #F4F4F7;
+
+    /* السطح يبقى عنّابياً — الهوية لا تتغيّر بتغيّر الوضع.
+       النص وحده يُفتَّح: #8B1538 كنص على خلفية داكنة غير مقروء. */
+    --accent: #9B1A40;
+    --accent-hover: #B01E4A;
+    --accent-text: #FF8FA3;
+    --accent-soft: rgba(255, 143, 163, 0.13);
+    --accent-glow: rgba(155, 26, 64, 0.5);
+    --on-accent: #FFFFFF;
+
+    --gold: #E5C065;
+    --gold-soft: rgba(229, 192, 101, 0.16);
+
+    --state-success: #4ADE9B;
+    --state-info: #6BB6FF;
+    --state-warn: #F0B84E;
+    --state-danger: #FF7089;
+
+    --focus-ring: #E5C065;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 8px 16px -4px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 16px 32px -8px rgba(0, 0, 0, 0.6);
+    --shadow-overlay: 0 24px 64px -16px rgba(0, 0, 0, 0.75);
+    --shadow-raised: var(--shadow-sm);
+}
+
+/* --------------------------------------------------------------------------
+   4. التهيئة الأساسية
    -------------------------------------------------------------------------- */
 *, *::before, *::after {
     box-sizing: border-box;
@@ -147,858 +223,821 @@
 html {
     font-size: 16px;
     scroll-behavior: smooth;
-    height: 100%;
+    /* الشريط العلوي لاصق: يحجز مكانه فلا يغطي العنصر المُركَّز عليه */
+    scroll-padding-top: calc(var(--topbar-height) + var(--space-6));
 }
 
 body {
     font-family: var(--font-family);
-    background-color: var(--bg-primary);
+    background-color: var(--bg-page);
     color: var(--text-primary);
-    min-height: 100vh;
     min-height: 100dvh;
-    line-height: 1.6;
+    line-height: 1.65;
+    font-size: var(--text-base);
     overflow-x: hidden;
     position: relative;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
     transition: background-color var(--transition-smooth), color var(--transition-smooth);
 }
 
-/* RTL / LTR Font Tuning */
-[dir="rtl"] {
-    --font-family: var(--font-ar);
-}
-[dir="ltr"] {
-    --font-family: var(--font-en);
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-::-webkit-scrollbar-thumb {
-    background: var(--muc-maroon);
-    border-radius: var(--radius-full);
-}
-::-webkit-scrollbar-thumb:hover {
-    background: var(--muc-bright-red);
+h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    line-height: 1.22;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
 }
 
-/* Links and buttons */
-a {
-    color: inherit;
-    text-decoration: none;
-}
+a { color: inherit; text-decoration: none; }
+
 button {
     font-family: inherit;
     cursor: pointer;
     border: none;
     background: none;
-    outline: none;
-}
-input, select, textarea {
-    font-family: inherit;
     color: inherit;
 }
 
+input, select, textarea { font-family: inherit; color: inherit; }
+
+img { max-width: 100%; }
+
+/* الأرقام في السياق الأكاديمي بيانات: عرض ثابت دائماً */
+.stat-num, .countdown-timer, .cell-num, .cell-code,
+.gpa-ring-val, .id-student-num, .student-preview-id {
+    font-family: var(--font-num);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+}
+
+/* شريط التمرير: خط رفيع لا كتلة ملوّنة */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: var(--rule);
+    border: 3px solid var(--bg-page);
+    border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
 /* --------------------------------------------------------------------------
-   5. AMBIENT BACKGROUND GLOWS
+   5. أدوات اللون المستعملة في الوسم
+   --------------------------------------------------------------------------
+   كانت هذه الأصناف مستعملة 16 مرة في index.html دون أي تعريف، فكانت
+   الأيقونات ترث لون النص بدل لونها المقصود. */
+.text-muc-gold        { color: var(--gold); }
+.text-muc-bright-red  { color: var(--accent-text); }
+.text-accent-blue     { color: var(--state-info); }
+.text-accent-cyan     { color: var(--state-info); }
+.text-accent-emerald  { color: var(--state-success); }
+.text-accent-amber    { color: var(--state-warn); }
+
+/* --------------------------------------------------------------------------
+   6. التركيز وإتاحة الوصول
    -------------------------------------------------------------------------- */
-.ambient-bg {
+:focus:not(:focus-visible) { outline: none; }
+
+:focus-visible {
+    outline-width: var(--focus-ring-width);
+    outline-style: solid;
+    outline-color: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+}
+
+.input-field:focus-visible,
+.code-editor-box:focus-visible {
+    outline-width: var(--focus-ring-width);
+    outline-style: solid;
+    outline-color: var(--focus-ring);
+    outline-offset: 1px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.skip-link {
+    position: absolute;
+    top: var(--space-2);
+    inset-inline-start: var(--space-2);
+    z-index: 200;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semi);
+    transform: translateY(-160%);
+    transition: transform var(--transition-fast);
+}
+.skip-link:focus { transform: translateY(0); }
+
+/* --------------------------------------------------------------------------
+   7. خلفية الصفحة — توهّج محيط ساكن
+   --------------------------------------------------------------------------
+   تدرّجان قطريان باهتان يمنعان الخلفية المسطّحة من أن تبدو ميتة.
+   ساكنان تماماً: لا يستهلكان إطاراً واحداً من المعالج. */
+.page-rule-bg {
     position: fixed;
     inset: 0;
+    /* خلف المحتوى دون أن يحتاج المحتوى لسياق تكديس خاص به */
+    z-index: -1;
     pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-}
-
-.ambient-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.7;
-    will-change: transform, opacity;
-}
-
-.ambient-orb-1 {
-    top: -120px;
-    right: -100px;
-    width: 550px;
-    height: 550px;
-    background: var(--ambient-glow-1);
-    animation: ambientFloat1 18s ease-in-out infinite alternate;
-}
-
-.ambient-orb-2 {
-    bottom: -150px;
-    left: -120px;
-    width: 500px;
-    height: 500px;
-    background: var(--ambient-glow-2);
-    animation: ambientFloat2 22s ease-in-out infinite alternate;
-}
-
-.ambient-orb-3 {
-    top: 45%;
-    left: 20%;
-    width: 380px;
-    height: 380px;
-    background: var(--ambient-glow-3);
-    animation: ambientPulse 12s ease-in-out infinite alternate;
-}
-
-.ambient-grid {
-    position: absolute;
-    inset: 0;
-    background-size: 36px 36px;
-    background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-}
-[data-theme="light"] .ambient-grid {
-    background-image: 
-        linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    background:
+        radial-gradient(60% 50% at 85% -5%, var(--accent-soft) 0%, transparent 70%),
+        radial-gradient(50% 45% at 10% 105%, var(--gold-soft) 0%, transparent 70%);
 }
 
 /* --------------------------------------------------------------------------
-   6. MAIN APPLICATION LAYOUT
+   8. هيكل التطبيق
    -------------------------------------------------------------------------- */
 #app-layout {
     position: relative;
-    z-index: 1;
+    /* بلا z-index هنا.
+       z-index:1 كان ينشئ سياق تكديس، فيصبح z-index:60 على الشريط
+       الجانبي محصوراً داخله بينما الغطاء (z:50) شقيق له خارجه —
+       فيغطّي الغطاء الدرجَ نفسه: ضباب على كل شيء ولا عنصر قابل للنقر. */
     display: flex;
-    min-height: 100vh;
     min-height: 100dvh;
     width: 100%;
 }
 
 /* ==========================================================================
-   SIDEBAR / SIDE PANEL (DESKTOP)
+   الشريط الجانبي — فهرس الوثيقة
    ========================================================================== */
 #sidebar {
     width: var(--sidebar-width);
     flex-shrink: 0;
-    height: 100vh;
+    height: 100dvh;
     position: sticky;
     top: 0;
     z-index: 40;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 1.5rem 1.2rem;
-    background: var(--bg-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-inline-end: 1px solid var(--border-subtle);
+    padding: var(--space-6) var(--space-5);
+    background: var(--bg-surface);
+    border-inline-end: 1px solid var(--rule);
     transition: width var(--transition-smooth), transform var(--transition-smooth);
 }
 
-/* Sidebar Brand Header */
+/* ترويسة الكلية: شعار + خيط ذهبي، كترويسة الوثيقة الرسمية */
 .sidebar-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--border-subtle);
-    margin-bottom: 1.25rem;
+    gap: var(--space-3);
+    padding-bottom: var(--space-5);
+    margin-bottom: var(--space-4);
+    position: relative;
+}
+.sidebar-header::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--rule);
 }
 
 .sidebar-logo-link {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    overflow: hidden;
+    gap: var(--space-3);
+    min-width: 0;
 }
 
 .sidebar-logo-img {
-    height: 48px;
+    height: 44px;
     width: auto;
     object-fit: contain;
+    flex-shrink: 0;
     transition: transform var(--transition-fast);
 }
-.sidebar-logo-link:hover .sidebar-logo-img {
-    transform: scale(1.05);
-}
+.sidebar-logo-link:hover .sidebar-logo-img { transform: scale(1.04); }
 
-.sidebar-brand-text {
-    display: flex;
-    flex-direction: column;
+.sidebar-brand-text { display: flex; flex-direction: column; min-width: 0; }
+.sidebar-brand-title {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: var(--weight-bold);
+    color: var(--text-primary);
+    line-height: 1.25;
     white-space: nowrap;
 }
-.sidebar-brand-title {
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    line-height: 1.2;
-}
 .sidebar-brand-sub {
-    font-size: 0.72rem;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+    line-height: 1.4;
+    letter-spacing: 0.02em;
 }
 
-/* Collapse Handle
-   يطفو على الحافة الداخلية للقائمة في منتصف الارتفاع، بعيداً عن الشعار
-   وعن بطاقة الطالب، فلا يزاحم أي عنصر في الوضع المطوي. */
-.sidebar-toggle-btn {
-    position: absolute;
-    top: 50%;
-    /* inline-end هي الحافة المواجهة للمحتوى في LTR وRTL معاً */
-    inset-inline-end: 0;
-    transform: translate(50%, -50%);
-    width: 28px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-full);
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    cursor: pointer;
-    z-index: 45;
-    opacity: 0;
-    box-shadow: var(--shadow-md);
-    transition: opacity var(--transition-fast),
-                background var(--transition-fast),
-                color var(--transition-fast),
-                border-color var(--transition-fast);
-}
-
-/* transform فيزيائي دائماً، فيُعكس صراحةً في RTL */
-[dir="rtl"] .sidebar-toggle-btn {
-    transform: translate(-50%, -50%);
-}
-
-/* يظهر عند الاقتراب من القائمة، ويبقى ظاهراً دائماً للوحة المفاتيح */
-#sidebar:hover .sidebar-toggle-btn,
-.sidebar-toggle-btn:focus-visible {
-    opacity: 1;
-}
-
-.sidebar-toggle-btn:hover {
-    background: var(--muc-maroon);
-    border-color: var(--muc-maroon);
-    color: #FFFFFF;
-}
-
-.sidebar-toggle-btn i {
-    font-size: 0.8rem;
-    transition: transform var(--transition-smooth);
-}
-
-/* السهم يشير إلى الجهة التي ستتحرك إليها حافة القائمة */
-.sidebar-toggle-btn i                                 { transform: rotate(180deg); }
-#sidebar.collapsed .sidebar-toggle-btn i              { transform: rotate(0deg); }
-[dir="rtl"] .sidebar-toggle-btn i                     { transform: rotate(0deg); }
-[dir="rtl"] #sidebar.collapsed .sidebar-toggle-btn i  { transform: rotate(180deg); }
-
-/* على الشاشات التي تعمل باللمس لا يوجد hover، فيبقى اللسان ظاهراً */
-@media (hover: none) {
-    .sidebar-toggle-btn { opacity: 1; }
-}
-
-/* Navigation Menu */
+/* --- روابط التنقل --- */
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 1px;
     flex: 1;
     overflow-y: auto;
-    padding-right: 0.2rem;
+    min-height: 0;
 }
 
 .nav-category-label {
-    font-size: 0.7rem;
+    font-size: var(--text-2xs);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.14em;
     color: var(--text-muted);
-    padding: 0.6rem 0.8rem 0.25rem;
-    font-weight: 700;
+    padding: var(--space-5) var(--space-2) var(--space-2);
+    font-weight: var(--weight-semi);
 }
+.sidebar-nav > .nav-category-label:first-child { padding-top: 0; }
 
+/* الرابط شريط مسطّر، والعنصر النشط يُعلَّم بعمود عنّابي على الحافة
+   الداخلية — كعلامة الهامش في الكتاب، لا كزر ملوّن. */
 .nav-link {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
-    padding: 0.75rem 0.9rem;
+    gap: var(--space-3);
+    min-height: var(--tap-min);
+    padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-md);
     color: var(--text-secondary);
-    font-size: 0.88rem;
-    font-weight: 600;
-    transition: all var(--transition-fast);
+    /* مقاس أصغر قليلاً: "معمل الذكاء الاصطناعي" كان يلتف لسطرين
+       فيكسر إيقاع ارتفاع الصفوف في الفهرس. */
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     position: relative;
     user-select: none;
+    transition: color var(--transition-fast), background var(--transition-fast);
 }
+
+/* لا علامة هامش: العنصر النشط يمتلئ بلون العلامة مباشرةً */
 
 .nav-link i {
-    font-size: 1.15rem;
-    width: 24px;
+    font-size: 1rem;
+    width: 20px;
     text-align: center;
-    transition: transform var(--transition-fast), color var(--transition-fast);
+    flex-shrink: 0;
+    color: var(--text-muted);
+    transition: color var(--transition-fast);
 }
 
-.nav-link:hover {
-    color: var(--text-primary);
-    background: var(--border-subtle);
-    transform: translateX(4px);
-}
-[dir="rtl"] .nav-link:hover {
-    transform: translateX(-4px);
-}
+.nav-text { min-width: 0; }
+
+.nav-link:hover { color: var(--text-primary); background: var(--bg-sunken); }
+.nav-link:hover i { color: var(--text-secondary); }
 
 .nav-link.active {
-    color: #FFFFFF;
-    background: linear-gradient(135deg, var(--muc-maroon) 0%, var(--muc-bright-red) 100%);
-    box-shadow: var(--shadow-brand);
+    color: var(--on-accent);
+    background: var(--accent);
+    font-weight: var(--weight-semi);
+    box-shadow: 0 4px 12px -4px var(--accent-glow);
 }
-.nav-link.active i {
-    color: #FFFFFF;
-    transform: scale(1.1);
-}
+.nav-link.active i { color: inherit; }
+.nav-link:hover i { color: var(--accent-text); }
 
+/* الشارات: إطار رفيع لا كتلة لون */
 .nav-badge {
     margin-inline-start: auto;
-    font-size: 0.68rem;
-    line-height: 1.5;
-    padding: 0.15rem 0.5rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+    padding: 1px var(--space-2);
     border-radius: var(--radius-full);
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    background: var(--badge-violet-bg);
-    color: var(--badge-violet-fg);
-    border: 1px solid var(--badge-border);
+    background: var(--bg-sunken);
+    color: var(--text-muted);
+    font-weight: var(--weight-semi);
+    flex-shrink: 0;
 }
+.nav-link.active .nav-badge { background: rgba(255, 255, 255, 0.22); color: inherit; }
 
-.nav-badge--gpa   { background: var(--badge-violet-bg); color: var(--badge-violet-fg); }
-.nav-badge--drive { background: var(--badge-blue-bg);   color: var(--badge-blue-fg); }
-.nav-badge--ai    { background: var(--badge-green-bg);  color: var(--badge-green-fg); }
+.nav-external-icon { color: var(--text-muted); }
 
-/* على الرابط النشط الخلفية عنّابية، فالشارة تصبح شفافة بنص أبيض */
-.nav-link.active .nav-badge {
-    background: rgba(255, 255, 255, 0.22);
-    color: #FFFFFF;
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-/* Sidebar Collapsed State */
-#sidebar.collapsed {
-    width: var(--sidebar-collapsed-width);
-    padding: 1.25rem 0.5rem;
-}
-
-/* الشريط المطوي ضيق: امنع أي عنصر من تجاوز عرضه */
-#sidebar.collapsed .sidebar-nav,
-#sidebar.collapsed .sidebar-header,
-#sidebar.collapsed .sidebar-student-card {
-    min-width: 0;
-    overflow-x: clip;
-}
+/* --- الطي على سطح المكتب --- */
+#sidebar.collapsed { width: var(--sidebar-collapsed-width); padding-inline: var(--space-3); }
 
 #sidebar.collapsed .sidebar-brand-text,
 #sidebar.collapsed .nav-text,
 #sidebar.collapsed .nav-badge,
 #sidebar.collapsed .nav-category-label,
 #sidebar.collapsed .student-preview-info,
-#sidebar.collapsed .nav-external-icon,
-#sidebar.collapsed .sidebar-student-card > .fa-id-card {
+#sidebar.collapsed .nav-external-icon {
     display: none !important;
 }
-
-#sidebar.collapsed .sidebar-header {
-    justify-content: center;
-    gap: 0;
-    padding-bottom: 1rem;
-}
-
-#sidebar.collapsed .sidebar-logo-link {
-    justify-content: center;
-    width: 100%;
-    /* overflow:hidden الموروث كان يقصّ الشعار في العرض الضيق */
-    overflow: visible;
-}
-
-/* الشعار مربّع (414×414) ويُحتوى كاملاً داخل عرض الشريط */
-#sidebar.collapsed .sidebar-logo-img {
-    height: auto;
-    width: 100%;
-    max-width: 44px;
-    aspect-ratio: 1 / 1;
-    object-fit: contain;
-    margin: 0 auto;
-    display: block;
-}
-
-#sidebar.collapsed .nav-link {
-    justify-content: center;
-    padding: 0.75rem 0.25rem;
-    width: 100%;
-}
-
-#sidebar.collapsed .nav-link i {
-    width: auto;
-    /* margin-inline-start:auto على أيقونة الرابط الخارجي كان يزاحم الأيقونة الأساسية */
-    margin: 0 auto;
-}
-
-#sidebar.collapsed .nav-link:hover {
-    transform: none;
-}
-
+#sidebar.collapsed .sidebar-header,
+#sidebar.collapsed .sidebar-logo-link,
+#sidebar.collapsed .nav-link,
 #sidebar.collapsed .sidebar-student-card {
     justify-content: center;
-    padding: 0.5rem 0.25rem;
-    background: transparent;
-    border-color: transparent;
+    gap: 0;
 }
+#sidebar.collapsed .sidebar-logo-img { height: 36px; }
+#sidebar.collapsed .nav-link i { width: auto; }
 
-#sidebar.collapsed .student-avatar-wrap {
-    margin: 0 auto;
-}
-
-/* Sidebar Footer Student Profile Card */
-.sidebar-student-card {
-    margin-top: 1rem;
-    padding: 0.75rem;
-    border-radius: var(--radius-lg);
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-.sidebar-student-card:hover {
-    border-color: var(--border-highlight);
-    box-shadow: var(--shadow-sm);
-    transform: translateY(-2px);
-}
-.student-avatar-wrap {
-    position: relative;
-    width: 42px;
-    height: 42px;
-    flex-shrink: 0;
-}
-.student-avatar {
-    width: 100%;
-    height: 100%;
-    border-radius: var(--radius-md);
-    background: linear-gradient(135deg, var(--muc-dark-maroon), var(--muc-maroon));
-    border: 2px solid var(--muc-gold);
+/* مقبض الطي */
+.sidebar-toggle-btn {
+    position: absolute;
+    top: 50%;
+    inset-inline-end: 0;
+    transform: translate(50%, -50%);
+    width: 22px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #FFFFFF;
-    font-weight: 700;
-    font-size: 1.1rem;
-    overflow: hidden;
+    border: 1px solid var(--rule);
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    z-index: 45;
+    opacity: 0;
+    transition: opacity var(--transition-fast), color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+[dir="rtl"] .sidebar-toggle-btn { transform: translate(-50%, -50%); }
+
+/* توسيع مساحة اللمس دون تغيير الشكل */
+.sidebar-toggle-btn::after {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: var(--tap-min);
+    height: var(--tap-min);
 }
 
-.student-avatar-img {
+#sidebar:hover .sidebar-toggle-btn,
+.sidebar-toggle-btn:focus-visible { opacity: 1; }
+.sidebar-toggle-btn:hover { color: var(--accent-text); border-color: var(--accent-text); }
+
+.sidebar-toggle-btn i { font-size: 0.7rem; transition: transform var(--transition-smooth); }
+.sidebar-toggle-btn i                                { transform: rotate(180deg); }
+#sidebar.collapsed .sidebar-toggle-btn i             { transform: rotate(0deg); }
+[dir="rtl"] .sidebar-toggle-btn i                    { transform: rotate(0deg); }
+[dir="rtl"] #sidebar.collapsed .sidebar-toggle-btn i { transform: rotate(180deg); }
+
+@media (hover: none) { .sidebar-toggle-btn { opacity: 1; } }
+
+/* --- بطاقة الطالب أسفل الفهرس --- */
+/* عرض هوية ساكن: لا مؤشر يد ولا حالة مرور، فلا يوحي بأنه قابل للنقر */
+.sidebar-student-card {
     width: 100%;
-    height: 100%;
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    border-radius: var(--radius-lg);
+    background: var(--bg-sunken);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.student-avatar-wrap { position: relative; width: 40px; height: 40px; flex-shrink: 0; }
+.student-avatar {
+    width: 100%; height: 100%;
+    border-radius: var(--radius-md);
+    background: var(--accent);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.student-avatar-img {
+    width: 100%; height: 100%;
     object-fit: cover;
-    /* الصورة طولية، وهذا الإزاحة تُبقي الوجه في إطار القص المربّع */
     object-position: center 45%;
     display: block;
 }
 .student-online-dot {
     position: absolute;
     bottom: -2px;
-    right: -2px;
-    width: 11px;
-    height: 11px;
+    inset-inline-end: -2px;
+    width: 10px; height: 10px;
     border-radius: 50%;
-    background: var(--accent-emerald);
-    border: 2px solid var(--bg-secondary);
+    background: var(--state-success);
+    border: 2px solid var(--bg-sunken);
 }
-[dir="rtl"] .student-online-dot {
-    right: auto;
-    left: -2px;
-}
-.student-preview-info {
-    flex: 1;
-    overflow: hidden;
-}
+.student-preview-info { flex: 1; min-width: 0; }
 .student-preview-name {
-    font-size: 0.85rem;
-    font-weight: 700;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semi);
     color: var(--text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 .student-preview-id {
-    font-size: 0.72rem;
-    color: var(--muc-gold);
-    font-family: monospace;
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
 }
 
+/* زر إغلاق الدرج — يظهر على الجوال فقط */
+.drawer-close-btn {
+    display: none;
+    position: absolute;
+    top: var(--space-4);
+    inset-inline-end: var(--space-4);
+    width: var(--tap-min);
+    height: var(--tap-min);
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background: var(--bg-sunken);
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    z-index: 5;
+}
+.drawer-close-btn:hover { color: var(--accent-text); background: var(--accent-soft); }
+
 /* ==========================================================================
-   MAIN CONTENT AREA & TOPBAR
+   المحتوى الرئيسي والشريط العلوي
    ========================================================================== */
 #main-wrapper {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100dvh;
 }
 
-/* TOPBAR */
 #topbar {
     height: var(--topbar-height);
     position: sticky;
+    /* مرجع الوضع للوحة التنبيهات المنسدلة */
     top: 0;
     z-index: 30;
-    background: var(--bg-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border-subtle);
-    padding: 0 1.5rem;
+    /* شبه معتم لا شفاف: النص الثانوي فوقه كان يسقط تحت 4.5:1
+       حين يمرّ محتوى فاتح خلفه أثناء التمرير. */
+    background: color-mix(in srgb, var(--bg-page) 94%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule);
+    padding-inline: var(--space-6);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-4);
 }
 
-/* Topbar Left / Start */
 .topbar-start {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-3);
+    min-width: 0;
+    flex: 1;
 }
 
-/* Mobile Toggle Hamburger */
+/* زر الهامبرغر: ثلاثة خطوط تتحول إلى × عند الفتح */
 .mobile-nav-toggle {
     display: none;
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
-    background: var(--border-subtle);
-    color: var(--text-primary);
+    width: var(--tap-min);
+    height: var(--tap-min);
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    transition: all var(--transition-fast);
+    flex-shrink: 0;
+    color: var(--text-primary);
 }
-.mobile-nav-toggle:hover {
-    background: var(--border-medium);
+.hamburger-lines { display: block; position: relative; width: 20px; height: 14px; }
+.hamburger-lines span {
+    position: absolute;
+    inset-inline: 0;
+    height: 2px;
+    background: currentColor;
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+.hamburger-lines span:nth-child(1) { top: 0; }
+.hamburger-lines span:nth-child(2) { top: 6px; }
+.hamburger-lines span:nth-child(3) { top: 12px; }
+
+.mobile-nav-toggle[aria-expanded="true"] .hamburger-lines span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+.mobile-nav-toggle[aria-expanded="true"] .hamburger-lines span:nth-child(2) { opacity: 0; }
+.mobile-nav-toggle[aria-expanded="true"] .hamburger-lines span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
 }
 
-.topbar-title-block {
-    display: flex;
-    flex-direction: column;
-}
-.topbar-faculty-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    display: flex;
+.topbar-mobile-logo {
+    display: none;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    min-width: var(--tap-min);
+    min-height: var(--tap-min);
+}
+.topbar-logo-img { height: 34px; width: auto; object-fit: contain; }
+
+.topbar-title-block { display: flex; flex-direction: column; min-width: 0; }
+.topbar-faculty-title {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: var(--weight-bold);
+    color: var(--text-primary);
+    line-height: 1.25;
 }
 .topbar-faculty-subtitle {
-    font-size: 0.75rem;
+    font-size: var(--text-2xs);
     color: var(--text-secondary);
+    letter-spacing: 0.02em;
 }
 
-/* Topbar Center (Academic Status Chip) */
+/* شارة الفصل الدراسي: إطار ذهبي رفيع */
+/* كل كبسولات الشريط على ارتفاع واحد: 44px.
+   كانت هذه ٣٠px والمجموعة ٤٨px والزر ٤٤px — ثلاثة ارتفاعات في صفّ
+   واحد تجعل الشريط يبدو غير مضبوط. */
 .academic-term-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.4rem 0.85rem;
+    gap: var(--space-2);
+    height: var(--tap-min);
+    padding-inline: var(--space-4);
     border-radius: var(--radius-full);
-    background: rgba(212, 175, 55, 0.1);
-    border: 1px solid rgba(212, 175, 55, 0.25);
-    color: var(--muc-gold);
-    font-size: 0.78rem;
-    font-weight: 700;
+    background: var(--gold-soft);
+    /* نفس أسلوب المجموعة: حلقة خارجية، فيتطابق الارتفاع الداخلي */
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 36%, transparent);
+    color: var(--text-secondary);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semi);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
+.academic-term-chip i { color: var(--gold); }
 
-/* Topbar Right / End Actions */
-.topbar-end {
+.topbar-end { display: flex; align-items: center; gap: var(--space-2); flex-shrink: 0; }
+
+/* --- كتلة الأدوات المساعدة ---
+   ثلاثة أزرار صامتة داخل حاوية واحدة بفواصل رفيعة. هذا يفصلها بصرياً
+   عن الإجراء الأساسي (البطاقة الرقمية) فلا تتنافس معه على الانتباه. */
+/* كانت خلفية غائرة بلا حدّ فوق شريط بنفس درجة اللون تقريباً، فلا
+   تكاد تُرى. الحدّ الصريح والسطح المرتفع يجعلانها تُقرأ كمجموعة
+   تحكّم واحدة. */
+.utility-cluster {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
+    height: var(--tap-min);
+    padding: 0;
+    background: var(--bg-surface);
+    border-radius: var(--radius-full);
+    /* الحدّ مرسوم خارج الصندوق بـ box-shadow لا بـ border:
+       الحدّ الحقيقي يقتطع 2px من الارتفاع الداخلي فتصير الأزرار 42px،
+       وهذا يُنقص مساحة اللمس عن الحد المطلوب. */
+    box-shadow: 0 0 0 1px var(--rule), var(--shadow-sm);
+    /* الأزرار تملأ الارتفاع كاملاً، والقصّ يبقي الطرفين مستديرين */
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
-/* Action Controls (Theme, Language, Notification) */
-.action-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
+.utility-btn {
+    position: relative;
+    min-width: var(--tap-min);
+    /* 44px حقيقية لا ممتدة بعنصر زائف: مساحة اللمس تُقاس لا تُفترض */
+    height: 100%;
+    align-self: stretch;
+    padding-inline: var(--space-3);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--border-subtle);
     color: var(--text-secondary);
-    border: 1px solid var(--border-subtle);
-    transition: all var(--transition-fast);
-    position: relative;
     font-size: 1rem;
+    font-weight: var(--weight-semi);
+    transition: background var(--transition-fast), color var(--transition-fast);
 }
-.action-btn:hover {
-    background: var(--border-medium);
-    color: var(--text-primary);
-    transform: translateY(-2px);
+.utility-btn:hover { background: var(--bg-sunken); color: var(--text-primary); }
+.utility-btn:active { transform: scale(0.94); }
+.utility-btn[aria-expanded="true"] { background: var(--accent-soft); color: var(--accent-text); }
+
+.utility-divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--rule);
+    flex-shrink: 0;
 }
 
-.action-btn-pill {
-    width: auto;
-    padding: 0 0.85rem;
-    gap: 0.5rem;
-    font-size: 0.82rem;
-    font-weight: 600;
+.lang-label {
+    font-family: var(--font-num);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
 }
 
-.badge-dot {
+/* عدّاد التنبيهات: رقم لا نقطة صمّاء — يخبر كم لا "يوجد شيء".
+   كان content-box مع حشو 4px وحدّ 2px يضخّمه إلى 27×19 فوق جرس
+   مقاسه 13×14 — أي أنه كان يغطّي الأيقونة بالكامل لا يعلّم عليها. */
+.notif-count {
     position: absolute;
-    top: 7px;
-    right: 7px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--muc-bright-red);
-    box-shadow: 0 0 8px var(--muc-bright-red);
-}
-[dir="rtl"] .badge-dot {
-    right: auto;
-    left: 7px;
+    top: 6px;
+    inset-inline-end: 6px;
+    /* الحشو والحدّ داخل المقاس المعلن، فلا يتمدّد الصندوق */
+    box-sizing: border-box;
+    min-width: 16px;
+    height: 16px;
+    padding-inline: 4px;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    color: #FFFFFF;
+    font-family: var(--font-num);
+    font-size: 0.625rem;
+    font-weight: var(--weight-bold);
+    line-height: 14px;
+    text-align: center;
+    pointer-events: none;
 }
 
-/* Student ID Button */
+/* --- لوحة التنبيهات --- */
+.notif-panel {
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    inset-inline-end: var(--space-6);
+    width: min(340px, calc(100vw - var(--space-8)));
+    z-index: 60;
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+.notif-panel[hidden] { display: none; }
+
+.notif-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--rule);
+}
+.notif-panel-head h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semi);
+    color: var(--text-primary);
+}
+.notif-clear {
+    font-size: var(--text-2xs);
+    color: var(--accent-text);
+    font-weight: var(--weight-semi);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-xs);
+}
+.notif-clear:hover { background: var(--accent-soft); }
+
+.notif-list { list-style: none; max-height: 320px; overflow-y: auto; }
+
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--rule);
+}
+.notif-item:last-child { border-bottom: none; }
+
+/* النقطة تؤكّد حالة "غير مقروء" التي يحملها النص أصلاً — لا تنقلها وحدها */
+.notif-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: transparent;
+    margin-top: 7px;
+    flex-shrink: 0;
+}
+.notif-item.is-unread .notif-dot { background: var(--accent); }
+.notif-item.is-unread .notif-text { font-weight: var(--weight-semi); color: var(--text-primary); }
+
+.notif-text { font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.5; }
+.notif-time { font-size: var(--text-2xs); color: var(--text-muted); margin-top: 2px; display: block; }
+
+/* الإجراء الأساسي الوحيد في الشريط: كتلة عنّابية مصمتة */
 .btn-student-card {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.5rem 1.1rem;
-    border-radius: var(--radius-md);
-    background: linear-gradient(135deg, var(--muc-maroon), var(--muc-bright-red));
-    color: #FFFFFF;
-    font-size: 0.84rem;
-    font-weight: 700;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: var(--shadow-brand);
-    transition: all var(--transition-fast);
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: var(--tap-min);
+    padding-inline: var(--space-5);
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semi);
+    box-shadow: 0 4px 14px -4px var(--accent-glow);
+    transition: background var(--transition-fast), transform var(--transition-spring);
 }
-.btn-student-card:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 12px 28px -6px rgba(139, 21, 56, 0.6);
-}
+.btn-student-card:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.btn-student-card:active { transform: translateY(0) scale(0.97); }
 
 /* ==========================================================================
-   CONTENT VIEW CONTAINER
+   حاوية المحتوى
    ========================================================================== */
 #main-content {
     flex: 1;
-    padding: 1.75rem 1.5rem 6rem;
-    max-width: 1400px;
     width: 100%;
+    max-width: var(--container-max);
     margin: 0 auto;
+    padding: var(--space-10) var(--space-6) var(--space-16);
 }
 
-/* Tab Panels Visibility */
-.tab-content {
-    display: none;
-}
-.tab-content.active {
-    display: block;
-    animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
 /* ==========================================================================
-   MOBILE BOTTOM NAVIGATION DOCK
-   ========================================================================== */
-#mobile-dock {
-    display: none;
-    position: fixed;
-    bottom: 12px;
-    left: 12px;
-    right: 12px;
-    z-index: 45;
-    background: var(--bg-glass);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-xl);
-    padding: 0.4rem 0.6rem;
-    box-shadow: var(--shadow-lg);
-}
-
-.dock-menu {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    width: 100%;
-    gap: 0.25rem;
-}
-
-.dock-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.2rem;
-    padding: 0.45rem 0.2rem;
-    border-radius: var(--radius-lg);
-    color: var(--text-secondary);
-    font-size: 0.68rem;
-    font-weight: 600;
-    transition: all var(--transition-fast);
-}
-
-.dock-item i {
-    font-size: 1.15rem;
-    transition: transform var(--transition-fast);
-}
-
-.dock-item.active {
-    color: #FFFFFF;
-    background: linear-gradient(135deg, var(--muc-maroon), var(--muc-bright-red));
-    box-shadow: var(--shadow-brand);
-}
-.dock-item.active i {
-    transform: scale(1.15);
-}
-
-/* ==========================================================================
-   MOBILE SIDEBAR DRAWER OVERLAY
+   غطاء الدرج
    ========================================================================== */
 .drawer-backdrop {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(4px);
+    background: rgba(13, 13, 16, 0.5);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     z-index: 50;
     opacity: 0;
     transition: opacity var(--transition-smooth);
 }
-.drawer-backdrop.active {
-    display: block;
-    opacity: 1;
-}
-
-/* Mobile Brand Logo in Topbar (hidden by default on desktop) */
-.topbar-mobile-logo {
-    display: none;
-    align-items: center;
-    gap: 0.5rem;
-}
-.topbar-logo-img {
-    height: 38px;
-    width: auto;
-    object-fit: contain;
-}
+.drawer-backdrop.active { display: block; opacity: 1; }
 
 /* ==========================================================================
-   RESPONSIVE MEDIA QUERIES
+   الاستجابة
+   ==========================================================================
+   لا شريط سفلي: القائمة نفسها تتحول إلى درج ينزلق، فيبقى التنقل
+   واحداً من 320px حتى الشاشات الكبيرة.
    ========================================================================== */
+@media (max-width: 1200px) {
+    :root { --sidebar-width: 240px; }
+}
+
 @media (max-width: 1024px) {
-    :root {
-        --sidebar-width: 240px;
+    #sidebar {
+        position: fixed;
+        inset-block: 0;
+        inset-inline-start: 0;
+        z-index: 60;
+        width: min(300px, 84vw);
+        height: 100dvh;
+        padding-top: calc(var(--space-6) + var(--tg-safe-top));
+        border-inline-end: none;
+        border-start-end-radius: var(--radius-2xl);
+        border-end-end-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-overlay);
+        /* يخرج خارج الحافة الابتدائية: يعمل في RTL وLTR معاً */
+        transform: translateX(-100%);
     }
-    #main-content {
-        padding: 1.25rem 1rem 6rem;
-    }
+    [dir="rtl"] #sidebar { transform: translateX(100%); }
+
+    #sidebar.mobile-open,
+    [dir="rtl"] #sidebar.mobile-open { transform: translateX(0); }
+
+    .mobile-nav-toggle { display: flex; }
+    .drawer-close-btn { display: flex; }
+    .sidebar-toggle-btn { display: none; }
+
+    /* الطي لا معنى له في وضع الدرج: يُلغى أثره */
+    #sidebar.collapsed { width: min(300px, 84vw); padding-inline: var(--space-5); }
+    #sidebar.collapsed .sidebar-brand-text,
+    #sidebar.collapsed .student-preview-info { display: flex !important; }
+    #sidebar.collapsed .nav-text,
+    #sidebar.collapsed .nav-badge,
+    #sidebar.collapsed .nav-category-label,
+    #sidebar.collapsed .nav-external-icon { display: block !important; }
+    #sidebar.collapsed .sidebar-header,
+    #sidebar.collapsed .sidebar-logo-link,
+    #sidebar.collapsed .nav-link { justify-content: flex-start; gap: var(--space-3); }
+    #sidebar.collapsed .nav-link i { width: 20px; }
+
+    #main-content { padding: var(--space-8) var(--space-5) var(--space-12); }
 }
 
 @media (max-width: 768px) {
-    /* Hide side panel/menu completely on mobile - only bottom nav is used */
-    #sidebar {
-        display: none !important;
-    }
+    .topbar-mobile-logo { display: flex; }
+    .academic-term-chip { display: none; }
+    .btn-student-card span { display: none; }
+    .btn-student-card { padding-inline: var(--space-3); }
+    #topbar { padding-inline: var(--space-4); }
+    #main-content { padding: var(--space-6) var(--space-4) var(--space-10); }
+}
 
-    /* Hide hamburger menu button */
-    .mobile-nav-toggle {
-        display: none !important;
-    }
-
-    /* Hide drawer backdrop */
-    .drawer-backdrop {
-        display: none !important;
-    }
-
-    /* Show university logo in mobile topbar */
-    .topbar-mobile-logo {
-        display: flex;
-    }
-
+@media (max-width: 560px) {
+    .lang-label { display: none; }
+    .utility-btn { padding-inline: var(--space-2); }
+    .topbar-faculty-subtitle { display: none; }
     .topbar-faculty-title {
-        font-size: 0.88rem;
-    }
-    .topbar-faculty-subtitle {
-        font-size: 0.7rem;
-    }
-
-    .academic-term-chip {
-        display: none;
-    }
-
-    /* Dedicated clean bottom navigation dock for mobile */
-    #mobile-dock {
-        display: flex;
-    }
-
-    .btn-student-card span {
-        display: none;
-    }
-    .btn-student-card {
-        padding: 0.5rem 0.75rem;
-    }
-
-    #topbar {
-        padding: 0 0.85rem;
+        font-size: var(--text-base);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 
 /* ==========================================================================
-   TELEGRAM MINI APP / FULLSCREEN MODE
+   وضع تيليجرام ملء الشاشة
    ========================================================================== */
-
-:root {
-    /* تُحدَّث من telegram.js؛ صفر في المتصفح العادي */
-    --tg-safe-top: 0px;
-    --tg-safe-bottom: 0px;
-}
-
-/* في وضع ملء الشاشة يمتد المحتوى تحت شريط حالة الجهاز وزر إغلاق تيليجرام،
-   فيُزاح الشريط العلوي للأسفل بمقدار المساحة الآمنة. */
 .tg-fullscreen #topbar {
     height: calc(var(--topbar-height) + var(--tg-safe-top));
     padding-top: var(--tg-safe-top);
 }
-
-/* زر الإغلاق والقائمة يظهران أعلى اليسار في RTL: نترك لهما فراغاً */
-.tg-fullscreen .topbar-end {
-    padding-inline-start: 3.25rem;
-}
-
-.tg-fullscreen #sidebar {
-    padding-top: calc(1.5rem + var(--tg-safe-top));
-}
-
-/* شريط التنقل السفلي يرتفع فوق مؤشر الشاشة الرئيسية */
-.tg-fullscreen #mobile-dock {
-    bottom: calc(12px + var(--tg-safe-bottom));
-}
-
-.tg-fullscreen #main-content {
-    padding-bottom: calc(6rem + var(--tg-safe-bottom));
-}
-
-/* داخل تيليجرام لا يوجد شريط عنوان متصفح: امنع سحب الصفحة/التحديد العرضي */
-.tg-miniapp body {
-    overscroll-behavior-y: contain;
-}
+.tg-fullscreen .topbar-end { padding-inline-start: 3.25rem; }
+.tg-fullscreen #main-content { padding-bottom: calc(var(--space-16) + var(--tg-safe-bottom)); }
+.tg-miniapp body { overscroll-behavior-y: contain; }

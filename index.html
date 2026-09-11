@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="dark">
+<html lang="ar" dir="rtl" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#09080E">
+    <meta name="theme-color" content="#F6F6F9">
     <title>جامعة مايو - كلية الحاسبات والذكاء الاصطناعي | MUC Student Portal</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/images/logo.png">
 
-    <!-- Google Fonts: Cairo & IBM Plex Sans Arabic -->
+    <!-- الطباعة: Cairo — خط عربي متغيّر (200–1000)
+         يُستعمل للعناوين والنص والأرقام معاً: عائلة واحدة بأوزان متعدّدة
+         تعطي تسلسلاً واضحاً دون تنافر بين خطّين. -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Telegram Mini App SDK (must load before assets/js/telegram.js) -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -27,13 +29,12 @@
 </head>
 <body>
 
+    <!-- ==================== SKIP LINK ==================== -->
+    <!-- أول ما يصله التركيز: يقفز فوق التنقل مباشرة إلى المحتوى -->
+    <a href="#main-content" class="skip-link" data-i18n="skip_to_content">تخطي إلى المحتوى الرئيسي</a>
+
     <!-- ==================== AMBIENT BACKGROUND GLOWS ==================== -->
-    <div class="ambient-bg" aria-hidden="true">
-        <div class="ambient-orb ambient-orb-1"></div>
-        <div class="ambient-orb ambient-orb-2"></div>
-        <div class="ambient-orb ambient-orb-3"></div>
-        <div class="ambient-grid"></div>
-    </div>
+    <div class="page-rule-bg" aria-hidden="true"></div>
 
     <!-- ==================== MOBILE DRAWER BACKDROP ==================== -->
     <div id="drawer-backdrop" class="drawer-backdrop"></div>
@@ -43,7 +44,13 @@
 
         <!-- ==================== SIDE PANEL (SIDEBAR) ==================== -->
         <aside id="sidebar" role="navigation" aria-label="Main Navigation">
-            
+
+            <!-- إغلاق الدرج: يظهر على الشاشات الصغيرة فقط -->
+            <button id="drawer-close-btn" class="drawer-close-btn" type="button"
+                    aria-label="إغلاق القائمة | Close navigation menu">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+
             <!-- Top: University Brand -->
             <div>
                 <div class="sidebar-header">
@@ -63,7 +70,7 @@
                     <div class="nav-category-label" data-i18n="nav_category_academic">الشؤون الأكاديمية</div>
 
                     <!-- Home / Dashboard -->
-                    <a href="#home" class="nav-link active" data-tab="home" title="الرئيسية | Dashboard">
+                    <a href="#home" class="nav-link active" data-tab="home" aria-current="page" title="الرئيسية | Dashboard">
                         <i class="fa-solid fa-house"></i>
                         <span class="nav-text" data-i18n="nav_dashboard">الرئيسية</span>
                     </a>
@@ -123,7 +130,10 @@
             </button>
 
             <!-- Bottom: Student Quick ID Card Trigger -->
-            <div class="sidebar-student-card" onclick="openStudentCardModal()" title="View Digital ID">
+            <!-- عرض هوية فقط، لا مدخل ثانٍ للبطاقة.
+                 المدخل الوحيد هو زر الشريط العلوي: البطاقة تُستعمل عند
+                 بوابات الحرم، فيجب أن تُفتح بضغطة واحدة دون فتح الدرج. -->
+            <div class="sidebar-student-card">
                 <div class="student-avatar-wrap">
                     <div class="student-avatar">
                         <img src="assets/images/profile.jpeg" alt=""
@@ -135,7 +145,6 @@
                     <div class="student-preview-name" data-i18n="student_name">عبدالمجيد خيري</div>
                     <div class="student-preview-id">ID: 202688412</div>
                 </div>
-                <i class="fa-solid fa-id-card text-muc-gold" style="font-size: 1.1rem;"></i>
             </div>
 
         </aside>
@@ -148,6 +157,15 @@
                 
                 <!-- Start / Left -->
                 <div class="topbar-start">
+                    <!-- فتح القائمة الجانبية كدرج على الشاشات الصغيرة -->
+                    <button id="mobile-menu-btn" class="mobile-nav-toggle" type="button"
+                            aria-expanded="false" aria-controls="sidebar"
+                            aria-label="فتح قائمة التنقل | Open navigation menu">
+                        <span class="hamburger-lines" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                        </span>
+                    </button>
+
                     <!-- Mobile Logo (shown only on mobile) -->
                     <a href="#home" class="topbar-mobile-logo" onclick="switchTab('home'); return false;" title="MUC">
                         <img src="assets/images/logo.png" alt="MUC Logo" class="topbar-logo-img">
@@ -169,65 +187,137 @@
 
                 <!-- End / Right Actions -->
                 <div class="topbar-end">
-                    <!-- Language Switcher -->
-                    <button id="lang-toggle-btn" class="action-btn action-btn-pill" onclick="toggleLanguage()" title="Switch Language">
-                        <i class="fa-solid fa-language"></i>
-                        <span class="lang-label">English</span>
-                    </button>
 
-                    <!-- Theme Toggle (Dark / Light) -->
-                    <button id="theme-toggle-btn" class="action-btn" onclick="toggleTheme()" title="Toggle Theme">
-                        <i id="theme-toggle-icon" class="fa-solid fa-sun"></i>
-                    </button>
+                    <!-- أدوات مساعدة مجمّعة في كتلة واحدة:
+                         ثلاثة أزرار منفصلة كانت تتنافس بصرياً مع الإجراء
+                         الأساسي. تجميعها يجعل التسلسل واضحاً: مجموعة
+                         أدوات صامتة + زر أساسي واحد. -->
+                    <div class="utility-cluster">
 
-                    <!-- Notifications Button -->
-                    <button class="action-btn" onclick="showNotification('لا توجد تنبيهات غير مقروءة حالياً.')" title="Notifications">
-                        <i class="fa-solid fa-bell"></i>
-                        <span class="badge-dot"></span>
-                    </button>
+                        <!-- اللغة: يعرض اللغة التي سينتقل إليها -->
+                        <button id="lang-toggle-btn" class="utility-btn" type="button"
+                                onclick="toggleLanguage()"
+                                aria-label="التبديل إلى الإنجليزية | Switch to English">
+                            <span class="lang-label" aria-hidden="true">EN</span>
+                        </button>
+
+                        <span class="utility-divider" aria-hidden="true"></span>
+
+                        <!-- المظهر: زر ثنائي الحالة، والحالة تُعلن لا تُستنتج -->
+                        <button id="theme-toggle-btn" class="utility-btn" type="button"
+                                onclick="toggleTheme()"
+                                aria-pressed="false"
+                                aria-label="الوضع الداكن | Dark mode">
+                            <i id="theme-toggle-icon" class="fa-solid fa-moon" aria-hidden="true"></i>
+                        </button>
+
+                        <span class="utility-divider" aria-hidden="true"></span>
+
+                        <!-- التنبيهات: تفتح لوحة فعلية بدل رسالة عابرة -->
+                        <button id="notif-btn" class="utility-btn" type="button"
+                                aria-haspopup="true" aria-expanded="false"
+                                aria-controls="notif-panel"
+                                aria-label="التنبيهات، 2 غير مقروءة | Notifications, 2 unread">
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span class="notif-count" aria-hidden="true">2</span>
+                        </button>
+                    </div>
 
                     <!-- Digital ID Modal Trigger -->
-                    <button class="btn-student-card" onclick="openStudentCardModal()" title="View Digital Student ID">
-                        <i class="fa-solid fa-id-card"></i>
+                    <button class="btn-student-card" onclick="openStudentCardModal()"
+                            type="button" title="View Digital Student ID">
+                        <i class="fa-solid fa-id-card" aria-hidden="true"></i>
                         <span data-i18n="digital_id">البطاقة الرقمية</span>
                     </button>
+                </div>
+
+                <!-- لوحة التنبيهات -->
+                <div id="notif-panel" class="notif-panel" role="region"
+                     aria-labelledby="notif-panel-title" hidden>
+                    <div class="notif-panel-head">
+                        <h2 id="notif-panel-title" data-i18n="notif_title">التنبيهات</h2>
+                        <button type="button" class="notif-clear" onclick="clearNotifications()"
+                                data-i18n="notif_clear">تعليم الكل كمقروء</button>
+                    </div>
+                    <ul class="notif-list">
+                        <li class="notif-item is-unread">
+                            <span class="notif-dot" aria-hidden="true"></span>
+                            <div>
+                                <p class="notif-text" data-i18n="notif_1">تم رفع سلايدات محاضرة الشبكات العصبية (Lecture 4).</p>
+                                <time class="notif-time" datetime="2026-09-11T09:20" data-i18n="notif_1_time">منذ ٢٠ دقيقة</time>
+                            </div>
+                        </li>
+                        <li class="notif-item is-unread">
+                            <span class="notif-dot" aria-hidden="true"></span>
+                            <div>
+                                <p class="notif-text" data-i18n="notif_2">تذكير: امتحان تراكيب البيانات يوم ١٥ مايو، لجنة ٤.</p>
+                                <time class="notif-time" datetime="2026-09-11T08:00" data-i18n="notif_2_time">منذ ساعتين</time>
+                            </div>
+                        </li>
+                        <li class="notif-item">
+                            <span class="notif-dot" aria-hidden="true"></span>
+                            <div>
+                                <p class="notif-text" data-i18n="notif_3">تم تحديث الجدول الدراسي لقسم الذكاء الاصطناعي.</p>
+                                <time class="notif-time" datetime="2026-09-10T14:00" data-i18n="notif_3_time">أمس</time>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </header>
 
             <!-- ==================== CONTENT PANELS (TABS) ==================== -->
-            <main id="main-content">
+            <main id="main-content" tabindex="-1">
 
                 <!-- -------------------------------------------------------------
                      TAB 1: HOME / DASHBOARD OVERVIEW
                      ------------------------------------------------------------- -->
                 <section id="tab-home" class="tab-content active">
 
-                    <!-- Hero Greeting Banner -->
+                    <!-- Hero: Student Record Summary -->
                     <div class="hero-banner">
                         <div class="hero-glow-orb"></div>
                         <div class="hero-content">
-                            <div>
-                                <div class="hero-welcome-tag">
-                                    <i class="fa-solid fa-sparkles text-muc-gold"></i>
-                                    <span data-i18n="hero_welcome_back">أهلاً بك مجدداً 👋</span>
+
+                            <div class="hero-identity">
+                                <img src="assets/images/profile.jpeg" alt=""
+                                     class="hero-avatar" decoding="async">
+                                <div>
+                                    <div class="hero-welcome-tag">
+                                        <span data-i18n="hero_welcome_back">بيانات الطالب</span>
+                                    </div>
+                                    <h1 class="hero-title" data-i18n="student_name">عبدالمجيد خيري</h1>
+                                    <p class="hero-subtitle" data-i18n="hero_student_sub">طالب بكالوريوس - المستوى الثاني • قسم الذكاء الاصطناعي</p>
                                 </div>
-                                <h1 class="hero-title" data-i18n="student_name">عبدالمجيد خيرت</h1>
-                                <p class="hero-subtitle" data-i18n="hero_student_sub">طالب بكالوريوس - المستوى الثاني • قسم الذكاء الاصطناعي</p>
                             </div>
 
-                            <!-- Hero Quick Stats -->
+                            <!-- الأرقام مع سياقها: رقم مجرّد لا يخبر الطالب بموقعه -->
                             <div class="hero-stats-grid">
-                                <div class="hero-stat-card">
+
+                                <div class="hero-stat-card hero-stat-primary">
                                     <span class="stat-label" data-i18n="stat_gpa_label">المعدل التراكمي (CGPA)</span>
                                     <span id="hero-stat-gpa" class="stat-num gold">3.62</span>
+                                    <span class="stat-meta">
+                                        <span data-i18n="stat_gpa_standing">تقدير ممتاز</span>
+                                        <span class="stat-trend" data-i18n="stat_gpa_trend">▲ ٠٫١٢ عن الفصل الماضي</span>
+                                    </span>
                                 </div>
+
                                 <div class="hero-stat-card">
                                     <span class="stat-label" data-i18n="stat_hours_label">الساعات المعتمدة</span>
-                                    <span class="stat-num">48</span>
+                                    <span class="stat-num"><bdi>48</bdi><span class="stat-of"><bdi>/ 144</bdi></span></span>
+                                    <!-- التقدّم نحو التخرّج: أهم سياق غاب عن الرقم -->
+                                    <div class="stat-progress" role="progressbar"
+                                         aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"
+                                         aria-label="التقدّم نحو التخرّج | Progress toward degree">
+                                        <span style="width: 33%"></span>
+                                    </div>
+                                    <span class="stat-meta" data-i18n="stat_hours_meta">أنجزت ٣٣٪ من الدرجة</span>
                                 </div>
+
                                 <div class="hero-stat-card">
                                     <span class="stat-label" data-i18n="stat_courses_label">مقررات الفصل</span>
-                                    <span class="stat-num green">5</span>
+                                    <span class="stat-num">5</span>
+                                    <span class="stat-meta" data-i18n="stat_courses_meta">١٥ ساعة مسجّلة</span>
                                 </div>
                             </div>
                         </div>
@@ -253,7 +343,7 @@
                         </div>
                         <div class="countdown-box">
                             <span class="countdown-label" data-i18n="countdown_label">متبقي:</span>
-                            <span id="countdown-timer" class="countdown-timer">00:24:15</span>
+                            <span id="countdown-timer" class="countdown-timer" role="timer" aria-live="off">00:24:15</span>
                         </div>
                     </div>
 
@@ -270,10 +360,11 @@
                     <div class="services-grid">
                         
                         <!-- Card 1: GPA Predictor -->
-                        <div class="glass-panel-interactive service-card service-purple" onclick="switchTab('gpa')">
+                        <!-- رابط لا div: يصله التركيز ويعمل بمفتاح Enter دون شيفرة إضافية -->
+                        <a href="#gpa" data-tab="gpa" class="glass-panel-interactive service-card service-purple">
                             <div class="service-card-top">
                                 <div class="service-icon-wrap">
-                                    <i class="fa-solid fa-calculator"></i>
+                                    <i class="fa-solid fa-calculator" aria-hidden="true"></i>
                                 </div>
                                 <span class="service-tag" data-i18n="badge_interactive">تفاعلي</span>
                             </div>
@@ -281,13 +372,13 @@
                                 <h4 class="service-title" data-i18n="card_gpa_title">حاسبة المعدل التراكمي</h4>
                                 <p class="service-desc" data-i18n="card_gpa_desc">توقع معدلك الفصلي والتراكمي بدقة مع نظام الساعات المعتمدة 4.0.</p>
                             </div>
-                        </div>
+                        </a>
 
                         <!-- Card 2: Digital Library -->
-                        <div class="glass-panel-interactive service-card service-blue" onclick="switchTab('library')">
+                        <a href="#library" data-tab="library" class="glass-panel-interactive service-card service-blue">
                             <div class="service-card-top">
                                 <div class="service-icon-wrap">
-                                    <i class="fa-solid fa-book-bookmark"></i>
+                                    <i class="fa-solid fa-book-bookmark" aria-hidden="true"></i>
                                 </div>
                                 <span class="service-tag" data-i18n="badge_daily_update">تحديث يومي</span>
                             </div>
@@ -295,13 +386,13 @@
                                 <h4 class="service-title" data-i18n="card_library_title">المكتبة والمحاضرات</h4>
                                 <p class="service-desc" data-i18n="card_library_desc">سلايدات المحاضرات، مذكرات السكاشن، وبنوك أسئلة الامتحانات السابقة.</p>
                             </div>
-                        </div>
+                        </a>
 
                         <!-- Card 3: Timetable -->
-                        <div class="glass-panel-interactive service-card service-amber" onclick="switchTab('schedule')">
+                        <a href="#schedule" data-tab="schedule" class="glass-panel-interactive service-card service-amber">
                             <div class="service-card-top">
                                 <div class="service-icon-wrap">
-                                    <i class="fa-solid fa-calendar-days"></i>
+                                    <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
                                 </div>
                                 <span class="service-tag" data-i18n="badge_organized">منظم</span>
                             </div>
@@ -309,13 +400,13 @@
                                 <h4 class="service-title" data-i18n="card_schedule_title">الجدول الدراسي الأسبوعي</h4>
                                 <p class="service-desc" data-i18n="card_schedule_desc">مواعيد المحاضرات والسكاشن وقاعات التدريس بمؤشرات تفاعلية.</p>
                             </div>
-                        </div>
+                        </a>
 
                         <!-- Card 4: AI Lab -->
-                        <div class="glass-panel-interactive service-card service-emerald" onclick="switchTab('ai')">
+                        <a href="#ai" data-tab="ai" class="glass-panel-interactive service-card service-emerald">
                             <div class="service-card-top">
                                 <div class="service-icon-wrap">
-                                    <i class="fa-solid fa-brain"></i>
+                                    <i class="fa-solid fa-brain" aria-hidden="true"></i>
                                 </div>
                                 <span class="service-tag" data-i18n="badge_ai_tag">ذكاء اصطناعي</span>
                             </div>
@@ -323,7 +414,7 @@
                                 <h4 class="service-title" data-i18n="card_ai_title">معمل البرمجة والذكاء الاصطناعي</h4>
                                 <p class="service-desc" data-i18n="card_ai_desc">مساعد ذكي لشرح الأكواد واكتشاف الأخطاء ومراجعة مفاهيم الخوارزميات.</p>
                             </div>
-                        </div>
+                        </a>
 
                         <!-- Card 5: Official SIS Portal -->
                         <a href="https://www.muc.edu.eg/ar" target="_blank" rel="noopener noreferrer" class="glass-panel-interactive service-card service-red">
@@ -352,30 +443,25 @@
                 <section id="tab-gpa" class="tab-content">
                     
                     <!-- Top Heading -->
-                    <div style="margin-bottom: 1.5rem;">
-                        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary);" data-i18n="gpa_title">حاسبة المعدل التراكمي (GPA Predictor)</h2>
-                        <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="gpa_subtitle">أدخل درجات موادك الحالية لحساب GPA المتوقع بنظام 4.0</p>
+                    <div class="page-header">
+                        <h2 data-i18n="gpa_title">حاسبة المعدل التراكمي (GPA Predictor)</h2>
+                        <p data-i18n="gpa_subtitle">أدخل درجات موادك الحالية لحساب GPA المتوقع بنظام 4.0</p>
                     </div>
 
                     <div class="gpa-card-layout">
                         
                         <!-- Left: Circular Gauge Card -->
                         <div class="glass-panel gpa-gauge-card">
-                            <span style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 1rem;" data-i18n="gpa_semester_label">المعدل الفصلي المتوقع</span>
+                            <span data-i18n="gpa_semester_label">المعدل الفصلي المتوقع</span>
 
                             <div class="gpa-ring-wrapper">
-                                <svg class="gpa-ring-svg" viewBox="0 0 170 170">
-                                    <defs>
-                                        <linearGradient id="gpaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" stop-color="var(--muc-maroon)" />
-                                            <stop offset="50%" stop-color="var(--muc-bright-red)" />
-                                            <stop offset="100%" stop-color="var(--muc-gold)" />
-                                        </linearGradient>
-                                    </defs>
+                                <!-- بلا تدرّج: الحلقة تُلوَّن بلون العلامة من الورقة،
+                                     فتتبع الوضع الفاتح والداكن تلقائياً. -->
+                                <svg class="gpa-ring-svg" viewBox="0 0 170 170" aria-hidden="true">
                                     <circle class="gpa-ring-bg" cx="85" cy="85" r="72" />
                                     <circle id="gpa-ring-fill" class="gpa-ring-fill" cx="85" cy="85" r="72" />
                                 </svg>
-                                <div class="gpa-ring-inner">
+                                <div class="gpa-ring-inner" role="status" aria-live="polite">
                                     <span id="gpa-metric-value" class="gpa-ring-val">3.78</span>
                                     <span class="gpa-ring-max">/ 4.00</span>
                                 </div>
@@ -436,9 +522,9 @@
                      ------------------------------------------------------------- -->
                 <section id="tab-schedule" class="tab-content">
                     
-                    <div style="margin-bottom: 1.5rem;">
-                        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary);" data-i18n="sched_title">الجدول الدراسي الأسبوعي</h2>
-                        <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="sched_subtitle">عرض القاعات ومواعيد المحاضرات والسكاشن حسب اليوم</p>
+                    <div class="page-header">
+                        <h2 data-i18n="sched_title">الجدول الدراسي الأسبوعي</h2>
+                        <p data-i18n="sched_subtitle">عرض القاعات ومواعيد المحاضرات والسكاشن حسب اليوم</p>
                     </div>
 
                     <!-- Day Navigation Pills -->
@@ -455,7 +541,7 @@
                     <div class="schedule-list">
                         
                         <!-- Item 1: Sun Lecture -->
-                        <div class="glass-panel schedule-item-card" data-day="sun">
+                        <div class="glass-panel schedule-item-card session-lecture" data-day="sun">
                             <div>
                                 <h3 class="schedule-course-title">تراكيب البيانات والمصفوفات (Data Structures)</h3>
                                 <div class="schedule-meta-row">
@@ -473,11 +559,11 @@
                                     </span>
                                 </div>
                             </div>
-                            <span class="session-type-badge" style="background: rgba(139, 21, 56, 0.2); color: var(--muc-bright-red); border-color: rgba(139, 21, 56, 0.4);" data-i18n="badge_lecture">محاضرة نظرية</span>
+                            <span class="session-type-badge session-lecture" data-i18n="badge_lecture">محاضرة نظرية</span>
                         </div>
 
                         <!-- Item 2: Mon Lab -->
-                        <div class="glass-panel schedule-item-card" data-day="mon" style="border-inline-start-color: var(--accent-emerald);">
+                        <div class="glass-panel schedule-item-card session-lab" data-day="mon">
                             <div>
                                 <h3 class="schedule-course-title">معمل البرمجة الكائنية المتقدمة (OOP Lab)</h3>
                                 <div class="schedule-meta-row">
@@ -495,11 +581,11 @@
                                     </span>
                                 </div>
                             </div>
-                            <span class="session-type-badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.4);" data-i18n="badge_lab">سكشن عملي</span>
+                            <span class="session-type-badge session-lab" data-i18n="badge_lab">سكشن عملي</span>
                         </div>
 
                         <!-- Item 3: Tue Lecture -->
-                        <div class="glass-panel schedule-item-card" data-day="tue">
+                        <div class="glass-panel schedule-item-card session-lecture" data-day="tue">
                             <div>
                                 <h3 class="schedule-course-title">الذكاء الاصطناعي والأنساق الخبيرة (AI & Expert Systems)</h3>
                                 <div class="schedule-meta-row">
@@ -517,11 +603,11 @@
                                     </span>
                                 </div>
                             </div>
-                            <span class="session-type-badge" style="background: rgba(139, 21, 56, 0.2); color: var(--muc-bright-red); border-color: rgba(139, 21, 56, 0.4);" data-i18n="badge_lecture">محاضرة نظرية</span>
+                            <span class="session-type-badge session-lecture" data-i18n="badge_lecture">محاضرة نظرية</span>
                         </div>
 
                         <!-- Item 4: Wed Tutorial -->
-                        <div class="glass-panel schedule-item-card" data-day="wed" style="border-inline-start-color: var(--accent-amber);">
+                        <div class="glass-panel schedule-item-card session-tutorial" data-day="wed">
                             <div>
                                 <h3 class="schedule-course-title">رياضيات متقطعة ونظرية المخططات (Discrete Math)</h3>
                                 <div class="schedule-meta-row">
@@ -539,7 +625,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <span class="session-type-badge" style="background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); border-color: rgba(245, 158, 11, 0.4);" data-i18n="badge_tutorial">تمرين</span>
+                            <span class="session-type-badge session-tutorial" data-i18n="badge_tutorial">تمرين</span>
                         </div>
 
                     </div>
@@ -551,19 +637,23 @@
                      ------------------------------------------------------------- -->
                 <section id="tab-library" class="tab-content">
                     
-                    <div style="margin-bottom: 1.5rem;">
-                        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary);" data-i18n="lib_title">مكتبة المواد الرقمية - MUC Drive</h2>
-                        <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="lib_subtitle">تصفح محاضراتك وسكاشنك وامتحانات السنين السابقة</p>
+                    <div class="page-header">
+                        <h2 data-i18n="lib_title">مكتبة المواد الرقمية - MUC Drive</h2>
+                        <p data-i18n="lib_subtitle">تصفح محاضراتك وسكاشنك وامتحانات السنين السابقة</p>
                     </div>
 
                     <!-- Search & Level Filter -->
                     <div class="library-filter-bar">
                         <div class="search-input-wrap">
                             <i class="fa-solid fa-magnifying-glass"></i>
-                            <input id="library-search-input" type="text" class="input-field search-input" placeholder="ابحث عن المحاضرة، الكود، أو الملخص..." data-i18n-placeholder="search_placeholder">
+                            <input id="library-search-input" type="search" class="input-field search-input"
+                                   placeholder="ابحث عن المحاضرة، الكود، أو الملخص..."
+                                   data-i18n-placeholder="search_placeholder"
+                                   aria-label="ابحث في المكتبة الرقمية | Search the library">
                         </div>
 
-                        <select id="library-level-select" class="input-field" style="max-width: 240px;">
+                        <select id="library-level-select" class="input-field" style="max-width: 240px;"
+                                aria-label="تصفية حسب المستوى الدراسي | Filter by level">
                             <option value="all" data-i18n="level_all">جميع المستويات</option>
                             <option value="level-1" data-i18n="level_1">المستوى الأول</option>
                             <option value="level-2" selected data-i18n="level_2">المستوى الثاني</option>
@@ -586,8 +676,9 @@
                                     <div class="resource-meta">تراكيب البيانات • PDF • 4.2 MB</div>
                                 </div>
                             </div>
-                            <button class="btn-download" onclick="triggerDownload('DataStructures_Algorithms.pdf')" title="Download">
-                                <i class="fa-solid fa-download"></i>
+                            <button class="btn-download" onclick="triggerDownload('DataStructures_Algorithms.pdf')"
+                                    type="button" aria-label="تنزيل: ملخص خوارزميات الترتيب والبحث">
+                                <i class="fa-solid fa-download" aria-hidden="true"></i>
                             </button>
                         </div>
 
@@ -602,8 +693,9 @@
                                     <div class="resource-meta">ذكاء اصطناعي • PPTX • 12.8 MB</div>
                                 </div>
                             </div>
-                            <button class="btn-download" onclick="triggerDownload('NeuralNetworks_Lec4.pptx')" title="Download">
-                                <i class="fa-solid fa-download"></i>
+                            <button class="btn-download" onclick="triggerDownload('NeuralNetworks_Lec4.pptx')"
+                                    type="button" aria-label="تنزيل: سلايدات الشبكات العصبية">
+                                <i class="fa-solid fa-download" aria-hidden="true"></i>
                             </button>
                         </div>
 
@@ -618,8 +710,9 @@
                                     <div class="resource-meta">برمجة C++ • ZIP • 1.5 MB</div>
                                 </div>
                             </div>
-                            <button class="btn-download" onclick="triggerDownload('OOP_Inheritance_Lab.zip')" title="Download">
-                                <i class="fa-solid fa-download"></i>
+                            <button class="btn-download" onclick="triggerDownload('OOP_Inheritance_Lab.zip')"
+                                    type="button" aria-label="تنزيل: شيت تطبيقات الـ OOP والوراثة">
+                                <i class="fa-solid fa-download" aria-hidden="true"></i>
                             </button>
                         </div>
 
@@ -634,8 +727,9 @@
                                     <div class="resource-meta">رياضيات متقطعة • PDF • 2.1 MB</div>
                                 </div>
                             </div>
-                            <button class="btn-download" onclick="triggerDownload('DiscreteMath_Midterm2025.pdf')" title="Download">
-                                <i class="fa-solid fa-download"></i>
+                            <button class="btn-download" onclick="triggerDownload('DiscreteMath_Midterm2025.pdf')"
+                                    type="button" aria-label="تنزيل: امتحان نصفي 2025 مع نموذج الإجابة">
+                                <i class="fa-solid fa-download" aria-hidden="true"></i>
                             </button>
                         </div>
 
@@ -649,12 +743,12 @@
                 <section id="tab-ai" class="tab-content">
                     
                     <div class="ai-lab-header">
-                        <div class="ai-icon-large">
+                        <div class="ai-icon-large" aria-hidden="true">
                             <i class="fa-solid fa-brain"></i>
                         </div>
-                        <div>
-                            <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary);" data-i18n="ai_title">معمل الذكاء الاصطناعي الأكاديمي</h2>
-                            <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="ai_subtitle">أدوات ذكية للمساعدة في حل الشيتات وشرح الأكواد واكتشاف الأخطاء</p>
+                        <div class="page-header" style="margin-bottom: 0;">
+                            <h2 data-i18n="ai_title">معمل الذكاء الاصطناعي الأكاديمي</h2>
+                            <p data-i18n="ai_subtitle">أدوات ذكية للمساعدة في حل الشيتات وشرح الأكواد واكتشاف الأخطاء</p>
                         </div>
                     </div>
 
@@ -668,17 +762,20 @@
 
                     <!-- Code Editor Box -->
                     <div class="glass-panel" style="padding: 1.5rem;">
-                        <textarea id="ai-code-editor" class="code-editor-box" placeholder="ألصق كود C++ أو Python أو اسأل أي سؤال أكاديمي هنا..." data-i18n-placeholder="ai_input_placeholder"></textarea>
+                        <textarea id="ai-code-editor" class="code-editor-box"
+                                  placeholder="ألصق كود C++ أو Python أو اسأل أي سؤال أكاديمي هنا..."
+                                  data-i18n-placeholder="ai_input_placeholder"
+                                  aria-label="الكود أو السؤال الأكاديمي | Your code or question"></textarea>
                         
                         <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
-                            <button id="btn-ai-analyze" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-emerald), #059669);">
+                            <button id="btn-ai-analyze" class="btn-primary" type="button">
                                 <i class="fa-solid fa-wand-magic-sparkles"></i>
                                 <span data-i18n="btn_ai_analyze">تحليل وشرح الكود بواسطة AI</span>
                             </button>
                         </div>
 
                         <!-- Output Box -->
-                        <div id="ai-output-box" class="ai-output-box"></div>
+                        <div id="ai-output-box" class="ai-output-box" role="status" aria-live="polite"></div>
                     </div>
 
                 </section>
@@ -688,9 +785,9 @@
                      ------------------------------------------------------------- -->
                 <section id="tab-exams" class="tab-content">
                     
-                    <div style="margin-bottom: 1.5rem;">
-                        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary);" data-i18n="exams_title">جدول امتحانات الفصل الدراسي</h2>
-                        <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="exams_subtitle">مواعيد امتحانات منتصف الفصل ونهاية الفصل وأرقام اللجان والجلوس</p>
+                    <div class="page-header">
+                        <h2 data-i18n="exams_title">جدول امتحانات الفصل الدراسي</h2>
+                        <p data-i18n="exams_subtitle">مواعيد امتحانات منتصف الفصل ونهاية الفصل وأرقام اللجان والجلوس</p>
                     </div>
 
                     <div class="glass-panel data-table-wrap">
@@ -742,42 +839,27 @@
 
     </div>
 
-    <!-- ==================== MOBILE BOTTOM QUICK DOCK ==================== -->
-    <nav id="mobile-dock" role="navigation" aria-label="Mobile Bottom Navigation">
-        <div class="dock-menu">
-            <button class="dock-item active" data-tab="home">
-                <i class="fa-solid fa-house"></i>
-                <span data-i18n="nav_dashboard">الرئيسية</span>
-            </button>
-            <button class="dock-item" data-tab="gpa">
-                <i class="fa-solid fa-calculator"></i>
-                <span data-i18n="nav_gpa">المعدل</span>
-            </button>
-            <button class="dock-item" data-tab="schedule">
-                <i class="fa-solid fa-calendar-days"></i>
-                <span data-i18n="nav_schedule">الجدول</span>
-            </button>
-            <button class="dock-item" data-tab="library">
-                <i class="fa-solid fa-book-bookmark"></i>
-                <span data-i18n="nav_library">المكتبة</span>
-            </button>
-            <button class="dock-item" data-tab="ai">
-                <i class="fa-solid fa-brain"></i>
-                <span data-i18n="nav_ai">الذكاء</span>
-            </button>
-        </div>
-    </nav>
-
     <!-- ==================== DIGITAL STUDENT ID CARD MODAL (3D FLIP) ==================== -->
-    <div id="student-card-modal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div id="student-card-modal" class="modal-backdrop" role="dialog" aria-modal="true"
+         aria-labelledby="id-modal-heading">
         <div class="modal-dialog">
-            
-            <button class="modal-close-btn" onclick="closeStudentCardModal()" title="Close ID Card">
-                <i class="fa-solid fa-xmark"></i>
+
+            <!-- اسم منطوق للحوار: aria-modal وحده لا يخبر قارئ الشاشة بما فُتح -->
+            <h2 id="id-modal-heading" class="sr-only" data-i18n="id_modal_title">
+                بطاقة الطالب الرقمية
+            </h2>
+
+            <button class="modal-close-btn" onclick="closeStudentCardModal()"
+                    type="button" title="Close ID Card"
+                    aria-label="إغلاق البطاقة | Close ID card">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
             </button>
 
             <!-- 3D Perspective Card -->
-            <div id="id-card-flip" class="id-card-perspective" title="Click to flip card">
+            <!-- زر لا div: القلب كان متاحاً للفأرة فقط -->
+            <button id="id-card-flip" class="id-card-perspective" type="button"
+                    aria-pressed="false"
+                    aria-label="اقلب البطاقة لعرض رمز الدخول | Flip card to show access code">
                 <div id="id-card-inner" class="id-card-inner">
                     
                     <!-- ================= FRONT SIDE ================= -->
@@ -845,11 +927,11 @@
                     </div>
 
                 </div>
-            </div>
+            </button>
 
             <!-- Hint text -->
             <div class="id-flip-hint">
-                <i class="fa-solid fa-rotate text-muc-gold"></i>
+                <i class="fa-solid fa-rotate text-muc-gold" aria-hidden="true"></i>
                 <span data-i18n="id_flip_prompt">اضغط على البطاقة لقلبها (3D)</span>
             </div>
 
@@ -857,11 +939,16 @@
     </div>
 
     <!-- ==================== SCRIPTS ==================== -->
+    <!-- GSAP: يُحمَّل قبل motion.js. الحركة تحسين اختياري —
+         إن أخفق التحميل تُعرض الصفحة كاملة وساكنة. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+
     <script src="assets/js/telegram.js"></script>
     <script src="assets/js/i18n.js"></script>
     <script src="assets/js/theme.js"></script>
     <script src="assets/js/gpa.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/motion.js" defer></script>
 
 </body>
 </html>

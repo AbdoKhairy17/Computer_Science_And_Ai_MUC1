@@ -31,47 +31,94 @@ function saveCoursesToStorage() {
     } catch (e) {}
 }
 
+const GRADE_OPTIONS = [
+    [4.0, 'A+ (4.00)'], [3.7, 'A (3.70)'],  [3.3, 'B+ (3.30)'],
+    [3.0, 'B (3.00)'],  [2.7, 'C+ (2.70)'], [2.4, 'C (2.40)'],
+    [2.0, 'D+ (2.00)'], [1.7, 'D (1.70)'],  [0.0, 'F (0.00)']
+];
+
+/* بناء الصف بعُقد DOM بدل innerHTML.
+   اسم المقرر يكتبه المستخدم ويُحفظ في localStorage: تمريره داخل
+   value="${...}" كان يسمح لعلامة اقتباس واحدة بكسر السمة وحقن وسوم. */
+function buildCourseRow(course, idx) {
+    const row = document.createElement('div');
+    row.className = 'gpa-row-item';
+
+    // --- اسم المقرر ---
+    const nameCell = document.createElement('div');
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.className = 'input-field';
+    nameInput.value = course.name;           // كنص، لا كـ HTML
+    // الحقول كانت بلا اسم منطوق: قارئ الشاشة ينطقها "حقل نص، فارغ"
+    nameInput.setAttribute('aria-label', `اسم المقرر ${idx + 1}`);
+    nameInput.addEventListener('change', () => {
+        updateCourseField(idx, 'name', nameInput.value);
+    });
+    nameCell.appendChild(nameInput);
+
+    // --- الساعات المعتمدة ---
+    const hoursCell = document.createElement('div');
+    const hoursSelect = document.createElement('select');
+    hoursSelect.className = 'input-field';
+    hoursSelect.setAttribute('aria-label', `الساعات المعتمدة للمقرر ${idx + 1}`);
+    [1, 2, 3, 4].forEach(h => {
+        const opt = document.createElement('option');
+        opt.value = String(h);
+        opt.textContent = String(h);
+        opt.selected = course.hours === h;
+        hoursSelect.appendChild(opt);
+    });
+    hoursSelect.addEventListener('change', () => {
+        updateCourseField(idx, 'hours', hoursSelect.value);
+    });
+    hoursCell.appendChild(hoursSelect);
+
+    // --- التقدير ---
+    const gradeCell = document.createElement('div');
+    const gradeSelect = document.createElement('select');
+    gradeSelect.className = 'input-field';
+    gradeSelect.setAttribute('aria-label', `تقدير المقرر ${idx + 1}`);
+    GRADE_OPTIONS.forEach(([value, label]) => {
+        const opt = document.createElement('option');
+        opt.value = value.toFixed(1);
+        opt.textContent = label;
+        opt.selected = course.grade === value;
+        gradeSelect.appendChild(opt);
+    });
+    gradeSelect.addEventListener('change', () => {
+        updateCourseField(idx, 'grade', gradeSelect.value);
+    });
+    gradeCell.appendChild(gradeSelect);
+
+    // --- زر الحذف ---
+    const actionCell = document.createElement('div');
+    actionCell.style.display = 'flex';
+    actionCell.style.justifyContent = 'center';
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'btn-icon-danger';
+    // الاسم المنطوق يذكر المقرر: "حذف" وحدها لا تخبر أيّ صف
+    removeBtn.setAttribute('aria-label', `حذف المقرر: ${course.name}`);
+    removeBtn.title = 'Remove';
+    const trashIcon = document.createElement('i');
+    trashIcon.className = 'fa-solid fa-trash-can';
+    trashIcon.setAttribute('aria-hidden', 'true');
+    removeBtn.appendChild(trashIcon);
+    removeBtn.addEventListener('click', () => removeCourseRow(idx));
+    actionCell.appendChild(removeBtn);
+
+    row.append(nameCell, hoursCell, gradeCell, actionCell);
+    return row;
+}
+
 function renderCourseRows() {
     const container = document.getElementById('gpa-courses-list');
     if (!container) return;
 
-    container.innerHTML = '';
-
+    container.textContent = '';
     studentCourses.forEach((c, idx) => {
-        const row = document.createElement('div');
-        row.className = 'gpa-row-item';
-        row.innerHTML = `
-            <div>
-                <input type="text" class="input-field" value="${c.name}" onchange="updateCourseField(${idx}, 'name', this.value)">
-            </div>
-            <div>
-                <select class="input-field" onchange="updateCourseField(${idx}, 'hours', this.value)">
-                    <option value="1" ${c.hours === 1 ? 'selected' : ''}>1</option>
-                    <option value="2" ${c.hours === 2 ? 'selected' : ''}>2</option>
-                    <option value="3" ${c.hours === 3 ? 'selected' : ''}>3</option>
-                    <option value="4" ${c.hours === 4 ? 'selected' : ''}>4</option>
-                </select>
-            </div>
-            <div>
-                <select class="input-field" onchange="updateCourseField(${idx}, 'grade', this.value)">
-                    <option value="4.0" ${c.grade === 4.0 ? 'selected' : ''}>A+ (4.00)</option>
-                    <option value="3.7" ${c.grade === 3.7 ? 'selected' : ''}>A (3.70)</option>
-                    <option value="3.3" ${c.grade === 3.3 ? 'selected' : ''}>B+ (3.30)</option>
-                    <option value="3.0" ${c.grade === 3.0 ? 'selected' : ''}>B (3.00)</option>
-                    <option value="2.7" ${c.grade === 2.7 ? 'selected' : ''}>C+ (2.70)</option>
-                    <option value="2.4" ${c.grade === 2.4 ? 'selected' : ''}>C (2.40)</option>
-                    <option value="2.0" ${c.grade === 2.0 ? 'selected' : ''}>D+ (2.00)</option>
-                    <option value="1.7" ${c.grade === 1.7 ? 'selected' : ''}>D (1.70)</option>
-                    <option value="0.0" ${c.grade === 0.0 ? 'selected' : ''}>F (0.00)</option>
-                </select>
-            </div>
-            <div style="display: flex; justify-content: center;">
-                <button type="button" class="btn-icon-danger" onclick="removeCourseRow(${idx})" title="Remove">
-                    <i class="fa-solid fa-trash-can"></i>
-                </button>
-            </div>
-        `;
-        container.appendChild(row);
+        container.appendChild(buildCourseRow(c, idx));
     });
 
     calculateGpaMetrics();
@@ -101,7 +148,10 @@ function addCourseRow() {
 
 function removeCourseRow(idx) {
     if (studentCourses.length <= 1) {
-        alert(document.documentElement.getAttribute('lang') === 'en' ? "At least one course is required." : "يجب أن تحتوي الحاسبة على مادة واحدة على الأقل.");
+        const isEn = document.documentElement.getAttribute('lang') === 'en';
+        showNotification(isEn
+            ? 'At least one course is required.'
+            : 'يجب أن تحتوي الحاسبة على مادة واحدة على الأقل.');
         return;
     }
     studentCourses.splice(idx, 1);
@@ -121,9 +171,15 @@ function calculateGpaMetrics() {
     const calculatedGpa = totalCredits > 0 ? (totalQualityPoints / totalCredits) : 0.00;
     const gpaDisplay = calculatedGpa.toFixed(2);
 
-    // Update gauge text
+    // قيمة المؤشر: تُحسب أمام الطالب بدل أن تقفز فجأة
     const valElem = document.getElementById('gpa-metric-value');
-    if (valElem) valElem.textContent = gpaDisplay;
+    if (valElem) {
+        if (typeof window.animateNumber === 'function') {
+            window.animateNumber(valElem, calculatedGpa, 2);
+        } else {
+            valElem.textContent = gpaDisplay;
+        }
+    }
 
     // Update gauge SVG ring
     const ringFill = document.getElementById('gpa-ring-fill');
@@ -137,19 +193,25 @@ function calculateGpaMetrics() {
     const isEn = document.documentElement.getAttribute('lang') === 'en';
 
     if (standingElem) {
+        // الصنف يحمل لون النص والخلفية والحد معاً، فيبقيان متوافقين.
+        // ضبط اللون وحده كان يترك الخلفية خضراء دائماً.
+        let standingClass, standingText;
         if (calculatedGpa >= 3.65) {
-            standingElem.textContent = isEn ? "Standing: Excellent (Honors)" : "تقدير ممتاز مع مرتبة الشرف";
-            standingElem.style.color = "var(--accent-emerald)";
+            standingClass = 'standing-excellent';
+            standingText = isEn ? 'Standing: Excellent (Honors)' : 'تقدير ممتاز مع مرتبة الشرف';
         } else if (calculatedGpa >= 3.00) {
-            standingElem.textContent = isEn ? "Standing: Very Good" : "تقدير جيد جداً";
-            standingElem.style.color = "var(--accent-cyan)";
+            standingClass = 'standing-verygood';
+            standingText = isEn ? 'Standing: Very Good' : 'تقدير جيد جداً';
         } else if (calculatedGpa >= 2.50) {
-            standingElem.textContent = isEn ? "Standing: Good" : "تقدير جيد";
-            standingElem.style.color = "var(--accent-amber)";
+            standingClass = 'standing-good';
+            standingText = isEn ? 'Standing: Good' : 'تقدير جيد';
         } else {
-            standingElem.textContent = isEn ? "Standing: Pass" : "تقدير مقبول";
-            standingElem.style.color = "var(--muc-bright-red)";
+            standingClass = 'standing-pass';
+            standingText = isEn ? 'Standing: Pass' : 'تقدير مقبول';
         }
+        standingElem.className = 'gpa-standing-chip ' + standingClass;
+        standingElem.textContent = standingText;
+        standingElem.removeAttribute('style');
     }
 
     // Update Course count & credits summary
@@ -161,7 +223,13 @@ function calculateGpaMetrics() {
 
     // Update hero dashboard stat if exists
     const heroGpa = document.getElementById('hero-stat-gpa');
-    if (heroGpa) heroGpa.textContent = gpaDisplay;
+    if (heroGpa) {
+        if (typeof window.animateNumber === 'function') {
+            window.animateNumber(heroGpa, calculatedGpa, 2);
+        } else {
+            heroGpa.textContent = gpaDisplay;
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

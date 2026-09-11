@@ -14,7 +14,7 @@ from http.server import BaseHTTPRequestHandler
 # Set these in Vercel Environment Variables.
 #
 # TELEGRAM_BOT_TOKEN     = your NEW token from @BotFather
-# WEB_APP_URL            = https://codeartifact-2-ten.vercel.app/
+# WEB_APP_URL            = https://<your-app>.vercel.app/   (بشرطة مائلة في النهاية)
 # TELEGRAM_SECRET_TOKEN  = any random string you also pass to
 #                          setWebhook as ?secret_token=...
 #
@@ -29,7 +29,38 @@ SECRET_TOKEN = os.environ.get("TELEGRAM_SECRET_TOKEN", "")
 # TELEGRAM WEBHOOK
 # ============================================================
 
+# تيليجرام يعيد إرسال التحديث نفسه إن تأخّر الرد أو انقطع الاتصال،
+# فيصل نداء sendMessage مرتين ويستقبل الطالب رسالتين.
+#
+# حدود هذه الطريقة صريحة: الذاكرة تعيش داخل نسخة الدالة الدافئة فقط،
+# فإن أعاد تيليجرام الإرسال إلى نسخة جديدة (بدء بارد) لن يُلتقط التكرار.
+# المعالجة الكاملة تحتاج تخزيناً خارجياً (Vercel KV مثلاً)؛ هذه تغطّي
+# الحالة الشائعة بلا أي اعتماد إضافي.
+_SEEN_UPDATES = []
+_SEEN_LIMIT = 256
+
+
 class handler(BaseHTTPRequestHandler):
+
+    # --------------------------------------------------------
+    # هل رأينا هذا التحديث في هذه النسخة من قبل؟
+    # --------------------------------------------------------
+
+    def is_duplicate(self, update_id):
+
+        if update_id is None:
+            return False
+
+        if update_id in _SEEN_UPDATES:
+            return True
+
+        _SEEN_UPDATES.append(update_id)
+
+        # سقف ثابت للذاكرة: نتخلّص من الأقدم
+        if len(_SEEN_UPDATES) > _SEEN_LIMIT:
+            del _SEEN_UPDATES[:-_SEEN_LIMIT]
+
+        return False
 
     # --------------------------------------------------------
     # POST /api/webhook
@@ -72,10 +103,25 @@ class handler(BaseHTTPRequestHandler):
                 post_data.decode("utf-8")
             )
 
-            print("Telegram update:")
-            print(json.dumps(update, indent=2))
+            # لا نطبع جسم التحديث كاملاً: يحتوي نصوص الرسائل وأسماء
+            # المستخدمين ومعرّفاتهم، وتنتهي كلها في سجلّات Vercel.
+            print(
+                "Update %s (%s)" % (
+                    update.get("update_id"),
+                    ", ".join(
+                        k for k in update.keys()
+                        if k != "update_id"
+                    ) or "empty"
+                )
+            )
 
-            self.handle_update(update)
+            # لا نستعمل return هنا: الخروج المبكر يتخطّى رد 200 في نهاية
+            # الدالة، فيعتبر تيليجرام التسليم فاشلاً ويعيد المحاولة بلا
+            # نهاية — وهو بالضبط ما يفترض أن يمنعه منعُ التكرار.
+            if self.is_duplicate(update.get("update_id")):
+                print("Duplicate update, skipping.")
+            else:
+                self.handle_update(update)
 
         except Exception as e:
 
@@ -124,13 +170,17 @@ class handler(BaseHTTPRequestHandler):
 
         if not SECRET_TOKEN:
 
-            # No secret configured: nothing to check against.
+            # لا سرّ مضبوط = لا وسيلة للتحقق.
+            # كان هذا يُرجع True فيقبل أي طلب: نقطة النهاية عامة على
+            # الإنترنت، فمن يعرف الرابط يستطيع إرسال تحديثات مزوّرة
+            # ويجعل البوت يراسل أي محادثة. الإغلاق هو السلوك الصحيح،
+            # وهو ما يفعله /api/setup أصلاً في الحالة نفسها.
             print(
-                "WARNING: TELEGRAM_SECRET_TOKEN is not set, "
-                "the webhook is publicly callable."
+                "ERROR: TELEGRAM_SECRET_TOKEN is not set. "
+                "Refusing every update until it is configured."
             )
 
-            return True
+            return False
 
         received = self.headers.get(
             "X-Telegram-Bot-Api-Secret-Token",
@@ -213,7 +263,7 @@ class handler(BaseHTTPRequestHandler):
             self.send_text_message(
                 chat_id,
                 "Available commands:\n\n"
-                "/start - Open the MIU Student Portal\n"
+                "/start - Open the MUC Student Portal\n"
                 "/help - Show this help message"
             )
 

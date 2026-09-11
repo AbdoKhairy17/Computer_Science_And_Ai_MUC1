@@ -6,6 +6,25 @@
 
 const translations = {
     ar: {
+        // Accessibility
+        skip_to_content: "تخطي إلى المحتوى الرئيسي",
+
+        // Header + notifications
+        notif_title: "التنبيهات",
+        notif_clear: "تعليم الكل كمقروء",
+        notif_1: "تم رفع سلايدات محاضرة الشبكات العصبية (Lecture 4).",
+        notif_1_time: "منذ ٢٠ دقيقة",
+        notif_2: "تذكير: امتحان تراكيب البيانات يوم ١٥ مايو، لجنة ٤.",
+        notif_2_time: "منذ ساعتين",
+        notif_3: "تم تحديث الجدول الدراسي لقسم الذكاء الاصطناعي.",
+        notif_3_time: "أمس",
+
+        // Student record context
+        stat_gpa_standing: "تقدير ممتاز",
+        stat_gpa_trend: "▲ ٠٫١٢ عن الفصل الماضي",
+        stat_hours_meta: "أنجزت ٣٣٪ من الدرجة",
+        stat_courses_meta: "١٥ ساعة مسجّلة",
+
         // Brand & Header
         univ_name: "جامعة مايو بالقاهرة",
         faculty_name: "كلية الحاسبات والذكاء الاصطناعي",
@@ -31,7 +50,7 @@ const translations = {
         student_id_prefix: "ID: ",
 
         // Hero Greeting
-        hero_welcome_back: "أهلاً بك مجدداً 👋",
+        hero_welcome_back: "بيانات الطالب",
         hero_student_sub: "طالب بكالوريوس - المستوى الثاني • قسم الذكاء الاصطناعي",
         stat_gpa_label: "المعدل التراكمي (CGPA)",
         stat_hours_label: "الساعات المعتمدة",
@@ -142,6 +161,25 @@ const translations = {
     },
 
     en: {
+        // Accessibility
+        skip_to_content: "Skip to main content",
+
+        // Header + notifications
+        notif_title: "Notifications",
+        notif_clear: "Mark all as read",
+        notif_1: "Neural Networks lecture slides (Lecture 4) have been uploaded.",
+        notif_1_time: "20 minutes ago",
+        notif_2: "Reminder: Data Structures exam on 15 May, hall 4.",
+        notif_2_time: "2 hours ago",
+        notif_3: "The AI department timetable has been updated.",
+        notif_3_time: "Yesterday",
+
+        // Student record context
+        stat_gpa_standing: "Excellent standing",
+        stat_gpa_trend: "▲ 0.12 vs last term",
+        stat_hours_meta: "33% of the degree completed",
+        stat_courses_meta: "15 credit hours enrolled",
+
         // Brand & Header
         univ_name: "May University in Cairo",
         faculty_name: "Faculty of Computers & Artificial Intelligence",
@@ -167,7 +205,7 @@ const translations = {
         student_id_prefix: "ID: ",
 
         // Hero Greeting
-        hero_welcome_back: "Welcome back 👋",
+        hero_welcome_back: "Student Record",
         hero_student_sub: "Bachelor's Student - Level 2 • Dept. of Artificial Intelligence",
         stat_gpa_label: "Cumulative GPA",
         stat_hours_label: "Earned Credits",

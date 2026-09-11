@@ -12,7 +12,8 @@
         if (savedTheme === 'light' || savedTheme === 'dark') {
             return savedTheme;
         }
-        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        // "الورق" هو الوضع الأساسي: لا نتحول للداكن إلا بطلب صريح من النظام
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
 
     function applyTheme(theme) {
@@ -22,17 +23,25 @@
         // Update meta theme-color
         const metaColor = document.querySelector('meta[name="theme-color"]');
         if (metaColor) {
-            metaColor.setAttribute('content', theme === 'dark' ? '#09080E' : '#F4F6FB');
+            metaColor.setAttribute('content', theme === 'dark' ? '#12100E' : '#FBFAF7');
         }
 
-        // Update Theme Button Icon
+        // الأيقونة تعرض الوضع الذي سينتقل إليه الضغط
         const themeIcon = document.getElementById('theme-toggle-icon');
         if (themeIcon) {
-            if (theme === 'dark') {
-                themeIcon.className = 'fa-solid fa-sun';
-            } else {
-                themeIcon.className = 'fa-solid fa-moon';
-            }
+            themeIcon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+
+        // إشعار للمستمعين (شريط تيليجرام يتبع لون الخلفية)
+        window.dispatchEvent(new CustomEvent('muc:themechange', { detail: { theme: theme } }));
+
+        // الحالة تُعلن صراحةً بدل أن يُستنتج من شكل الأيقونة
+        const themeBtn = document.getElementById('theme-toggle-btn');
+        if (themeBtn) {
+            themeBtn.setAttribute('aria-pressed', String(theme === 'dark'));
+            themeBtn.setAttribute('aria-label',
+                theme === 'dark' ? 'التبديل إلى الوضع الفاتح | Switch to light mode'
+                                 : 'التبديل إلى الوضع الداكن | Switch to dark mode');
         }
     }
 
