@@ -18,7 +18,14 @@
 
     <!-- Telegram Mini App SDK (must load before assets/js/telegram.js) -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
+<!-- Telegram Mini App SDK (must load before assets/js/telegram.js) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+        }
+    </script>
     <!-- FontAwesome 6 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
