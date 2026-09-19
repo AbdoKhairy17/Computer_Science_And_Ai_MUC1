@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#F6F6F9">
+    <title>جامعة مايو - كلية الحاسبات والذكاء الاصطناعي | MUC Student Portal</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+
+    <!-- الطباعة: Cairo — خط عربي متغيّر (200–1000) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Telegram Mini App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+        }
+    </script>
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Modular CSS Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+<body>
+
+    <!-- ==================== SKIP LINK ==================== -->
+    <a href="#main-content" class="skip-link" data-i18n="skip_to_content">تخطي إلى المحتوى الرئيسي</a>
+
+    <!-- ==================== AMBIENT BACKGROUND GLOWS ==================== -->
+    <div class="page-rule-bg" aria-hidden="true"></div>
+
+    <!-- ==================== MOBILE DRAWER BACKDROP ==================== -->
+    <div id="drawer-backdrop" class="drawer-backdrop"></div>
+
+    <!-- ==================== MAIN APP LAYOUT ==================== -->
+    <div id="app-layout">
+
+        <!-- ==================== SIDE PANEL (SIDEBAR) ==================== -->
+        <aside id="sidebar" role="navigation" aria-label="Main Navigation">
+
+            <!-- إغلاق الدرج -->
+            <button id="drawer-close-btn" class="drawer-close-btn" type="button"
+                    aria-label="إغلاق القائمة | Close navigation menu">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+
+            <!-- Top: University Brand -->
+            <div>
+                <div class="sidebar-header">
+                    <a href="#" class="sidebar-logo-link" onclick="switchTab('home'); return false;">
+                        <img src="assets/images/logo.png" alt="MUC Crest" class="sidebar-logo-img">
+                        <div class="sidebar-brand-text">
+                            <span class="sidebar-brand-title" data-i18n="univ_name">جامعة مايو بالقاهرة</span>
+                            <span class="sidebar-brand-sub">
+                                <span data-i18n="faculty_name">كلية الحاسبات والذكاء الاصطناعي</span>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="sidebar-nav">
+                    <div class="nav-category-label" data-i18n="nav_category_academic">الشؤون الأكاديمية</div>
+
+                    <!-- Home / Dashboard -->
+                    <a href="#home" class="nav-link active" data-tab="home" aria-current="page" title="الرئيسية | Dashboard">
+                        <i class="fa-solid fa-house"></i>
+                        <span class="nav-text" data-i18n="nav_dashboard">الرئيسية</span>
+                    </a>
+
+                    <!-- GPA Predictor -->
+                    <a href="#gpa" class="nav-link" data-tab="gpa" title="حاسبة المعدل | GPA Predictor">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span class="nav-text" data-i18n="nav_gpa">حاسبة المعدل</span>
+                        <span class="nav-badge nav-badge--gpa">GPA</span>
+                    </a>
+
+                    <!-- Timetable -->
+                    <a href="#schedule" class="nav-link" data-tab="schedule" title="الجدول الدراسي | Timetable">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span class="nav-text" data-i18n="nav_schedule">الجدول الدراسي</span>
+                    </a>
+
+                    <!-- Digital Library -->
+                    <a href="#library" class="nav-link" data-tab="library" title="المكتبة والمحاضرات | Library">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                        <span class="nav-text" data-i18n="nav_library">المكتبة والمحاضرات</span>
+                        <span class="nav-badge nav-badge--drive">Drive</span>
+                    </a>
+
+                    <!-- AI Code Lab -->
+                    <a href="#ai" class="nav-link" data-tab="ai" title="معمل الذكاء الاصطناعي | AI Code Lab">
+                        <i class="fa-solid fa-brain"></i>
+                        <span class="nav-text" data-i18n="nav_ai">معمل الذكاء الاصطناعي</span>
+                        <span class="nav-badge nav-badge--ai">AI</span>
+                    </a>
+
+                    <!-- Exam Schedule -->
+                    <a href="#exams" class="nav-link" data-tab="exams" title="جدول الامتحانات | Exam Schedule">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                        <span class="nav-text" data-i18n="nav_exams">جدول الامتحانات</span>
+                    </a>
+
+                    <div class="nav-category-label" data-i18n="nav_category_links">روابط خارجية</div>
+
+                    <!-- Official SIS Portal External -->
+                    <a href="https://www.muc.edu.eg/ar" target="_blank" rel="noopener noreferrer" class="nav-link" title="بوابة SIS الرسمية">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="nav-text" data-i18n="nav_sis_portal">بوابة SIS الرسمية</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square nav-external-icon" style="font-size: 0.75rem; margin-inline-start: auto; width: auto;"></i>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Collapse handle -->
+            <button id="sidebar-toggle" class="sidebar-toggle-btn"
+                    type="button"
+                    aria-expanded="true"
+                    aria-controls="sidebar"
+                    title="طي القائمة الجانبية | Collapse sidebar">
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                <span class="sr-only" data-i18n="toggle_sidebar">طي القائمة الجانبية</span>
+            </button>
+
+            <!-- تم إزالة قسم الملف الشخصي الخاص بالطالب من هنا بنجاح -->
+
+        </aside>
+
+        <!-- ==================== MAIN WRAPPER ==================== -->
+        <div id="main-wrapper">
+
+            <!-- ==================== TOPBAR HEADER ==================== -->
+            <header id="topbar">
+                
+                <!-- Start / Left -->
+                <div class="topbar-start">
+                    <button id="mobile-menu-btn" class="mobile-nav-toggle" type="button"
+                            aria-expanded="false" aria-controls="sidebar"
+                            aria-label="فتح قائمة التنقل | Open navigation menu">
+                        <span class="hamburger-lines" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                        </span>
+                    </button>
+
+                    <a href="#home" class="topbar-mobile-logo" onclick="switchTab('home'); return false;" title="MUC">
+                        <img src="assets/images/logo.png" alt="MUC Logo" class="topbar-logo-img">
+                    </a>
+                    
+                    <div class="topbar-title-block">
+                        <div class="topbar-faculty-title">
+                            <span data-i18n="faculty_name">كلية الحاسبات والذكاء الاصطناعي</span>
+                        </div>
+                        <div class="topbar-faculty-subtitle" data-i18n="univ_name">جامعة مايو بالقاهرة</div>
+                    </div>
+                </div>
+
+                <!-- Center: Academic Semester Pill -->
+                <div class="academic-term-chip">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span data-i18n="current_term">ربيع 2026</span>
+                </div>
+
+                <!-- End / Right Actions -->
+                <div class="topbar-end">
+
+                    <div class="utility-cluster">
+                        <button id="lang-toggle-btn" class="utility-btn" type="button"
+                                onclick="toggleLanguage()"
+                                aria-label="التبديل إلى الإنجليزية | Switch to English">
+                            <span class="lang-label" aria-hidden="true">EN</span>
+                        </button>
+
+                        <span class="utility-divider" aria-hidden="true"></span>
+
+                        <button id="theme-toggle-btn" class="utility-btn" type="button"
+                                onclick="toggleTheme()"
+                                aria-pressed="false"
+                                aria-label="الوضع الداكن | Dark mode">
+                            <i id="theme-toggle-icon" class="fa-solid fa-moon" aria-hidden="true"></i>
+                        </button>
+
+                        <span class="utility-divider" aria-hidden="true"></span>
+
+                        <button id="notif-btn" class="utility-btn" type="button"
+                                aria-haspopup="true" aria-expanded="false"
+                                aria-controls="notif-panel"
+                                aria-label="التنبيهات، 2 غير مقروءة | Notifications, 2 unread">
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span class="notif-count" aria-hidden="true">2</span>
+                        </button>
+                    </div>
+
+                    <!-- تم إزالة زر البطاقة الرقمية من هنا بنجاح -->
+                </div>
+
+                <!-- لوحة التنبيهات -->
+                <div id="notif-panel" class="notif-panel" role="region"
+                     aria-labelledby="notif-panel-title" hidden>
+                    <div class="notif-panel-head">
+                        <h2 id="notif-panel-title" data-i18n="notif_title">التنبيهات</h2>
+                        <button type="button" class="notif-clear" onclick="clearNotifications()"
+                                data-i18n="notif_clear">تعليم الكل كمقروء</button>
+                    </div>
+                    <ul class="notif-list">
+                        <li class="notif-item is-unread">
+                            <span class="notif-dot" aria-hidden="true"></span>
+                            <div>
+                                <p class="notif-text" data-i18n="notif_1">تم رفع سلايدات محاضرة الشبكات العصبية (Lecture 4).</p>
+                                <time class="notif-time" datetime="2026-09-11T09:20" data-i18n="notif_1_time">منذ ٢٠ دقيقة</time>
+                            </div>
+                        </li>
+                        <li class="notif-item is-unread">
+                            <span class="notif-dot" aria-hidden="true"></span>
+                            <div>
+                                <p class="notif-text" data-i18n="notif_2">تذكير: امتحان تراكيب البيانات يوم ١٥ مايو، لجنة ٤.</p>
+                                <time class="notif-time" datetime="2026-09-11T08:00" data-i18n="notif_2_time">منذ ساعتين</time>
+                            </div>
+                        </li>
+                        <li class="notif-item">
+                            <span class="notif-dot" aria-hidden="true"></span>
+                            <div>
+                                <p class="notif-text" data-i18n="notif_3">تم تحديث الجدول الدراسي لقسم الذكاء الاصطناعي.</p>
+                                <time class="notif-time" datetime="2026-09-10T14:00" data-i18n="notif_3_time">أمس</time>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+
+            <!-- ==================== CONTENT PANELS (TABS) ==================== -->
+            <main id="main-content" tabindex="-1">
+
+                <!-- -------------------------------------------------------------
+                     TAB 1: HOME / DASHBOARD OVERVIEW
+                     ------------------------------------------------------------- -->
+                <section id="tab-home" class="tab-content active">
+
+                    <!-- Hero: General Portal Overview -->
+                    <div class="hero-banner">
+                        <div class="hero-glow-orb"></div>
+                        <div class="hero-content">
+
+                            <div class="hero-identity">
+                                <div>
+                                    <div class="hero-welcome-tag">
+                                        <span data-i18n="hero_welcome_back">بوابة الخدمات العامة</span>
+                                    </div>
+                                    <h1 class="hero-title">منصة كلية الحاسبات والذكاء الاصطناعي</h1>
+                                    <p class="hero-subtitle">النظام الأكاديمي الرقمي والمكتبة المركزية لطلاب جامعة مايو</p>
+                                </div>
+                            </div>
+
+                            <!-- إحصائيات عامة للموقع بدلاً من بيانات شخصية محددة -->
+                            <div class="hero-stats-grid">
+
+                                <div class="hero-stat-card hero-stat-primary">
+                                    <span class="stat-label">المقررات المتاحة</span>
+                                    <span class="stat-num gold">24</span>
+                                    <span class="stat-meta">
+                                        <span>جميع الأقسام الأكاديمية</span>
+                                    </span>
+                                </div>
+
+                                <div class="hero-stat-card">
+                                    <span class="stat-label">الملفات المرفوعة بالمكتبة</span>
+                                    <span class="stat-num">120+</span>
+                                    <span class="stat-meta">مذكرات، سلايدات، وشيتات</span>
+                                </div>
+
+                                <div class="hero-stat-card">
+                                    <span class="stat-label">مستويات الدراسة</span>
+                                    <span class="stat-num">4</span>
+                                    <span class="stat-meta">مستويات البكالوريوس</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Academic Notice Banner -->
+                    <div class="glass-panel live-notice-banner">
+                        <div class="live-notice-main">
+                            <div class="notice-icon-box">
+                                <i class="fa-solid fa-bell"></i>
+                            </div>
+                            <div>
+                                <div class="notice-tags">
+                                    <span class="notice-badge-red" data-i18n="notice_badge">تنبيه المواعيد</span>
+                                    <span class="live-indicator">
+                                        <span class="pulse-red-dot"></span>
+                                        <span data-i18n="notice_live_now">مباشر الآن</span>
+                                    </span>
+                                </div>
+                                <h2 class="notice-heading" data-i18n="notice_lecture_title">المحاضرة القادمة: الذكاء الاصطناعي والأنساق الخبيرة</h2>
+                                <p class="notice-details" data-i18n="notice_lecture_details">المدرج المركزي (C3) • الدكتور: أحمد العبد • الساعة 02:30 مساءً</p>
+                            </div>
+                        </div>
+                        <div class="countdown-box">
+                            <span class="countdown-label" data-i18n="countdown_label">متبقي:</span>
+                            <span id="countdown-timer" class="countdown-timer" role="timer" aria-live="off">00:24:15</span>
+                        </div>
+                    </div>
+
+                    <!-- Academic Services Grid Header -->
+                    <div class="services-section-header">
+                        <h3 class="services-title">
+                            <i class="fa-solid fa-shapes"></i>
+                            <span data-i18n="services_section_title">الخدمات الأكاديمية السريعة</span>
+                        </h3>
+                        <span class="services-count" data-i18n="services_count_text">5 خدمات تفاعلية</span>
+                    </div>
+
+                    <!-- Services Cards Grid -->
+                    <div class="services-grid">
+                        
+                        <!-- Card 1: GPA Predictor -->
+                        <a href="#gpa" data-tab="gpa" class="glass-panel-interactive service-card service-purple">
+                            <div class="service-card-top">
+                                <div class="service-icon-wrap">
+                                    <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+                                </div>
+                                <span class="service-tag" data-i18n="badge_interactive">تفاعلي</span>
+                            </div>
+                            <div>
+                                <h4 class="service-title" data-i18n="card_gpa_title">حاسبة المعدل التراكمي</h4>
+                                <p class="service-desc" data-i18n="card_gpa_desc">توقع معدلك الفصلي والتراكمي بدقة مع نظام الساعات المعتمدة 4.0.</p>
+                            </div>
+                        </a>
+
+                        <!-- Card 2: Digital Library -->
+                        <a href="#library" data-tab="library" class="glass-panel-interactive service-card service-blue">
+                            <div class="service-card-top">
+                                <div class="service-icon-wrap">
+                                    <i class="fa-solid fa-book-bookmark" aria-hidden="true"></i>
+                                </div>
+                                <span class="service-tag" data-i18n="badge_daily_update">تحديث يومي</span>
+                            </div>
+                            <div>
+                                <h4 class="service-title" data-i18n="card_library_title">المكتبة والمحاضرات</h4>
+                                <p class="service-desc" data-i18n="card_library_desc">سلايدات المحاضرات، مذكرات السكاشن، وبنوك أسئلة الامتحانات السابقة.</p>
+                            </div>
+                        </a>
+
+                        <!-- Card 3: Timetable -->
+                        <a href="#schedule" data-tab="schedule" class="glass-panel-interactive service-card service-amber">
+                            <div class="service-card-top">
+                                <div class="service-icon-wrap">
+                                    <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+                                </div>
+                                <span class="service-tag" data-i18n="badge_organized">منظم</span>
+                            </div>
+                            <div>
+                                <h4 class="service-title" data-i18n="card_schedule_title">الجدول الدراسي الأسبوعي</h4>
+                                <p class="service-desc" data-i18n="card_schedule_desc">مواعيد المحاضرات والسكاشن وقاعات التدريس بمؤشرات تفاعلية.</p>
+                            </div>
+                        </a>
+
+                        <!-- Card 4: AI Lab -->
+                        <a href="#ai" data-tab="ai" class="glass-panel-interactive service-card service-emerald">
+                            <div class="service-card-top">
+                                <div class="service-icon-wrap">
+                                    <i class="fa-solid fa-brain" aria-hidden="true"></i>
+                                </div>
+                                <span class="service-tag" data-i18n="badge_ai_tag">ذكاء اصطناعي</span>
+                            </div>
+                            <div>
+                                <h4 class="service-title" data-i18n="card_ai_title">معمل البرمجة والذكاء الاصطناعي</h4>
+                                <p class="service-desc" data-i18n="card_ai_desc">مساعد ذكي لشرح الأكواد واكتشاف الأخطاء ومراجعة مفاهيم الخوارزميات.</p>
+                            </div>
+                        </a>
+
+                        <!-- Card 5: Official SIS Portal -->
+                        <a href="https://www.muc.edu.eg/ar" target="_blank" rel="noopener noreferrer" class="glass-panel-interactive service-card service-red">
+                            <div class="service-card-top">
+                                <div class="service-icon-wrap">
+                                    <i class="fa-solid fa-globe"></i>
+                                </div>
+                                <span class="service-tag" data-i18n="badge_official">رسمي</span>
+                            </div>
+                            <div>
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <h4 class="service-title" data-i18n="card_portal_title">البوابة الأكاديمية الرسمية (SIS)</h4>
+                                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.9rem; color: var(--text-muted);"></i>
+                                </div>
+                                <p class="service-desc" data-i18n="card_portal_desc">الانتقال المباشر للنظام الأكاديمي الموحد للجامعة لتسجيل المقررات والنتائج.</p>
+                            </div>
+                        </a>
+
+                    </div>
+
+                </section>
+
+                <!-- -------------------------------------------------------------
+                     TAB 2: GPA PREDICTOR & CALCULATOR
+                     ------------------------------------------------------------- -->
+                <section id="tab-gpa" class="tab-content">
+                    
+                    <div class="page-header">
+                        <h2 data-i18n="gpa_title">حاسبة المعدل التراكمي (GPA Predictor)</h2>
+                        <p data-i18n="gpa_subtitle">أدخل درجات موادك الحالية لحساب GPA المتوقع بنظام 4.0</p>
+                    </div>
+
+                    <div class="gpa-card-layout">
+                        
+                        <div class="glass-panel gpa-gauge-card">
+                            <span data-i18n="gpa_semester_label">المعدل الفصلي المتوقع</span>
+
+                            <div class="gpa-ring-wrapper">
+                                <svg class="gpa-ring-svg" viewBox="0 0 170 170" aria-hidden="true">
+                                    <circle class="gpa-ring-bg" cx="85" cy="85" r="72" />
+                                    <circle id="gpa-ring-fill" class="gpa-ring-fill" cx="85" cy="85" r="72" />
+                                </svg>
+                                <div class="gpa-ring-inner" role="status" aria-live="polite">
+                                    <span id="gpa-metric-value" class="gpa-ring-val">3.78</span>
+                                    <span class="gpa-ring-max">/ 4.00</span>
+                                </div>
+                            </div>
+
+                            <div id="gpa-standing-badge" class="gpa-standing-chip" data-i18n="gpa_standing_excellent">
+                                تقدير ممتاز (Excellent)
+                            </div>
+
+                            <div class="gpa-meta-pills">
+                                <div class="gpa-meta-pill">
+                                    <span data-i18n="gpa_total_courses">عدد المواد:</span>
+                                    <b id="gpa-summary-courses">5</b>
+                                </div>
+                                <div class="gpa-meta-pill">
+                                    <span data-i18n="gpa_total_credits">إجمالي الساعات:</span>
+                                    <b id="gpa-summary-hours">15</b>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel gpa-form-panel">
+                            
+                            <div class="gpa-row-header">
+                                <span data-i18n="gpa_th_course">اسم المقرر</span>
+                                <span data-i18n="gpa_th_hours">الساعات</span>
+                                <span data-i18n="gpa_th_grade">التقدير</span>
+                                <span style="text-align: center;" data-i18n="gpa_th_action">حذف</span>
+                            </div>
+
+                            <div id="gpa-courses-list" style="display: flex; flex-direction: column; gap: 0.65rem;">
+                            </div>
+
+                            <div class="gpa-controls-bar">
+                                <button type="button" class="btn-secondary" onclick="addCourseRow()">
+                                    <i class="fa-solid fa-plus-circle text-muc-bright-red"></i>
+                                    <span data-i18n="btn_add_course">إضافة مادة جديدة</span>
+                                </button>
+
+                                <button type="button" class="btn-primary" onclick="calculateGpaMetrics()">
+                                    <i class="fa-solid fa-calculator"></i>
+                                    <span data-i18n="btn_calc_gpa">احسب المعدل الآن</span>
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- -------------------------------------------------------------
+                     TAB 3: ACADEMIC SCHEDULE
+                     ------------------------------------------------------------- -->
+                <section id="tab-schedule" class="tab-content">
+                    
+                    <div class="page-header">
+                        <h2 data-i18n="sched_title">الجدول الدراسي الأسبوعي</h2>
+                        <p data-i18n="sched_subtitle">عرض القاعات ومواعيد المحاضرات والسكاشن حسب اليوم</p>
+                    </div>
+
+                    <div class="schedule-days-nav">
+                        <button class="day-tab-btn active" data-day="all">الكل (All Days)</button>
+                        <button class="day-tab-btn" data-day="sun" data-i18n="day_sun">الأحد</button>
+                        <button class="day-tab-btn" data-day="mon" data-i18n="day_mon">الإثنين</button>
+                        <button class="day-tab-btn" data-day="tue" data-i18n="day_tue">الثلاثاء</button>
+                        <button class="day-tab-btn" data-day="wed" data-i18n="day_wed">الأربعاء</button>
+                        <button class="day-tab-btn" data-day="thu" data-i18n="day_thu">الخميس</button>
+                    </div>
+
+                    <div class="schedule-list">
+                        
+                        <div class="glass-panel schedule-item-card session-lecture" data-day="sun">
+                            <div>
+                                <h3 class="schedule-course-title">تراكيب البيانات والمصفوفات (Data Structures)</h3>
+                                <div class="schedule-meta-row">
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-clock text-muc-bright-red"></i>
+                                        <span>الأحد • 09:00 ص - 11:00 ص</span>
+                                    </span>
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-user-tie text-muc-gold"></i>
+                                        <span>د. مصطفى الشريف</span>
+                                    </span>
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-location-dot text-accent-blue"></i>
+                                        <span>المدرج المركزي B2</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="session-type-badge session-lecture" data-i18n="badge_lecture">محاضرة نظرية</span>
+                        </div>
+
+                        <div class="glass-panel schedule-item-card session-lab" data-day="mon">
+                            <div>
+                                <h3 class="schedule-course-title">معمل البرمجة الكائنية المتقدمة (OOP Lab)</h3>
+                                <div class="schedule-meta-row">
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-clock text-accent-emerald"></i>
+                                        <span>الإثنين • 11:30 ص - 01:30 م</span>
+                                    </span>
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-user-tie text-muc-gold"></i>
+                                        <span>م. سارة محمود</span>
+                                    </span>
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-desktop text-accent-cyan"></i>
+                                        <span>معمل الحاسب 4 (Computer Lab 4)</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="session-type-badge session-lab" data-i18n="badge_lab">سكشن عملي</span>
+                        </div>
+
+                        <div class="glass-panel schedule-item-card session-lecture" data-day="tue">
+                            <div>
+                                <h3 class="schedule-course-title">الذكاء الاصطناعي والأنساق الخبيرة (AI & Expert Systems)</h3>
+                                <div class="schedule-meta-row">
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-clock text-muc-bright-red"></i>
+                                        <span>الثلاثاء • 02:30 م - 04:30 م</span>
+                                    </span>
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-user-tie text-muc-gold"></i>
+                                        <span>د. أحمد العبد</span>
+                                    </span>
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-location-dot text-accent-blue"></i>
+                                        <span>قاعة المحاضرات C3</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="session-type-badge session-lecture" data-i18n="badge_lecture">محاضرة نظرية</span>
+                        </div>
+
+                        <div class="glass-panel schedule-item-card session-tutorial" data-day="wed">
+                            <div>
+                                <h3 class="schedule-course-title">رياضيات متقطعة ونظرية المخططات (Discrete Math)</h3>
+                                <div class="schedule-meta-row">
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-clock text-accent-amber"></i>
+                                        <span>الأربعاء • 10:00 ص - 12:00 م</span>
+                                    </span>
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-user-tie text-muc-gold"></i>
+                                        <span>د. كمال الشناوي</span>
+                                    </span>
+                                    <span class="schedule-meta-item">
+                                        <i class="fa-solid fa-location-dot text-accent-blue"></i>
+                                        <span>قاعة A1</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="session-type-badge session-tutorial" data-i18n="badge_tutorial">تمرين</span>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- -------------------------------------------------------------
+                     TAB 4: DIGITAL LIBRARY & MUC DRIVE
+                     ------------------------------------------------------------- -->
+                <section id="tab-library" class="tab-content">
+                    
+                    <div class="page-header">
+                        <h2 data-i18n="lib_title">مكتبة المواد الرقمية - MUC Drive</h2>
+                        <p data-i18n="lib_subtitle">تصفح محاضراتك وسكاشنك وامتحانات السنين السابقة</p>
+                    </div>
+
+                    <div class="library-filter-bar">
+                        <div class="search-input-wrap">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input id="library-search-input" type="search" class="input-field search-input"
+                                   placeholder="ابحث عن المحاضرة، الكود، أو الملخص..."
+                                   data-i18n-placeholder="search_placeholder"
+                                   aria-label="ابحث في المكتبة الرقمية | Search the library">
+                        </div>
+
+                        <select id="library-level-select" class="input-field" style="max-width: 240px;"
+                                aria-label="تصفية حسب المستوى الدراسي | Filter by level">
+                            <option value="all" data-i18n="level_all">جميع المستويات</option>
+                            <option value="level-1" data-i18n="level_1">المستوى الأول</option>
+                            <option value="level-2" selected data-i18n="level_2">المستوى الثاني</option>
+                            <option value="level-3" data-i18n="level_3">المستوى الثالث</option>
+                            <option value="level-4" data-i18n="level_4">المستوى الرابع</option>
+                        </select>
+                    </div>
+
+                    <div class="library-grid">
+                        
+                        <div class="glass-panel resource-card" data-level="level-2">
+                            <div class="resource-left">
+                                <div class="resource-icon pdf">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">ملخص خوارزميات الترتيب والبحث</div>
+                                    <div class="resource-meta">تراكيب البيانات • PDF • 4.2 MB</div>
+                                </div>
+                            </div>
+                            <button class="btn-download" onclick="triggerDownload('DataStructures_Algorithms.pdf')"
+                                    type="button" aria-label="تنزيل: ملخص خوارزميات الترتيب والبحث">
+                                <i class="fa-solid fa-download" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+                        <div class="glass-panel resource-card" data-level="level-2">
+                            <div class="resource-left">
+                                <div class="resource-icon pptx">
+                                    <i class="fa-solid fa-file-powerpoint"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">سلايدات الشبكات العصبية (Lecture 4)</div>
+                                    <div class="resource-meta">ذكاء اصطناعي • PPTX • 12.8 MB</div>
+                                </div>
+                            </div>
+                            <button class="btn-download" onclick="triggerDownload('NeuralNetworks_Lec4.pptx')"
+                                    type="button" aria-label="تنزيل: سلايدات الشبكات العصبية">
+                                <i class="fa-solid fa-download" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+                        <div class="glass-panel resource-card" data-level="level-2">
+                            <div class="resource-left">
+                                <div class="resource-icon code">
+                                    <i class="fa-solid fa-code"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">شيت تطبيقات الـ OOP والوراثة</div>
+                                    <div class="resource-meta">برمجة C++ • ZIP • 1.5 MB</div>
+                                </div>
+                            </div>
+                            <button class="btn-download" onclick="triggerDownload('OOP_Inheritance_Lab.zip')"
+                                    type="button" aria-label="تنزيل: شيت تطبيقات الـ OOP والوراثة">
+                                <i class="fa-solid fa-download" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+                        <div class="glass-panel resource-card" data-level="level-2">
+                            <div class="resource-left">
+                                <div class="resource-icon pdf">
+                                    <i class="fa-solid fa-file-lines"></i>
+                                </div>
+                                <div class="resource-info">
+                                    <div class="resource-title">امتحان نصفي 2025 مع نموذج الإجابة</div>
+                                    <div class="resource-meta">رياضيات متقطعة • PDF • 2.1 MB</div>
+                                </div>
+                            </div>
+                            <button class="btn-download" onclick="triggerDownload('DiscreteMath_Midterm2025.pdf')"
+                                    type="button" aria-label="تنزيل: امتحان نصفي 2025 مع نموذج الإجابة">
+                                <i class="fa-solid fa-download" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- -------------------------------------------------------------
+                     TAB 5: AI CODE LAB & ASSISTANT
+                     ------------------------------------------------------------- -->
+                <section id="tab-ai" class="tab-content">
+                    
+                    <div class="ai-lab-header">
+                        <div class="ai-icon-large" aria-hidden="true">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <div class="page-header" style="margin-bottom: 0;">
+                            <h2 data-i18n="ai_title">معمل الذكاء الاصطناعي الأكاديمي</h2>
+                            <p data-i18n="ai_subtitle">أدوات ذكية للمساعدة في حل الشيتات وشرح الأكواد واكتشاف الأخطاء</p>
+                        </div>
+                    </div>
+
+                    <div class="ai-chips-row">
+                        <button class="ai-prompt-chip" data-prompt="اشرح لي خوارزمية Merge Sort بلغة C++ مع توضيح التعقيد الزمني." data-i18n="ai_chip_explain">شرح خوارزميات الترتيب في C++</button>
+                        <button class="ai-prompt-chip" data-prompt="ما هو الفرق العملي بين Overriding و Overloading في البرمجة كائنية التوجه؟" data-i18n="ai_chip_oop">مفاهيم تعدد الأشكال Polymorphism</button>
+                        <button class="ai-prompt-chip" data-prompt="كيف أجهز Dataset لتدريب نموذج Machine Learning خطوة بخطوة؟" data-i18n="ai_chip_dataset">كيف أجهز Dataset لتدريب نموذج AI؟</button>
+                        <button class="ai-prompt-chip" data-prompt="كودي يخرج خطأ Segmentation fault عند استخدام المؤشرات Pointers، كيف أتتبعه؟" data-i18n="ai_chip_debug">اكتشاف أخطاء Segmentation Fault</button>
+                    </div>
+
+                    <div class="glass-panel" style="padding: 1.5rem;">
+                        <textarea id="ai-code-editor" class="code-editor-box"
+                                  placeholder="ألصق كود C++ أو Python أو اسأل أي سؤال أكاديمي هنا..."
+                                  data-i18n-placeholder="ai_input_placeholder"
+                                  aria-label="الكود أو السؤال الأكاديمي | Your code or question"></textarea>
+                        
+                        <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+                            <button id="btn-ai-analyze" class="btn-primary" type="button">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <span data-i18n="btn_ai_analyze">تحليل وشرح الكود بواسطة AI</span>
+                            </button>
+                        </div>
+
+                        <div id="ai-output-box" class="ai-output-box" role="status" aria-live="polite"></div>
+                    </div>
+
+                </section>
+
+                <!-- -------------------------------------------------------------
+                     TAB 6: EXAM SCHEDULE
+                     ------------------------------------------------------------- -->
+                <section id="tab-exams" class="tab-content">
+                    
+                    <div class="page-header">
+                        <h2 data-i18n="exams_title">جدول امتحانات الفصل الدراسي</h2>
+                        <p data-i18n="exams_subtitle">مواعيد امتحانات منتصف الفصل ونهاية الفصل وأرقام اللجان والجلوس</p>
+                    </div>
+
+                    <div class="glass-panel data-table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="exam_col_code">كود المادة</th>
+                                    <th data-i18n="exam_col_course">اسم المقرر</th>
+                                    <th data-i18n="exam_col_datetime">التاريخ والوقت</th>
+                                    <th data-i18n="exam_col_hall">قاعة الامتحان</th>
+                                    <th data-i18n="exam_col_seat">رقم الجلوس</th>
+                                    <th data-i18n="exam_col_status">الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="cell-code">CS201</td>
+                                    <td class="cell-title">تراكيب البيانات (Data Structures)</td>
+                                    <td>15 مايو 2026 • 10:00 ص</td>
+                                    <td>مدرج C1 (لجنة 4)</td>
+                                    <td class="cell-num">عام</td>
+                                    <td><span class="status-pill status-confirmed">مؤكد</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="cell-code">AI202</td>
+                                    <td class="cell-title">ذكاء اصطناعي وأنساق خبيرة</td>
+                                    <td>18 مايو 2026 • 12:30 م</td>
+                                    <td>مدرج B2 (لجنة 2)</td>
+                                    <td class="cell-num">عام</td>
+                                    <td><span class="status-pill status-confirmed">مؤكد</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="cell-code">MATH204</td>
+                                    <td class="cell-title">رياضيات متقطعة ونظرية الرسوم</td>
+                                    <td>22 مايو 2026 • 10:00 ص</td>
+                                    <td>مدرج A3 (لجنة 7)</td>
+                                    <td class="cell-num">عام</td>
+                                    <td><span class="status-pill status-confirmed">مؤكد</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </section>
+
+            </main>
+
+        </div>
+
+    </div>
+
+    <!-- تم إزالة نافذة بطاقة الطالب الرقمية (Digital Student ID Modal) بالكامل لأن الموقع أصبح عاماً -->
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+
+    <script src="assets/js/telegram.js"></script>
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/gpa.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/motion.js" defer></script>
+
+</body>
+</html>
