@@ -9,16 +9,12 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/images/logo.png">
 
-    <!-- الطباعة: Cairo — خط عربي متغيّر (200–1000)
-         يُستعمل للعناوين والنص والأرقام معاً: عائلة واحدة بأوزان متعدّدة
-         تعطي تسلسلاً واضحاً دون تنافر بين خطّين. -->
+    <!-- الطباعة: Cairo — خط عربي متغيّر (200–1000) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- Telegram Mini App SDK (must load before assets/js/telegram.js) -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<!-- Telegram Mini App SDK (must load before assets/js/telegram.js) -->
+    <!-- Telegram Mini App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         if (window.Telegram && window.Telegram.WebApp) {
@@ -37,7 +33,6 @@
 <body>
 
     <!-- ==================== SKIP LINK ==================== -->
-    <!-- أول ما يصله التركيز: يقفز فوق التنقل مباشرة إلى المحتوى -->
     <a href="#main-content" class="skip-link" data-i18n="skip_to_content">تخطي إلى المحتوى الرئيسي</a>
 
     <!-- ==================== AMBIENT BACKGROUND GLOWS ==================== -->
@@ -52,7 +47,7 @@
         <!-- ==================== SIDE PANEL (SIDEBAR) ==================== -->
         <aside id="sidebar" role="navigation" aria-label="Main Navigation">
 
-            <!-- إغلاق الدرج: يظهر على الشاشات الصغيرة فقط -->
+            <!-- إغلاق الدرج -->
             <button id="drawer-close-btn" class="drawer-close-btn" type="button"
                     aria-label="إغلاق القائمة | Close navigation menu">
                 <i class="fa-solid fa-xmark" aria-hidden="true"></i>
@@ -126,7 +121,7 @@
                 </nav>
             </div>
 
-            <!-- Collapse handle: floats on the panel's inner edge, vertically centred -->
+            <!-- Collapse handle -->
             <button id="sidebar-toggle" class="sidebar-toggle-btn"
                     type="button"
                     aria-expanded="true"
@@ -136,23 +131,7 @@
                 <span class="sr-only" data-i18n="toggle_sidebar">طي القائمة الجانبية</span>
             </button>
 
-            <!-- Bottom: Student Quick ID Card Trigger -->
-            <!-- عرض هوية فقط، لا مدخل ثانٍ للبطاقة.
-                 المدخل الوحيد هو زر الشريط العلوي: البطاقة تُستعمل عند
-                 بوابات الحرم، فيجب أن تُفتح بضغطة واحدة دون فتح الدرج. -->
-            <div class="sidebar-student-card">
-                <div class="student-avatar-wrap">
-                    <div class="student-avatar">
-                        <img src="assets/images/profile.jpeg" alt=""
-                             class="student-avatar-img" loading="lazy" decoding="async">
-                    </div>
-                    <span class="student-online-dot"></span>
-                </div>
-                <div class="student-preview-info">
-                    <div class="student-preview-name" data-i18n="student_name">عبدالمجيد خيري</div>
-                    <div class="student-preview-id">ID: 202688412</div>
-                </div>
-            </div>
+            <!-- تم إزالة قسم الملف الشخصي الخاص بالطالب من هنا بنجاح -->
 
         </aside>
 
@@ -164,7 +143,6 @@
                 
                 <!-- Start / Left -->
                 <div class="topbar-start">
-                    <!-- فتح القائمة الجانبية كدرج على الشاشات الصغيرة -->
                     <button id="mobile-menu-btn" class="mobile-nav-toggle" type="button"
                             aria-expanded="false" aria-controls="sidebar"
                             aria-label="فتح قائمة التنقل | Open navigation menu">
@@ -173,7 +151,6 @@
                         </span>
                     </button>
 
-                    <!-- Mobile Logo (shown only on mobile) -->
                     <a href="#home" class="topbar-mobile-logo" onclick="switchTab('home'); return false;" title="MUC">
                         <img src="assets/images/logo.png" alt="MUC Logo" class="topbar-logo-img">
                     </a>
@@ -195,13 +172,7 @@
                 <!-- End / Right Actions -->
                 <div class="topbar-end">
 
-                    <!-- أدوات مساعدة مجمّعة في كتلة واحدة:
-                         ثلاثة أزرار منفصلة كانت تتنافس بصرياً مع الإجراء
-                         الأساسي. تجميعها يجعل التسلسل واضحاً: مجموعة
-                         أدوات صامتة + زر أساسي واحد. -->
                     <div class="utility-cluster">
-
-                        <!-- اللغة: يعرض اللغة التي سينتقل إليها -->
                         <button id="lang-toggle-btn" class="utility-btn" type="button"
                                 onclick="toggleLanguage()"
                                 aria-label="التبديل إلى الإنجليزية | Switch to English">
@@ -210,7 +181,6 @@
 
                         <span class="utility-divider" aria-hidden="true"></span>
 
-                        <!-- المظهر: زر ثنائي الحالة، والحالة تُعلن لا تُستنتج -->
                         <button id="theme-toggle-btn" class="utility-btn" type="button"
                                 onclick="toggleTheme()"
                                 aria-pressed="false"
@@ -220,7 +190,6 @@
 
                         <span class="utility-divider" aria-hidden="true"></span>
 
-                        <!-- التنبيهات: تفتح لوحة فعلية بدل رسالة عابرة -->
                         <button id="notif-btn" class="utility-btn" type="button"
                                 aria-haspopup="true" aria-expanded="false"
                                 aria-controls="notif-panel"
@@ -230,12 +199,7 @@
                         </button>
                     </div>
 
-                    <!-- Digital ID Modal Trigger -->
-                    <button class="btn-student-card" onclick="openStudentCardModal()"
-                            type="button" title="View Digital Student ID">
-                        <i class="fa-solid fa-id-card" aria-hidden="true"></i>
-                        <span data-i18n="digital_id">البطاقة الرقمية</span>
-                    </button>
+                    <!-- تم إزالة زر البطاقة الرقمية من هنا بنجاح -->
                 </div>
 
                 <!-- لوحة التنبيهات -->
@@ -280,51 +244,42 @@
                      ------------------------------------------------------------- -->
                 <section id="tab-home" class="tab-content active">
 
-                    <!-- Hero: Student Record Summary -->
+                    <!-- Hero: General Portal Overview -->
                     <div class="hero-banner">
                         <div class="hero-glow-orb"></div>
                         <div class="hero-content">
 
                             <div class="hero-identity">
-                                <img src="assets/images/profile.jpeg" alt=""
-                                     class="hero-avatar" decoding="async">
                                 <div>
                                     <div class="hero-welcome-tag">
-                                        <span data-i18n="hero_welcome_back">بيانات الطالب</span>
+                                        <span data-i18n="hero_welcome_back">بوابة الخدمات العامة</span>
                                     </div>
-                                    <h1 class="hero-title" data-i18n="student_name">عبدالمجيد خيري</h1>
-                                    <p class="hero-subtitle" data-i18n="hero_student_sub">طالب بكالوريوس - المستوى الثاني • قسم الذكاء الاصطناعي</p>
+                                    <h1 class="hero-title">منصة كلية الحاسبات والذكاء الاصطناعي</h1>
+                                    <p class="hero-subtitle">النظام الأكاديمي الرقمي والمكتبة المركزية لطلاب جامعة مايو</p>
                                 </div>
                             </div>
 
-                            <!-- الأرقام مع سياقها: رقم مجرّد لا يخبر الطالب بموقعه -->
+                            <!-- إحصائيات عامة للموقع بدلاً من بيانات شخصية محددة -->
                             <div class="hero-stats-grid">
 
                                 <div class="hero-stat-card hero-stat-primary">
-                                    <span class="stat-label" data-i18n="stat_gpa_label">المعدل التراكمي (CGPA)</span>
-                                    <span id="hero-stat-gpa" class="stat-num gold">3.62</span>
+                                    <span class="stat-label">المقررات المتاحة</span>
+                                    <span class="stat-num gold">24</span>
                                     <span class="stat-meta">
-                                        <span data-i18n="stat_gpa_standing">تقدير ممتاز</span>
-                                        <span class="stat-trend" data-i18n="stat_gpa_trend">▲ ٠٫١٢ عن الفصل الماضي</span>
+                                        <span>جميع الأقسام الأكاديمية</span>
                                     </span>
                                 </div>
 
                                 <div class="hero-stat-card">
-                                    <span class="stat-label" data-i18n="stat_hours_label">الساعات المعتمدة</span>
-                                    <span class="stat-num"><bdi>48</bdi><span class="stat-of"><bdi>/ 144</bdi></span></span>
-                                    <!-- التقدّم نحو التخرّج: أهم سياق غاب عن الرقم -->
-                                    <div class="stat-progress" role="progressbar"
-                                         aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"
-                                         aria-label="التقدّم نحو التخرّج | Progress toward degree">
-                                        <span style="width: 33%"></span>
-                                    </div>
-                                    <span class="stat-meta" data-i18n="stat_hours_meta">أنجزت ٣٣٪ من الدرجة</span>
+                                    <span class="stat-label">الملفات المرفوعة بالمكتبة</span>
+                                    <span class="stat-num">120+</span>
+                                    <span class="stat-meta">مذكرات، سلايدات، وشيتات</span>
                                 </div>
 
                                 <div class="hero-stat-card">
-                                    <span class="stat-label" data-i18n="stat_courses_label">مقررات الفصل</span>
-                                    <span class="stat-num">5</span>
-                                    <span class="stat-meta" data-i18n="stat_courses_meta">١٥ ساعة مسجّلة</span>
+                                    <span class="stat-label">مستويات الدراسة</span>
+                                    <span class="stat-num">4</span>
+                                    <span class="stat-meta">مستويات البكالوريوس</span>
                                 </div>
                             </div>
                         </div>
@@ -367,7 +322,6 @@
                     <div class="services-grid">
                         
                         <!-- Card 1: GPA Predictor -->
-                        <!-- رابط لا div: يصله التركيز ويعمل بمفتاح Enter دون شيفرة إضافية -->
                         <a href="#gpa" data-tab="gpa" class="glass-panel-interactive service-card service-purple">
                             <div class="service-card-top">
                                 <div class="service-icon-wrap">
@@ -449,7 +403,6 @@
                      ------------------------------------------------------------- -->
                 <section id="tab-gpa" class="tab-content">
                     
-                    <!-- Top Heading -->
                     <div class="page-header">
                         <h2 data-i18n="gpa_title">حاسبة المعدل التراكمي (GPA Predictor)</h2>
                         <p data-i18n="gpa_subtitle">أدخل درجات موادك الحالية لحساب GPA المتوقع بنظام 4.0</p>
@@ -457,13 +410,10 @@
 
                     <div class="gpa-card-layout">
                         
-                        <!-- Left: Circular Gauge Card -->
                         <div class="glass-panel gpa-gauge-card">
                             <span data-i18n="gpa_semester_label">المعدل الفصلي المتوقع</span>
 
                             <div class="gpa-ring-wrapper">
-                                <!-- بلا تدرّج: الحلقة تُلوَّن بلون العلامة من الورقة،
-                                     فتتبع الوضع الفاتح والداكن تلقائياً. -->
                                 <svg class="gpa-ring-svg" viewBox="0 0 170 170" aria-hidden="true">
                                     <circle class="gpa-ring-bg" cx="85" cy="85" r="72" />
                                     <circle id="gpa-ring-fill" class="gpa-ring-fill" cx="85" cy="85" r="72" />
@@ -490,7 +440,6 @@
                             </div>
                         </div>
 
-                        <!-- Right: Course Rows Table Panel -->
                         <div class="glass-panel gpa-form-panel">
                             
                             <div class="gpa-row-header">
@@ -500,12 +449,9 @@
                                 <span style="text-align: center;" data-i18n="gpa_th_action">حذف</span>
                             </div>
 
-                            <!-- Dynamic List -->
                             <div id="gpa-courses-list" style="display: flex; flex-direction: column; gap: 0.65rem;">
-                                <!-- Rendered dynamically by gpa.js -->
                             </div>
 
-                            <!-- Controls -->
                             <div class="gpa-controls-bar">
                                 <button type="button" class="btn-secondary" onclick="addCourseRow()">
                                     <i class="fa-solid fa-plus-circle text-muc-bright-red"></i>
@@ -534,7 +480,6 @@
                         <p data-i18n="sched_subtitle">عرض القاعات ومواعيد المحاضرات والسكاشن حسب اليوم</p>
                     </div>
 
-                    <!-- Day Navigation Pills -->
                     <div class="schedule-days-nav">
                         <button class="day-tab-btn active" data-day="all">الكل (All Days)</button>
                         <button class="day-tab-btn" data-day="sun" data-i18n="day_sun">الأحد</button>
@@ -544,10 +489,8 @@
                         <button class="day-tab-btn" data-day="thu" data-i18n="day_thu">الخميس</button>
                     </div>
 
-                    <!-- Schedule Items List -->
                     <div class="schedule-list">
                         
-                        <!-- Item 1: Sun Lecture -->
                         <div class="glass-panel schedule-item-card session-lecture" data-day="sun">
                             <div>
                                 <h3 class="schedule-course-title">تراكيب البيانات والمصفوفات (Data Structures)</h3>
@@ -569,7 +512,6 @@
                             <span class="session-type-badge session-lecture" data-i18n="badge_lecture">محاضرة نظرية</span>
                         </div>
 
-                        <!-- Item 2: Mon Lab -->
                         <div class="glass-panel schedule-item-card session-lab" data-day="mon">
                             <div>
                                 <h3 class="schedule-course-title">معمل البرمجة الكائنية المتقدمة (OOP Lab)</h3>
@@ -591,7 +533,6 @@
                             <span class="session-type-badge session-lab" data-i18n="badge_lab">سكشن عملي</span>
                         </div>
 
-                        <!-- Item 3: Tue Lecture -->
                         <div class="glass-panel schedule-item-card session-lecture" data-day="tue">
                             <div>
                                 <h3 class="schedule-course-title">الذكاء الاصطناعي والأنساق الخبيرة (AI & Expert Systems)</h3>
@@ -613,7 +554,6 @@
                             <span class="session-type-badge session-lecture" data-i18n="badge_lecture">محاضرة نظرية</span>
                         </div>
 
-                        <!-- Item 4: Wed Tutorial -->
                         <div class="glass-panel schedule-item-card session-tutorial" data-day="wed">
                             <div>
                                 <h3 class="schedule-course-title">رياضيات متقطعة ونظرية المخططات (Discrete Math)</h3>
@@ -649,7 +589,6 @@
                         <p data-i18n="lib_subtitle">تصفح محاضراتك وسكاشنك وامتحانات السنين السابقة</p>
                     </div>
 
-                    <!-- Search & Level Filter -->
                     <div class="library-filter-bar">
                         <div class="search-input-wrap">
                             <i class="fa-solid fa-magnifying-glass"></i>
@@ -669,10 +608,8 @@
                         </select>
                     </div>
 
-                    <!-- Resource Cards Grid -->
                     <div class="library-grid">
                         
-                        <!-- Doc 1 -->
                         <div class="glass-panel resource-card" data-level="level-2">
                             <div class="resource-left">
                                 <div class="resource-icon pdf">
@@ -689,7 +626,6 @@
                             </button>
                         </div>
 
-                        <!-- Doc 2 -->
                         <div class="glass-panel resource-card" data-level="level-2">
                             <div class="resource-left">
                                 <div class="resource-icon pptx">
@@ -706,7 +642,6 @@
                             </button>
                         </div>
 
-                        <!-- Doc 3 -->
                         <div class="glass-panel resource-card" data-level="level-2">
                             <div class="resource-left">
                                 <div class="resource-icon code">
@@ -723,7 +658,6 @@
                             </button>
                         </div>
 
-                        <!-- Doc 4 -->
                         <div class="glass-panel resource-card" data-level="level-2">
                             <div class="resource-left">
                                 <div class="resource-icon pdf">
@@ -759,7 +693,6 @@
                         </div>
                     </div>
 
-                    <!-- Prompt Suggestion Chips -->
                     <div class="ai-chips-row">
                         <button class="ai-prompt-chip" data-prompt="اشرح لي خوارزمية Merge Sort بلغة C++ مع توضيح التعقيد الزمني." data-i18n="ai_chip_explain">شرح خوارزميات الترتيب في C++</button>
                         <button class="ai-prompt-chip" data-prompt="ما هو الفرق العملي بين Overriding و Overloading في البرمجة كائنية التوجه؟" data-i18n="ai_chip_oop">مفاهيم تعدد الأشكال Polymorphism</button>
@@ -767,7 +700,6 @@
                         <button class="ai-prompt-chip" data-prompt="كودي يخرج خطأ Segmentation fault عند استخدام المؤشرات Pointers، كيف أتتبعه؟" data-i18n="ai_chip_debug">اكتشاف أخطاء Segmentation Fault</button>
                     </div>
 
-                    <!-- Code Editor Box -->
                     <div class="glass-panel" style="padding: 1.5rem;">
                         <textarea id="ai-code-editor" class="code-editor-box"
                                   placeholder="ألصق كود C++ أو Python أو اسأل أي سؤال أكاديمي هنا..."
@@ -781,7 +713,6 @@
                             </button>
                         </div>
 
-                        <!-- Output Box -->
                         <div id="ai-output-box" class="ai-output-box" role="status" aria-live="polite"></div>
                     </div>
 
@@ -815,7 +746,7 @@
                                     <td class="cell-title">تراكيب البيانات (Data Structures)</td>
                                     <td>15 مايو 2026 • 10:00 ص</td>
                                     <td>مدرج C1 (لجنة 4)</td>
-                                    <td class="cell-num">240812</td>
+                                    <td class="cell-num">عام</td>
                                     <td><span class="status-pill status-confirmed">مؤكد</span></td>
                                 </tr>
                                 <tr>
@@ -823,7 +754,7 @@
                                     <td class="cell-title">ذكاء اصطناعي وأنساق خبيرة</td>
                                     <td>18 مايو 2026 • 12:30 م</td>
                                     <td>مدرج B2 (لجنة 2)</td>
-                                    <td class="cell-num">240812</td>
+                                    <td class="cell-num">عام</td>
                                     <td><span class="status-pill status-confirmed">مؤكد</span></td>
                                 </tr>
                                 <tr>
@@ -831,7 +762,7 @@
                                     <td class="cell-title">رياضيات متقطعة ونظرية الرسوم</td>
                                     <td>22 مايو 2026 • 10:00 ص</td>
                                     <td>مدرج A3 (لجنة 7)</td>
-                                    <td class="cell-num">240812</td>
+                                    <td class="cell-num">عام</td>
                                     <td><span class="status-pill status-confirmed">مؤكد</span></td>
                                 </tr>
                             </tbody>
@@ -846,108 +777,9 @@
 
     </div>
 
-    <!-- ==================== DIGITAL STUDENT ID CARD MODAL (3D FLIP) ==================== -->
-    <div id="student-card-modal" class="modal-backdrop" role="dialog" aria-modal="true"
-         aria-labelledby="id-modal-heading">
-        <div class="modal-dialog">
-
-            <!-- اسم منطوق للحوار: aria-modal وحده لا يخبر قارئ الشاشة بما فُتح -->
-            <h2 id="id-modal-heading" class="sr-only" data-i18n="id_modal_title">
-                بطاقة الطالب الرقمية
-            </h2>
-
-            <button class="modal-close-btn" onclick="closeStudentCardModal()"
-                    type="button" title="Close ID Card"
-                    aria-label="إغلاق البطاقة | Close ID card">
-                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-            </button>
-
-            <!-- 3D Perspective Card -->
-            <!-- زر لا div: القلب كان متاحاً للفأرة فقط -->
-            <button id="id-card-flip" class="id-card-perspective" type="button"
-                    aria-pressed="false"
-                    aria-label="اقلب البطاقة لعرض رمز الدخول | Flip card to show access code">
-                <div id="id-card-inner" class="id-card-inner">
-                    
-                    <!-- ================= FRONT SIDE ================= -->
-                    <div class="id-card-face id-card-front">
-                        <!-- Header -->
-                        <div class="id-header-row">
-                            <img src="assets/images/logo.png" alt="MUC Logo" class="id-crest-logo">
-                            <div class="id-univ-text">
-                                <div class="id-univ-title" data-i18n="id_modal_title">جامعة مايو بالقاهرة - MUC</div>
-                                <div class="id-univ-badge-name" data-i18n="id_badge_subtitle">بطاقة الطالب الرقمية الموحدة</div>
-                            </div>
-                        </div>
-
-                        <!-- Student Photo & Credentials -->
-                        <div class="id-student-center">
-                            <div class="id-avatar-frame">
-                                <div class="id-avatar-inner">
-                                    <img src="assets/images/profile.jpeg" alt=""
-                                         class="id-avatar-img" decoding="async">
-                                </div>
-                            </div>
-                            <div class="id-student-name" data-i18n="student_name">عبدالمجيد خيري</div>
-                            <div class="id-student-faculty" data-i18n="id_student_major">كلية الحاسبات والذكاء الاصطناعي</div>
-                            <div class="id-student-num">ID: 202688412</div>
-                        </div>
-
-                        <!-- Footer -->
-                        <div class="id-footer-row">
-                            <span data-i18n="id_academic_year">العام الأكاديمي: 2025/2026</span>
-                            <span class="id-status-active">
-                                <i class="fa-solid fa-shield-halved"></i>
-                                <span data-i18n="id_status_active">بطاقة نشطة وموثقة</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- ================= BACK SIDE (GATE PASS QR) ================= -->
-                    <div class="id-card-face id-card-back">
-                        <!-- Header (Matching front face) -->
-                        <div class="id-header-row">
-                            <img src="assets/images/logo.png" alt="MUC Logo" class="id-crest-logo">
-                            <div class="id-univ-text">
-                                <div class="id-univ-title" data-i18n="id_modal_title">جامعة مايو بالقاهرة - MUC</div>
-                                <div class="id-univ-badge-name" data-i18n="id_back_title">رمز الدخول الإلكتروني للحرم الجامعي</div>
-                            </div>
-                        </div>
-                        
-                        <!-- QR Code & Access Pass -->
-                        <div class="id-student-center">
-                            <div class="id-qr-box">
-                                <i class="fa-solid fa-qrcode"></i>
-                            </div>
-                            <div class="id-barcode-mock" style="margin-top: 0.65rem;">||| | ||||| |||| | |||||||| | |||</div>
-                            <div class="id-student-num" style="font-size: 0.82rem;">202688412 • CAMPUS PASS</div>
-                        </div>
-
-                        <!-- Footer (Matching front face) -->
-                        <div class="id-footer-row">
-                            <span data-i18n="id_scan_hint">امسح الرمز عند البوابات الإلكترونية والمكتبة</span>
-                            <span class="id-status-active">
-                                <i class="fa-solid fa-circle-check"></i>
-                                <span>Verified</span>
-                            </span>
-                        </div>
-                    </div>
-
-                </div>
-            </button>
-
-            <!-- Hint text -->
-            <div class="id-flip-hint">
-                <i class="fa-solid fa-rotate text-muc-gold" aria-hidden="true"></i>
-                <span data-i18n="id_flip_prompt">اضغط على البطاقة لقلبها (3D)</span>
-            </div>
-
-        </div>
-    </div>
+    <!-- تم إزالة نافذة بطاقة الطالب الرقمية (Digital Student ID Modal) بالكامل لأن الموقع أصبح عاماً -->
 
     <!-- ==================== SCRIPTS ==================== -->
-    <!-- GSAP: يُحمَّل قبل motion.js. الحركة تحسين اختياري —
-         إن أخفق التحميل تُعرض الصفحة كاملة وساكنة. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 
     <script src="assets/js/telegram.js"></script>
