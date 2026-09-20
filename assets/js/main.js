@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initMobileDrawer();
     initNotifications();
-    initStudentIdModal();
     initScheduleTabs();
     initLibraryFilters();
     initAiLabAssistant();
@@ -281,173 +280,84 @@ function clearNotifications() {
                         : 'التنبيهات | Notifications');
     }
 
-    const isEn = document.documentElement.getAttribute('lang') === 'en';
-    showNotification(isEn ? 'All notifications marked as read.'
+        showNotification(isEnglish() ? 'All notifications marked as read.'
                           : 'تم تعليم كل التنبيهات كمقروءة.');
 }
 
 /* ==========================================================================
-   3. DIGITAL STUDENT ID CARD (3D FLIP MODAL)
-   ========================================================================== */
-/* العنصر الذي فتح المودال: إليه يعود التركيز عند الإغلاق، وإلا قفز
-   إلى بداية الصفحة وفقد المستخدم موضعه تماماً. */
-let lastFocusedBeforeModal = null;
+   4. فلترة المحتوى (الجدول والمكتبة)
+   ==========================================================================
+   كانت دالتان منفصلتان تكرّران المنطق نفسه: مرور على البطاقات، وإظهار
+   أو إخفاء بـ style.display. صارتا نداءين لدالة واحدة تأخذ شرط المطابقة،
+   فأي قائمة جديدة تحتاج سطراً واحداً لا دالة كاملة. */
 
-function initStudentIdModal() {
-    const modal = document.getElementById('student-card-modal');
-    const flipContainer = document.getElementById('id-card-flip');
-
-    if (flipContainer) {
-        flipContainer.addEventListener('click', () => {
-            const inner = document.getElementById('id-card-inner');
-            if (!inner) return;
-            const flipped = inner.classList.toggle('flipped');
-            // الحالة تُعلن لقارئ الشاشة: الوجه المرئي تغيّر فعلاً
-            flipContainer.setAttribute('aria-pressed', String(flipped));
-        });
-    }
-
-    // Close on backdrop click outside card
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeStudentCardModal();
-            }
-        });
-
-        // حصر التركيز داخل الحوار: بدونه يتنقل Tab إلى محتوى الخلفية
-        // المحجوب بصرياً، فيتوه مستخدم لوحة المفاتيح خارج ما يراه.
-        modal.addEventListener('keydown', (e) => {
-            if (e.key !== 'Tab' || !modal.classList.contains('active')) return;
-
-            const focusable = modal.querySelectorAll(
-                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-            );
-            if (!focusable.length) return;
-
-            const first = focusable[0];
-            const last = focusable[focusable.length - 1];
-
-            if (e.shiftKey && document.activeElement === first) {
-                e.preventDefault();
-                last.focus();
-            } else if (!e.shiftKey && document.activeElement === last) {
-                e.preventDefault();
-                first.focus();
-            }
-        });
-    }
-
-    // Close on Escape key — فقط عندما يكون الحوار مفتوحاً
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
-            closeStudentCardModal();
-        }
+/** يُظهر العناصر المطابقة ويخفي غيرها، ويعيد عدد الظاهر منها. */
+function filterCards(selector, matches) {
+    let shown = 0;
+    document.querySelectorAll(selector).forEach((card) => {
+        const ok = matches(card);
+        // البطاقات تُعرض بـ flex، فالإظهار يعيدها إلى قيمتها لا إلى block
+        card.style.display = ok ? '' : 'none';
+        if (ok) shown += 1;
     });
+    return shown;
 }
 
-function openStudentCardModal() {
-    const modal = document.getElementById('student-card-modal');
-    if (!modal) return;
-
-    lastFocusedBeforeModal = document.activeElement;
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-
-    // التركيز ينتقل داخل الحوار فور فتحه، وإلا بقي على الصفحة خلفه
-    const closeBtn = modal.querySelector('.modal-close-btn');
-    if (closeBtn) closeBtn.focus();
-}
-
-function closeStudentCardModal() {
-    const modal = document.getElementById('student-card-modal');
-    if (!modal) return;
-
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-
-    // Reset card flip to front side
-    const inner = document.getElementById('id-card-inner');
-    if (inner) inner.classList.remove('flipped');
-    const flipBtn = document.getElementById('id-card-flip');
-    if (flipBtn) flipBtn.setAttribute('aria-pressed', 'false');
-
-    // إعادة التركيز إلى الزر الذي فتح الحوار
-    if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function') {
-        lastFocusedBeforeModal.focus();
-    }
-    lastFocusedBeforeModal = null;
-}
-
-/* ==========================================================================
-   4. SCHEDULE DAY FILTERING
-   ========================================================================== */
+/* --- الجدول الدراسي --- */
 function initScheduleTabs() {
     const dayButtons = document.querySelectorAll('.day-tab-btn');
-    dayButtons.forEach(btn => {
+    dayButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
-            dayButtons.forEach(b => b.classList.remove('active'));
+            dayButtons.forEach((b) => {
+                b.classList.remove('active');
+                b.setAttribute('aria-pressed', 'false');
+            });
             btn.classList.add('active');
-
-            const selectedDay = btn.getAttribute('data-day');
-            filterScheduleByDay(selectedDay);
+            btn.setAttribute('aria-pressed', 'true');
+            filterScheduleByDay(btn.getAttribute('data-day'));
         });
     });
 }
 
 function filterScheduleByDay(day) {
-    const items = document.querySelectorAll('.schedule-item-card');
-    items.forEach(item => {
-        const itemDay = item.getAttribute('data-day');
-        if (day === 'all' || itemDay === day) {
-            item.style.display = 'flex';
-        } else {
-            item.style.display = 'none';
-        }
-    });
+    filterCards('.schedule-item-card',
+        (card) => day === 'all' || card.getAttribute('data-day') === day);
 }
 
-/* ==========================================================================
-   5. DIGITAL LIBRARY SEARCH & FILTER
-   ========================================================================== */
+/* --- المكتبة الرقمية --- */
 function initLibraryFilters() {
     const searchInput = document.getElementById('library-search-input');
     const levelSelect = document.getElementById('library-level-select');
 
-    if (searchInput) {
-        searchInput.addEventListener('input', applyLibraryFilters);
-    }
-    if (levelSelect) {
-        levelSelect.addEventListener('change', applyLibraryFilters);
-    }
+    if (searchInput) searchInput.addEventListener('input', applyLibraryFilters);
+    if (levelSelect) levelSelect.addEventListener('change', applyLibraryFilters);
 }
 
 function applyLibraryFilters() {
-    const query = (document.getElementById('library-search-input')?.value || '').toLowerCase().trim();
+    const query = (document.getElementById('library-search-input')?.value || '')
+        .toLowerCase().trim();
     const level = document.getElementById('library-level-select')?.value || 'all';
 
-    const cards = document.querySelectorAll('.resource-card');
-    cards.forEach(card => {
+    filterCards('.resource-card', (card) => {
         const title = (card.querySelector('.resource-title')?.textContent || '').toLowerCase();
         const meta = (card.querySelector('.resource-meta')?.textContent || '').toLowerCase();
         const cardLevel = card.getAttribute('data-level') || 'all';
 
         const matchesQuery = !query || title.includes(query) || meta.includes(query);
-        const matchesLevel = (level === 'all') || (cardLevel === level);
-
-        if (matchesQuery && matchesLevel) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
-        }
+        const matchesLevel = level === 'all' || cardLevel === level;
+        return matchesQuery && matchesLevel;
     });
 }
 
-function triggerDownload(fileName) {
-    const isEn = document.documentElement.getAttribute('lang') === 'en';
-    const message = isEn ? `Downloading: ${fileName}...` : `جاري تحميل: ${fileName}...`;
-    showNotification(message);
-}
+/**
+ * يُستدعى من render.js بعد إعادة البناء: البطاقات الجديدة تولد ظاهرة،
+ * فلولا هذا لعاد المخفيّ بالفلتر إلى الظهور عند تبديل اللغة.
+ */
+window.reapplyFilters = function () {
+    const activeDay = document.querySelector('.day-tab-btn.active');
+    if (activeDay) filterScheduleByDay(activeDay.getAttribute('data-day'));
+    applyLibraryFilters();
+};
 
 /* ==========================================================================
    6. AI LAB CODE ASSISTANT
@@ -468,15 +378,13 @@ function initAiLabAssistant() {
 
     if (analyzeBtn && editor) {
         analyzeBtn.addEventListener('click', () => {
-            const isEn = document.documentElement.getAttribute('lang') === 'en';
-            const query = editor.value.trim();
+                        const query = editor.value.trim();
 
             if (!query) {
                 // alert() يوقف الصفحة ويخرج من أسلوب الواجهة تماماً.
                 // التنبيه العابر يوصل نفس الرسالة ويعيد التركيز للحقل.
-                showNotification(isEn
-                    ? 'Please enter some code or a question.'
-                    : 'يرجى كتابة كود أو سؤال في المربع.');
+                showNotification(t('يرجى كتابة كود أو سؤال في المربع.',
+                                   'Please enter some code or a question.'));
                 editor.focus();
                 return;
             }
@@ -490,21 +398,20 @@ function initAiLabAssistant() {
             analyzeBtn.setAttribute('aria-busy', 'true');
             analyzeBtn.innerHTML =
                 '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> <span>' +
-                (isEn ? 'Analyzing…' : 'جاري التحليل…') + '</span>';
+                t('جاري التحليل…', 'Analyzing…') + '</span>';
 
             output.style.display = 'block';
             output.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> ' +
-                (isEn
-                    ? 'AI is analyzing your code and drafting insights...'
-                    : 'جاري تحليل الكود وصياغة الملاحظات والحل بواسطة الذكاء الاصطناعي...');
+                t('جاري تحليل الكود وصياغة الملاحظات والحل بواسطة الذكاء الاصطناعي...',
+                  'AI is analyzing your code and drafting insights...');
 
             setTimeout(() => {
                 output.innerHTML = `
                     <div class="ai-output-head">
-                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i> ${isEn ? "Analysis Complete:" : "تم التحليل بنجاح:"}
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i> ${isEnglish() ? "Analysis Complete:" : "تم التحليل بنجاح:"}
                     </div>
                     <p>
-                        ${isEn ?
+                        ${isEnglish() ?
                             "1. <b>Time Complexity</b>: O(n log n) efficient recursion observed.<br>2. <b>Memory Safety</b>: Ensure pointers are deleted or wrapped with <code>std::unique_ptr</code>.<br>3. <b>Clean Code Tip</b>: Separate definition into header <code>.h</code> and source <code>.cpp</code>." :
                             "1. <b>التعقيد الزمني (Time Complexity)</b>: تم رصد كفاءة خوارزمية بمعدل O(n log n) ممتاز.<br>2. <b>أمان الذاكرة (Memory Management)</b>: تأكد من تحرير المؤشرات الديناميكية عبر <code>delete</code> أو الاعتماد على <code>std::unique_ptr</code> لتجنب Memory Leaks.<br>3. <b>نصيحة الأسلوب النظيف</b>: يُفضل فصل توقيع الدوال في ملف Header <code>.hpp</code> وتنفيذها في <code>.cpp</code>."
                         }

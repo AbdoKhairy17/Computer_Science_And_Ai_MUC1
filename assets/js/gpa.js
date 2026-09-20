@@ -148,10 +148,8 @@ function addCourseRow() {
 
 function removeCourseRow(idx) {
     if (studentCourses.length <= 1) {
-        const isEn = document.documentElement.getAttribute('lang') === 'en';
-        showNotification(isEn
-            ? 'At least one course is required.'
-            : 'يجب أن تحتوي الحاسبة على مادة واحدة على الأقل.');
+        showNotification(t('يجب أن تحتوي الحاسبة على مادة واحدة على الأقل.',
+                           'At least one course is required.'));
         return;
     }
     studentCourses.splice(idx, 1);
@@ -190,7 +188,6 @@ function calculateGpaMetrics() {
 
     // Update Standing Chip
     const standingElem = document.getElementById('gpa-standing-badge');
-    const isEn = document.documentElement.getAttribute('lang') === 'en';
 
     if (standingElem) {
         // الصنف يحمل لون النص والخلفية والحد معاً، فيبقيان متوافقين.
@@ -198,16 +195,16 @@ function calculateGpaMetrics() {
         let standingClass, standingText;
         if (calculatedGpa >= 3.65) {
             standingClass = 'standing-excellent';
-            standingText = isEn ? 'Standing: Excellent (Honors)' : 'تقدير ممتاز مع مرتبة الشرف';
+            standingText = t('تقدير ممتاز مع مرتبة الشرف', 'Standing: Excellent (Honors)');
         } else if (calculatedGpa >= 3.00) {
             standingClass = 'standing-verygood';
-            standingText = isEn ? 'Standing: Very Good' : 'تقدير جيد جداً';
+            standingText = t('تقدير جيد جداً', 'Standing: Very Good');
         } else if (calculatedGpa >= 2.50) {
             standingClass = 'standing-good';
-            standingText = isEn ? 'Standing: Good' : 'تقدير جيد';
+            standingText = t('تقدير جيد', 'Standing: Good');
         } else {
             standingClass = 'standing-pass';
-            standingText = isEn ? 'Standing: Pass' : 'تقدير مقبول';
+            standingText = t('تقدير مقبول', 'Standing: Pass');
         }
         standingElem.className = 'gpa-standing-chip ' + standingClass;
         standingElem.textContent = standingText;

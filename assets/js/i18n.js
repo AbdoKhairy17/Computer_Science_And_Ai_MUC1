@@ -7,6 +7,15 @@
 const translations = {
     ar: {
         // Accessibility
+        hero_portal_title: "منصة كلية الحاسبات والذكاء الاصطناعي",
+        hero_portal_sub: "النظام الأكاديمي الرقمي والمكتبة المركزية لطلاب جامعة مايو",
+        stat_courses_avail: "المقررات المتاحة",
+        stat_courses_avail_meta: "جميع الأقسام الأكاديمية",
+        stat_files: "الملفات المرفوعة بالمكتبة",
+        stat_files_meta: "مذكرات، سلايدات، وشيتات",
+        stat_levels: "مستويات الدراسة",
+        stat_levels_meta: "مستويات البكالوريوس",
+        day_all: "كل الأيام",
         skip_to_content: "تخطي إلى المحتوى الرئيسي",
 
         // Header + notifications
@@ -162,6 +171,15 @@ const translations = {
 
     en: {
         // Accessibility
+        hero_portal_title: "Faculty of Computers & AI Portal",
+        hero_portal_sub: "The digital academic system and central library for May University students",
+        stat_courses_avail: "Courses available",
+        stat_courses_avail_meta: "Across all departments",
+        stat_files: "Files in the library",
+        stat_files_meta: "Notes, slides and worksheets",
+        stat_levels: "Study levels",
+        stat_levels_meta: "Bachelor's levels",
+        day_all: "All days",
         skip_to_content: "Skip to main content",
 
         // Header + notifications
@@ -326,6 +344,22 @@ function getTranslation(key) {
     return key;
 }
 
+/* ------------------------------------------------------------------
+   مساعدا اللغة
+   ------------------------------------------------------------------
+   كان سطر قراءة اللغة مكرّراً خمس مرات بين main.js وgpa.js. تعريفهما
+   هنا — وi18n.js يُحمَّل قبل الملفين — يجعل مصدر اللغة واحداً. */
+
+/** هل الواجهة بالإنجليزية الآن؟ */
+function isEnglish() {
+    return document.documentElement.getAttribute('lang') === 'en';
+}
+
+/** يختار النص حسب اللغة الحالية */
+function t(ar, en) {
+    return isEnglish() ? en : ar;
+}
+
 function setLanguage(lang) {
     if (!translations[lang]) return;
     currentLanguage = lang;
@@ -352,6 +386,10 @@ function setLanguage(lang) {
             el.setAttribute('placeholder', text);
         }
     });
+
+    // المحتوى المبنيّ من data.js لا يحمل مفاتيح data-i18n، فيُعاد بناؤه
+    // باللغة الجديدة بدل أن يبقى بلغة التحميل الأولى.
+    window.dispatchEvent(new CustomEvent('muc:languagechange', { detail: { lang: lang } }));
 
     // زر اللغة: رمز من حرفين لا اسم كامل.
     // "English" / "العربية" كانا يأخذان عرضاً لا يتوفّر في شريط الجوال،

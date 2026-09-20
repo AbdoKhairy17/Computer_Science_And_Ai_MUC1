@@ -585,57 +585,6 @@ img { max-width: 100%; }
 
 /* --- بطاقة الطالب أسفل الفهرس --- */
 /* عرض هوية ساكن: لا مؤشر يد ولا حالة مرور، فلا يوحي بأنه قابل للنقر */
-.sidebar-student-card {
-    width: 100%;
-    margin-top: var(--space-4);
-    padding: var(--space-3);
-    border-radius: var(--radius-lg);
-    background: var(--bg-sunken);
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-}
-
-.student-avatar-wrap { position: relative; width: 40px; height: 40px; flex-shrink: 0; }
-.student-avatar {
-    width: 100%; height: 100%;
-    border-radius: var(--radius-md);
-    background: var(--accent);
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-.student-avatar-img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center 45%;
-    display: block;
-}
-.student-online-dot {
-    position: absolute;
-    bottom: -2px;
-    inset-inline-end: -2px;
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--state-success);
-    border: 2px solid var(--bg-sunken);
-}
-.student-preview-info { flex: 1; min-width: 0; }
-.student-preview-name {
-    font-size: var(--text-sm);
-    font-weight: var(--weight-semi);
-    color: var(--text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.student-preview-id {
-    font-size: var(--text-2xs);
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-}
 
 /* زر إغلاق الدرج — يظهر على الجوال فقط */
 .drawer-close-btn {
@@ -911,23 +860,6 @@ img { max-width: 100%; }
 .notif-time { font-size: var(--text-2xs); color: var(--text-muted); margin-top: 2px; display: block; }
 
 /* الإجراء الأساسي الوحيد في الشريط: كتلة عنّابية مصمتة */
-.btn-student-card {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    min-height: var(--tap-min);
-    padding-inline: var(--space-5);
-    border-radius: var(--radius-full);
-    background: var(--accent);
-    color: var(--on-accent);
-    font-size: var(--text-xs);
-    font-weight: var(--weight-semi);
-    box-shadow: 0 4px 14px -4px var(--accent-glow);
-    transition: background var(--transition-fast), transform var(--transition-spring);
-}
-.btn-student-card:hover { background: var(--accent-hover); transform: translateY(-2px); }
-.btn-student-card:active { transform: translateY(0) scale(0.97); }
 
 /* ==========================================================================
    حاوية المحتوى
@@ -1016,12 +948,6 @@ img { max-width: 100%; }
 
     /* الزر يصير أيقونة فقط: دائرة 44×44 تماماً كأزرار المجموعة
        المجاورة. كان 38×44 — كبسولة مضغوطة تكسر انتظام الصف. */
-    .btn-student-card span { display: none; }
-    .btn-student-card {
-        width: var(--tap-min);
-        padding-inline: 0;
-        flex-shrink: 0;
-    }
 
     #topbar { padding-inline: var(--space-4); }
     #main-content { padding: var(--space-6) var(--space-4) var(--space-10); }
